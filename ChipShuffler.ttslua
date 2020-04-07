@@ -1,0 +1,31 @@
+Shuffle = {}
+    Shuffle.click_function = 'shuffle'
+    Shuffle.function_owner = self
+    Shuffle.label = 'Shuffle'
+    Shuffle.position = {0,0.5,1.75}
+    Shuffle.rotation = {0,0,0}
+    Shuffle.width = 620
+    Shuffle.height = 300
+    Shuffle.font_size = 180
+    Shuffle.index = 0
+
+function onLoad()
+    self.createButton(Shuffle)
+end
+
+function shuffle()
+    print(self)
+    local bagQuantity = self.getObjects()
+    local x = 0
+    for k, v in pairs(bagQuantity) do
+        x = x+1
+    end
+    self.shuffle()
+    self.shuffle()
+    self.shuffle()
+    local heightInc = 1
+    for i = 1, x do
+        self.takeObject({position = {-14.25, heightInc, -2.3}, rotation = {0, 180, 180}})
+        heightInc = heightInc + 0.3
+    end
+end

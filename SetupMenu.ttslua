@@ -1,0 +1,3212 @@
+print('hi')  
+
+shuffleOneBag = {"a9c070"}
+shuffleFiveBag = {"6d9668"}
+shuffleTwentyBag = {"a4a36d"}
+
+trashBag = {"e5f9ac"}
+
+clearZone = {"68954c"}
+
+progressMarker = {"23dbd9"}
+
+playerOneBoard = {"137df2"}
+playerTwoBoard = {"ea3d6a"}
+playerThreeBoard = {"a894dd"}
+playerFourBoard = {"b18307"}
+
+playerOneChip = {"3dcf16"}
+playerTwoChip = {"583b51"}
+playerThreeChip = {"2db017"}
+playerFourChip = {"43f4eb"}
+
+playerOneBag = {"e71d91"}
+playerTwoBag = {"bf9554"}
+playerThreeBag = {"33d6b6"}
+playerFourBag = {"fbe266"}
+
+playerOneDiceBags = {"e71d91", "bf9554", "33d6b6", "fbe266", "b5c07f", "cdbdf5", "dcd1cd"}
+playerTwoDiceBags = {"e9010a", "bf9554", "33d6b6", "fbe266", "b5c07f", "cdbdf5", "dcd1cd"}
+playerThreeDiceBags = {"596947", "bf9554", "33d6b6", "fbe266", "b5c07f", "cdbdf5", "dcd1cd"}
+playerFourDiceBags = {"22bbda", "bf9554", "33d6b6", "fbe266", "b5c07f", "cdbdf5", "dcd1cd"}
+
+playerOneReferenceA = {"0dbfbc"}
+playerOneReferenceB = {"e48e29"}
+playerTwoReferenceA = {"dd5812"}
+playerTwoReferenceB = {"8a6362"}
+playerThreeReferenceA = {"2187fa"}
+playerThreeReferenceB = {"990bab"}
+playerFourReferenceA = {"c77f50"}
+playerFourReferenceB = {"25849c"}
+
+onePointBogChips = {"29ef21", "520a64", "28a6bf", "f762cf", "a6056c"}
+onePointScaleChips = {"75faa0", "574f6c", "929081", "97f75a", "2feaab"}
+onePointBeastChips = {"6a7581", "db36bd", "8dc052", "2b4f4b"}
+onePointOrcChips = {"f84b03", "a1e1c5", "0c73f2", "c3b485", "a773c3"}
+onePointGoblinChips = {"0e1b36", "077871", "f90257", "55ce71"}
+onePointTrollChips = {"fe4785", "4e5b7b", "a9d3ab", "fd2605", "a855a5"}
+
+fivePointBogChips = {"e3bb16", "61846e", "6092b8"}
+fivePointScaleChips = {"42f9e5", "75330e", "076793"}
+fivePointBeastChips = {"bbb122", "07b436", "8c776f", "ee56a8"}
+fivePointOrcChips = {"55e7df", "0b6120", "edc02e"}
+fivePointGoblinChips = {"576e6d", "745aa3", "96ea63", "d0d177"}
+fivePointTrollChips = {"97946c", "6bef44", "326db5"}
+
+twentyPointBogChips = {"89735d", "f5a3b3"}
+twentyPointScaleChips = {"767291", "3bb87e"}
+twentyPointBeastChips = {"8ac70b", "5895e1", "0e81a1"}
+
+generalDeck = {"a3128c"}
+soloDeck = {"bcc806"}
+specialDeck = {"d0dadc"}
+lootDeck = {"ed4988"}
+troveLootDeck = {"8d9b73"}
+tyrantMapChips = {"1b6a0e", "acbc24", "2913ce", "0e3673", "3be9d9", "c05cbd", "7dcf58"}
+tyrantBoardChips = {"d7b6f2", "f51e3e", "2b3f76", "987f15", "03755b", "d8aedc", "695cf8"}
+tyrantDice = {"141d2e", "0edfc6", "53c334", "fac5c6", "d49cf1", "31e46d", "5fdddc"}
+tyrantCards = {"c9811a", "a4bda1", "7bc3eb", "4611d5", "65a071", "738bde", "b33b7e"}
+nomEncounterCards = {"703dbb"}
+drellenEncounterCards = {"552395"}
+mulmeshEncounterCards = {"345994"}
+gendricksEncounterCards = {"804059", "9fa8c3"}
+goblinEncounterCards = {"1f748a", "73c890"}
+marrowEncounterCards = {"c3dc3b", "404893"}
+dusterEncounterCards = {"e6315d", "2709cb", "cae580"}
+
+    tyrantSelected = nil
+    playerOneSelected = nil
+    playeTwoSelected = nil
+    playerThreeSelected = nil
+    playerFourSelected = nil
+
+	playerCount = 0
+	playerOneActive =  0
+	playerTwoActive =  0
+	playerThreeActive = 0
+	playerFourActive = 0
+
+nomActive = 0
+drellenActive = 0
+mulmeshActive = 0
+gendricksActive = 0
+goblinActive = 0
+marrowActive = 0
+dusterActive = 0
+
+    Nom = {}
+    Nom.click_function = 'selectNom'
+    Nom.function_owner = self
+    Nom.label = 'Nom'
+    Nom.position = {-2.25,0.05,0.3}
+    Nom.rotation = {0,0,0}
+    Nom.width = 410
+    Nom.height = 200
+    Nom.font_size = 70
+    Nom.index = 0
+
+    Drellen = {}
+    Drellen.click_function = 'selectDrellen'
+    Drellen.function_owner = self
+    Drellen.label = 'Drellen'
+    Drellen.position = {-2.25,0.05,0.8}
+    Drellen.rotation = {0,0,0}
+    Drellen.width = 410
+    Drellen.height = 200
+    Drellen.font_size = 70
+    Drellen.index = 1
+
+    Mulmesh = {}
+    Mulmesh.click_function = 'selectMulmesh'
+    Mulmesh.function_owner = self
+    Mulmesh.label = 'Mulmesh'
+    Mulmesh.position = {-2.25,0.05,1.3}
+    Mulmesh.rotation = {0,0,0}
+    Mulmesh.width = 410
+    Mulmesh.height = 200
+    Mulmesh.font_size = 60
+    Mulmesh.index = 2
+
+    Gendricks = {}
+    Gendricks.click_function = 'selectGendricks'
+    Gendricks.function_owner = self
+    Gendricks.label = 'Gendricks'
+    Gendricks.position = {-2.25,0.05,1.8}
+    Gendricks.rotation = {0,0,0}
+    Gendricks.width = 410
+    Gendricks.height = 200
+    Gendricks.font_size = 60
+    Gendricks.index = 3
+
+    Goblin = {}
+    Goblin.click_function = 'selectGoblin'
+    Goblin.function_owner = self
+    Goblin.label = 'Goblin King'
+    Goblin.position = {-2.25,0.05,2.3}
+    Goblin.rotation = {0,0,0}
+    Goblin.width = 410
+    Goblin.height = 200
+    Goblin.font_size = 55
+    Goblin.index = 4
+
+    Marrow = {}
+    Marrow.click_function = 'selectMarrow'
+    Marrow.function_owner = self
+    Marrow.label = 'Marrow'
+    Marrow.position = {-2.25,0.05,2.8}
+    Marrow.rotation = {0,0,0}
+    Marrow.width = 410
+    Marrow.height = 200
+    Marrow.font_size = 70
+    Marrow.index = 5
+
+    Duster = {}
+    Duster.click_function = 'selectDuster'
+    Duster.function_owner = self
+    Duster.label = 'Duster'
+    Duster.position = {-2.25,0.05,3.3}
+    Duster.rotation = {0,0,0}
+    Duster.width = 410
+    Duster.height = 200
+    Duster.font_size = 70
+    Duster.index = 6
+
+    Boomer1 = {}
+    Boomer1.click_function = 'selectBoomer1'
+    Boomer1.function_owner = self
+    Boomer1.label = 'Boomer'
+    Boomer1.position = {-1.25,0.05,0.3}
+    Boomer1.rotation = {0,0,0}
+    Boomer1.width = 410
+    Boomer1.height = 200
+    Boomer1.font_size = 70
+    Boomer1.index = 7
+    Boomer1.color = {0.8, 0.8, 0}
+    Boomer1.font_color = {1, 1, 1}
+
+    Ghillie1 = {}
+    Ghillie1.click_function = 'selectGhillie1'
+    Ghillie1.function_owner = self
+    Ghillie1.label = 'Ghillie'
+    Ghillie1.position = {-1.25,0.05,0.8}
+    Ghillie1.rotation = {0,0,0}
+    Ghillie1.width = 410
+    Ghillie1.height = 200
+    Ghillie1.font_size = 70
+    Ghillie1.index = 8
+    Ghillie1.color = {0, 1, 0}
+    Ghillie1.font_color = {1, 1, 1}
+
+    Nugget1 = {}
+    Nugget1.click_function = 'selectNugget1'
+    Nugget1.function_owner = self
+    Nugget1.label = 'Nugget'
+    Nugget1.position = {-1.25,0.05, 1.3}
+    Nugget1.rotation = {0,0,0}
+    Nugget1.width = 410
+    Nugget1.height = 200
+    Nugget1.font_size = 70
+    Nugget1.index = 9
+    Nugget1.color = {0.8, 0, 1}
+    Nugget1.font_color = {1, 1, 1}
+
+    Patches1 = {}
+    Patches1.click_function = 'selectPatches1'
+    Patches1.function_owner = self
+    Patches1.label = 'Patches'
+    Patches1.position = {-1.25,0.05,1.8}
+    Patches1.rotation = {0,0,0}
+    Patches1.width = 410
+    Patches1.height = 200
+    Patches1.font_size = 70
+    Patches1.index = 10
+    Patches1.color = {1, 0, 0}
+    Patches1.font_color = {1, 1, 1}
+
+    Picket1 = {}
+    Picket1.click_function = 'selectPicket1'
+    Picket1.function_owner = self
+    Picket1.label = 'Picket'
+    Picket1.position = {-1.25,0.05,2.3}
+    Picket1.rotation = {0,0,0}
+    Picket1.width = 410
+    Picket1.height = 200
+    Picket1.font_size = 70
+    Picket1.index = 11
+    Picket1.color = {0, 0, 1}
+    Picket1.font_color = {1, 1, 1}
+
+    Tantrum1 = {}
+    Tantrum1.click_function = 'selectTantrum1'
+    Tantrum1.function_owner = self
+    Tantrum1.label = 'Tantrum'
+    Tantrum1.position = {-1.25,0.05,2.8}
+    Tantrum1.rotation = {0,0,0}
+    Tantrum1.width = 410
+    Tantrum1.height = 200
+    Tantrum1.font_size = 70
+    Tantrum1.index = 12
+    Tantrum1.color = {0.5, 0.5, 0.5}
+    Tantrum1.font_color = {1, 1, 1}
+
+    Tink1 = {}
+    Tink1.click_function = 'selectTink1'
+    Tink1.function_owner = self
+    Tink1.label = 'Tink'
+    Tink1.position = {-1.25,0.05,3.3}
+    Tink1.rotation = {0,0,0}
+    Tink1.width = 410
+    Tink1.height = 200
+    Tink1.font_size = 70
+    Tink1.index = 13
+    Tink1.color = {1, 0.5, 0}
+    Tink1.font_color = {1, 1, 1}
+
+    Boomer2 = {}
+    Boomer2.click_function = 'selectBoomer2'
+    Boomer2.function_owner = self
+    Boomer2.label = 'Boomer'
+    Boomer2.position = {-0.15,0.05,0.3}
+    Boomer2.rotation = {0,0,0}
+    Boomer2.width = 410
+    Boomer2.height = 200
+    Boomer2.font_size = 70
+    Boomer2.index = 14
+    Boomer2.color = {0.8, 0.8, 0}
+    Boomer2.font_color = {1, 1, 1}
+
+    Ghillie2 = {}
+    Ghillie2.click_function = 'selectGhillie2'
+    Ghillie2.function_owner = self
+    Ghillie2.label = 'Ghillie'
+    Ghillie2.position = {-0.15,0.05,0.8}
+    Ghillie2.rotation = {0,0,0}
+    Ghillie2.width = 410
+    Ghillie2.height = 200
+    Ghillie2.font_size = 70
+    Ghillie2.index = 15
+    Ghillie2.color = {0, 1, 0}
+    Ghillie2.font_color = {1, 1, 1}
+
+    Nugget2 = {}
+    Nugget2.click_function = 'selectNugget2'
+    Nugget2.function_owner = self
+    Nugget2.label = 'Nugget'
+    Nugget2.position = {-0.15,0.05, 1.3}
+    Nugget2.rotation = {0,0,0}
+    Nugget2.width = 410
+    Nugget2.height = 200
+    Nugget2.font_size = 70
+    Nugget2.index = 16
+    Nugget2.color = {0.8, 0, 1}
+    Nugget2.font_color = {1, 1, 1}
+
+    Patches2 = {}
+    Patches2.click_function = 'selectPatches2'
+    Patches2.function_owner = self
+    Patches2.label = 'Patches'
+    Patches2.position = {-0.15,0.05,1.8}
+    Patches2.rotation = {0,0,0}
+    Patches2.width = 410
+    Patches2.height = 200
+    Patches2.font_size = 70
+    Patches2.index = 17
+    Patches2.color = {1, 0, 0}
+    Patches2.font_color = {1, 1, 1}
+
+    Picket2 = {}
+    Picket2.click_function = 'selectPicket2'
+    Picket2.function_owner = self
+    Picket2.label = 'Picket'
+    Picket2.position = {-0.15,0.05,2.3}
+    Picket2.rotation = {0,0,0}
+    Picket2.width = 410
+    Picket2.height = 200
+    Picket2.font_size = 70
+    Picket2.index = 18
+    Picket2.color = {0, 0, 1}
+    Picket2.font_color = {1, 1, 1}
+
+    Tantrum2 = {}
+    Tantrum2.click_function = 'selectTantrum2'
+    Tantrum2.function_owner = self
+    Tantrum2.label = 'Tantrum'
+    Tantrum2.position = {-0.15,0.05,2.8}
+    Tantrum2.rotation = {0,0,0}
+    Tantrum2.width = 410
+    Tantrum2.height = 200
+    Tantrum2.font_size = 70
+    Tantrum2.index = 19
+    Tantrum2.color = {0.5, 0.5, 0.5}
+    Tantrum2.font_color = {1, 1, 1}
+
+    Tink2 = {}
+    Tink2.click_function = 'selectTink2'
+    Tink2.function_owner = self
+    Tink2.label = 'Tink'
+    Tink2.position = {-0.15,0.05,3.3}
+    Tink2.rotation = {0,0,0}
+    Tink2.width = 410
+    Tink2.height = 200
+    Tink2.font_size = 70
+    Tink2.index = 20
+    Tink2.color = {1, 0.5, 0}
+    Tink2.font_color = {1, 1, 1}
+
+    Boomer3 = {}
+    Boomer3.click_function = 'selectBoomer3'
+    Boomer3.function_owner = self
+    Boomer3.label = 'Boomer'
+    Boomer3.position = {1,0.05,0.3}
+    Boomer3.rotation = {0,0,0}
+    Boomer3.width = 410
+    Boomer3.height = 200
+    Boomer3.font_size = 70
+    Boomer3.index = 21
+    Boomer3.color = {0.8, 0.8, 0}
+    Boomer3.font_color = {1, 1, 1}
+
+    Ghillie3 = {}
+    Ghillie3.click_function = 'selectGhillie3'
+    Ghillie3.function_owner = self
+    Ghillie3.label = 'Ghillie'
+    Ghillie3.position = {1,0.05,0.8}
+    Ghillie3.rotation = {0,0,0}
+    Ghillie3.width = 410
+    Ghillie3.height = 200
+    Ghillie3.font_size = 70
+    Ghillie3.index = 22
+    Ghillie3.color = {0, 1, 0}
+    Ghillie3.font_color = {1, 1, 1}
+
+    Nugget3 = {}
+    Nugget3.click_function = 'selectNugget3'
+    Nugget3.function_owner = self
+    Nugget3.label = 'Nugget'
+    Nugget3.position = {1, 0.05, 1.3}
+    Nugget3.rotation = {0,0,0}
+    Nugget3.width = 410
+    Nugget3.height = 200
+    Nugget3.font_size = 70
+    Nugget3.index = 23
+    Nugget3.color = {0.8, 0, 1}
+    Nugget3.font_color = {1, 1, 1}
+
+    Patches3 = {}
+    Patches3.click_function = 'selectPatches3'
+    Patches3.function_owner = self
+    Patches3.label = 'Patches'
+    Patches3.position = {1,0.05,1.8}
+    Patches3.rotation = {0,0,0}
+    Patches3.width = 410
+    Patches3.height = 200
+    Patches3.font_size = 70
+    Patches3.index = 24
+    Patches3.color = {1, 0, 0}
+    Patches3.font_color = {1, 1, 1}
+
+    Picket3 = {}
+    Picket3.click_function = 'selectPicket3'
+    Picket3.function_owner = self
+    Picket3.label = 'Picket'
+    Picket3.position = {1,0.05,2.3}
+    Picket3.rotation = {0,0,0}
+    Picket3.width = 410
+    Picket3.height = 200
+    Picket3.font_size = 70
+    Picket3.index = 25
+    Picket3.color = {0, 0, 1}
+    Picket3.font_color = {1, 1, 1}
+
+    Tantrum3 = {}
+    Tantrum3.click_function = 'selectTantrum3'
+    Tantrum3.function_owner = self
+    Tantrum3.label = 'Tantrum'
+    Tantrum3.position = {1,0.05,2.8}
+    Tantrum3.rotation = {0,0,0}
+    Tantrum3.width = 410
+    Tantrum3.height = 200
+    Tantrum3.font_size = 70
+    Tantrum3.index = 26
+    Tantrum3.color = {0.5, 0.5, 0.5}
+    Tantrum3.font_color = {1, 1, 1}
+
+    Tink3 = {}
+    Tink3.click_function = 'selectTink3'
+    Tink3.function_owner = self
+    Tink3.label = 'Tink'
+    Tink3.position = {1,0.05,3.3}
+    Tink3.rotation = {0,0,0}
+    Tink3.width = 410
+    Tink3.height = 200
+    Tink3.font_size = 70
+    Tink3.index = 27
+    Tink3.color = {1, 0.5, 0}
+    Tink3.font_color = {1, 1, 1}
+
+    Boomer4 = {}
+    Boomer4.click_function = 'selectBoomer4'
+    Boomer4.function_owner = self
+    Boomer4.label = 'Boomer'
+    Boomer4.position = {2.15,0.05,0.3}
+    Boomer4.rotation = {0,0,0}
+    Boomer4.width = 410
+    Boomer4.height = 200
+    Boomer4.font_size = 70
+    Boomer4.index = 28
+    Boomer4.color = {0.8, 0.8, 0}
+    Boomer4.font_color = {1, 1, 1}
+
+    Ghillie4 = {}
+    Ghillie4.click_function = 'selectGhillie4'
+    Ghillie4.function_owner = self
+    Ghillie4.label = 'Ghillie'
+    Ghillie4.position = {2.15, 0.05, 0.8}
+    Ghillie4.rotation = {0,0,0}
+    Ghillie4.width = 410
+    Ghillie4.height = 200
+    Ghillie4.font_size = 70
+    Ghillie4.index = 29
+    Ghillie4.color = {0, 1, 0}
+    Ghillie4.font_color = {1, 1, 1}
+
+    Nugget4 = {}
+    Nugget4.click_function = 'selectNugget4'
+    Nugget4.function_owner = self
+    Nugget4.label = 'Nugget'
+    Nugget4.position = {2.15,0.05, 1.3}
+    Nugget4.rotation = {0,0,0}
+    Nugget4.width = 410
+    Nugget4.height = 200
+    Nugget4.font_size = 70
+    Nugget4.index = 30
+    Nugget4.color = {0.8, 0, 1}
+    Nugget4.font_color = {1, 1, 1}
+
+    Patches4 = {}
+    Patches4.click_function = 'selectPatches4'
+    Patches4.function_owner = self
+    Patches4.label = 'Patches'
+    Patches4.position = {2.15,0.05,1.8}
+    Patches4.rotation = {0,0,0}
+    Patches4.width = 410
+    Patches4.height = 200
+    Patches4.font_size = 70
+    Patches4.index = 31
+    Patches4.color = {1, 0, 0}
+    Patches4.font_color = {1, 1, 1}
+
+    Picket4 = {}
+    Picket4.click_function = 'selectPicket4'
+    Picket4.function_owner = self
+    Picket4.label = 'Picket'
+    Picket4.position = {2.15,0.05,2.3}
+    Picket4.rotation = {0,0,0}
+    Picket4.width = 410
+    Picket4.height = 200
+    Picket4.font_size = 70
+    Picket4.index = 32
+    Picket4.color = {0, 0, 1}
+    Picket4.font_color = {1, 1, 1}
+
+    Tantrum4 = {}
+    Tantrum4.click_function = 'selectTantrum4'
+    Tantrum4.function_owner = self
+    Tantrum4.label = 'Tantrum'
+    Tantrum4.position = {2.15,0.05,2.8}
+    Tantrum4.rotation = {0,0,0}
+    Tantrum4.width = 410
+    Tantrum4.height = 200
+    Tantrum4.font_size = 70
+    Tantrum4.index = 33
+    Tantrum4.color = {0.5, 0.5, 0.5}
+    Tantrum4.font_color = {1, 1, 1}
+
+    Tink4 = {}
+    Tink4.click_function = 'selectTink4'
+    Tink4.function_owner = self
+    Tink4.label = 'Tink'
+    Tink4.position = {2.15,0.05,3.3}
+    Tink4.rotation = {0,0,0}
+    Tink4.width = 410
+    Tink4.height = 200
+    Tink4.font_size = 70
+    Tink4.index = 34
+    Tink4.color = {1, 0.5, 0}
+    Tink4.font_color = {1, 1, 1}
+
+    startGame = {}
+    startGame.click_function = 'gameStart'
+    startGame.function_owner = self
+    startGame.label = 'Click to Start after selecting a Tyrant & Characters'
+    startGame.position = {-0.15,0.05,3.8}
+    startGame.rotation = {0,0,0}
+    startGame.width = 2100
+    startGame.height = 200
+    startGame.font_size = 90
+    startGame.index = 35
+
+function onload()
+    self.createButton(Nom)
+    self.createButton(Drellen)
+    self.createButton(Mulmesh)
+    self.createButton(Gendricks)
+    self.createButton(Goblin)
+    self.createButton(Marrow)
+    self.createButton(Duster)
+    self.createButton(Boomer1)
+    self.createButton(Ghillie1)
+    self.createButton(Nugget1)
+    self.createButton(Patches1)
+    self.createButton(Picket1)
+    self.createButton(Tantrum1)
+    self.createButton(Tink1)
+    self.createButton(Boomer2)
+    self.createButton(Ghillie2)
+    self.createButton(Nugget2)
+    self.createButton(Patches2)
+    self.createButton(Picket2)
+    self.createButton(Tantrum2)
+    self.createButton(Tink2)
+    self.createButton(Boomer3)
+    self.createButton(Ghillie3)
+    self.createButton(Nugget3)
+    self.createButton(Patches3)
+    self.createButton(Picket3)
+    self.createButton(Tantrum3)
+    self.createButton(Tink3)
+    self.createButton(Boomer4)
+    self.createButton(Ghillie4)
+    self.createButton(Nugget4)
+    self.createButton(Patches4)
+    self.createButton(Picket4)
+    self.createButton(Tantrum4)
+    self.createButton(Tink4)
+    self.createButton(startGame)
+end
+
+function selectBoomer1()
+	if playerOneSelected == "Boomer" then
+		clearPlayerOneSelection()
+	elseif (playerTwoSelected  == "Boomer") or (playerThreeSelected  == "Boomer") or (playerFourSelected  == "Boomer") then
+		broadcastToAll ( "Hero already selected by another player", {1, 0.5, 0.5} )
+	else
+    Boomer1.label = ("* Boomer *")
+    Ghillie1.label = ("Ghillie")
+    Nugget1.label = ("Nugget")
+    Patches1.label = ("Patches")
+    Picket1.label = ("Picket")
+    Tantrum1.label = ("Tantrum")
+    Tink1.label = ("Tink")
+    playerOneSelected = "Boomer"
+    playerOneActive = 1
+    buttonUpdate()
+end
+end
+
+function selectGhillie1()
+	if playerOneSelected == "Ghillie" then
+		clearPlayerOneSelection()
+	elseif (playerTwoSelected  == "Ghillie") or (playerThreeSelected  == "Ghillie") or (playerFourSelected  == "Ghillie") then
+		broadcastToAll ( "Hero already selected by another player", {1, 0.5, 0.5} )
+	else
+    Boomer1.label = ("Boomer")
+    Ghillie1.label = ("* Ghillie *")
+    Nugget1.label = ("Nugget")
+    Patches1.label = ("Patches")
+    Picket1.label = ("Picket")
+    Tantrum1.label = ("Tantrum")
+    Tink1.label = ("Tink")
+    playerOneSelected = "Ghillie"
+    playerOneActive = 1
+    buttonUpdate()
+end
+end
+
+function selectNugget1()
+	if playerOneSelected == "Nugget" then
+		clearPlayerOneSelection()
+	elseif (playerTwoSelected  == "Nugget") or (playerThreeSelected  == "Nugget") or (playerFourSelected  == "Nugget") then
+		broadcastToAll ( "Hero already selected by another player", {1, 0.5, 0.5} )
+	else
+    Boomer1.label = ("Boomer")
+    Ghillie1.label = ("Ghillie")
+    Nugget1.label = ("* Nugget *")
+    Patches1.label = ("Patches")
+    Picket1.label = ("Picket")
+    Tantrum1.label = ("Tantrum")
+    Tink1.label = ("Tink")
+    playerOneSelected = "Nugget"
+    playerOneActive = 1
+    buttonUpdate()
+end
+end
+
+function selectPatches1()
+	if playerOneSelected == "Patches" then
+		clearPlayerOneSelection()
+	elseif (playerTwoSelected  == "Patches") or (playerThreeSelected  == "Patches") or (playerFourSelected  == "Patches") then
+		broadcastToAll ( "Hero already selected by another player", {1, 0.5, 0.5} )
+	else
+    Boomer1.label = ("Boomer")
+    Ghillie1.label = ("Ghillie")
+    Nugget1.label = ("Nugget")
+    Patches1.label = ("* Patches *")
+    Picket1.label = ("Picket")
+    Tantrum1.label = ("Tantrum")
+    Tink1.label = ("Tink")
+    playerOneSelected = "Patches"
+    playerOneActive = 1
+    buttonUpdate()
+end
+end
+
+function selectPicket1()
+	if playerOneSelected == "Picket" then
+		clearPlayerOneSelection()
+	elseif (playerTwoSelected  == "Picket") or (playerThreeSelected  == "Picket") or (playerFourSelected  == "Picket") then
+		broadcastToAll ( "Hero already selected by another player", {1, 0.5, 0.5} )
+	else
+    Boomer1.label = ("Boomer")
+    Ghillie1.label = ("Ghillie")
+    Nugget1.label = ("Nugget")
+    Patches1.label = ("Patches")
+    Picket1.label = ("* Picket *")
+    Tantrum1.label = ("Tantrum")
+    Tink1.label = ("Tink")
+    playerOneSelected = "Picket"
+    playerOneActive = 1
+    buttonUpdate()
+end
+end
+
+function selectTantrum1()
+	if playerOneSelected == "Tantrum" then
+		clearPlayerOneSelection()
+	elseif (playerTwoSelected  == "Tantrum") or (playerThreeSelected  == "Tantrum") or (playerFourSelected  == "Tantrum") then
+		broadcastToAll ( "Hero already selected by another player", {1, 0.5, 0.5} )
+	else
+    Boomer1.label = ("Boomer")
+    Ghillie1.label = ("Ghillie")
+    Nugget1.label = ("Nugget")
+    Patches1.label = ("Patches")
+    Picket1.label = ("Picket")
+    Tantrum1.label = ("* Tantrum *")
+    Tink1.label = ("Tink")
+    playerOneSelected = "Tantrum"
+    playerOneActive = 1
+    buttonUpdate()
+end
+end
+
+function selectTink1()
+	if playerOneSelected == "Tink" then
+		clearPlayerOneSelection()
+	elseif (playerTwoSelected  == "Tink") or (playerThreeSelected  == "Tink") or (playerFourSelected  == "Tink") then
+		broadcastToAll ( "Hero already selected by another player", {1, 0.5, 0.5} )
+	else
+    Boomer1.label = ("Boomer")
+    Ghillie1.label = ("Ghillie")
+    Nugget1.label = ("Nugget")
+    Patches1.label = ("Patches")
+    Picket1.label = ("Picket")
+    Tantrum1.label = ("Tantrum")
+    Tink1.label = ("* Tink *")
+    playerOneSelected = "Tink"
+    playerOneActive = 1
+    buttonUpdate()
+end
+end
+
+function selectBoomer2()
+	if playerTwoSelected == "Boomer" then
+		clearPlayerTwoSelection()
+	elseif (playerOneSelected  == "Boomer") or (playerThreeSelected  == "Boomer") or (playerFourSelected  == "Boomer") then
+		broadcastToAll ( "Hero already selected by another player", {1, 0.5, 0.5} )
+	else
+    Boomer2.label = ("* Boomer *")
+    Ghillie2.label = ("Ghillie")
+    Nugget2.label = ("Nugget")
+    Patches2.label = ("Patches")
+    Picket2.label = ("Picket")
+    Tantrum2.label = ("Tantrum")
+    Tink2.label = ("Tink")
+    playerTwoSelected = "Boomer"
+    playerTwoActive = 1
+    buttonUpdate()
+end
+end
+
+function selectGhillie2()
+	if playerTwoSelected == "Ghillie" then
+		clearPlayerTwoSelection()
+	elseif (playerOneSelected  == "Ghillie") or (playerThreeSelected  == "Ghillie") or (playerFourSelected  == "Ghillie") then
+		broadcastToAll ( "Hero already selected by another player", {1, 0.5, 0.5} )
+	else
+    Boomer2.label = ("Boomer")
+    Ghillie2.label = ("* Ghillie *")
+    Nugget2.label = ("Nugget")
+    Patches2.label = ("Patches")
+    Picket2.label = ("Picket")
+    Tantrum2.label = ("Tantrum")
+    Tink2.label = ("Tink")
+    playerTwoSelected = "Ghillie"
+    playerTwoActive = 1
+    buttonUpdate()
+end
+end
+
+function selectNugget2()
+	if playerTwoSelected == "Nugget" then
+		clearPlayerTwoSelection()
+	elseif (playerOneSelected  == "Nugget") or (playerThreeSelected  == "Nugget") or (playerFourSelected  == "Nugget") then
+		broadcastToAll ( "Hero already selected by another player", {1, 0.5, 0.5} )
+	else
+    Boomer2.label = ("Boomer")
+    Ghillie2.label = ("Ghillie")
+    Nugget2.label = ("* Nugget *")
+    Patches2.label = ("Patches")
+    Picket2.label = ("Picket")
+    Tantrum2.label = ("Tantrum")
+    Tink2.label = ("Tink")
+    playerTwoSelected = "Nugget"
+    playerTwoActive = 1
+    buttonUpdate()
+end
+end
+
+function selectPatches2()
+	if playerTwoSelected == "Patches" then
+		clearPlayerTwoSelection()
+	elseif (playerOneSelected  == "Patches") or (playerThreeSelected  == "Patches") or (playerFourSelected  == "Patches") then
+		broadcastToAll ( "Hero already selected by another player", {1, 0.5, 0.5} )
+	else
+    Boomer2.label = ("Boomer")
+    Ghillie2.label = ("Ghillie")
+    Nugget2.label = ("Nugget")
+    Patches2.label = ("* Patches *")
+    Picket2.label = ("Picket")
+    Tantrum2.label = ("Tantrum")
+    Tink2.label = ("Tink")
+    playerTwoSelected = "Patches"
+    playerTwoActive = 1
+    buttonUpdate()
+end
+end
+
+function selectPicket2()
+	if playerTwoSelected == "Picket" then
+		clearPlayerTwoSelection()
+	elseif (playerOneSelected  == "Picket") or (playerThreeSelected  == "Picket") or (playerFourSelected  == "Picket") then
+		broadcastToAll ( "Hero already selected by another player", {1, 0.5, 0.5} )
+	else
+    Boomer2.label = ("Boomer")
+    Ghillie2.label = ("Ghillie")
+    Nugget2.label = ("Nugget")
+    Patches2.label = ("Patches")
+    Picket2.label = ("* Picket *")
+    Tantrum2.label = ("Tantrum")
+    Tink2.label = ("Tink")
+    playerTwoSelected = "Picket"
+    playerTwoActive = 1
+    buttonUpdate()
+end
+end
+
+function selectTantrum2()
+	if playerTwoSelected == "Tantrum" then
+		clearPlayerTwoSelection()
+	elseif (playerOneSelected  == "Tantrum") or (playerThreeSelected  == "Tantrum") or (playerFourSelected  == "Tantrum") then
+		broadcastToAll ( "Hero already selected by another player", {1, 0.5, 0.5} )
+	else
+    Boomer2.label = ("Boomer")
+    Ghillie2.label = ("Ghillie")
+    Nugget2.label = ("Nugget")
+    Patches2.label = ("Patches")
+    Picket2.label = ("Picket")
+    Tantrum2.label = ("* Tantrum *")
+    Tink2.label = ("Tink")
+    playerTwoSelected = "Tantrum"
+    playerTwoActive = 1
+    buttonUpdate()
+end
+end
+
+function selectTink2()
+	if playerTwoSelected == "Tink" then
+		clearPlayerTwoSelection()
+	elseif (playerOneSelected  == "Tink") or (playerThreeSelected  == "Tink") or (playerFourSelected  == "Tink") then
+		broadcastToAll ( "Hero already selected by another player", {1, 0.5, 0.5} )
+	else
+    Boomer2.label = ("Boomer")
+    Ghillie2.label = ("Ghillie")
+    Nugget2.label = ("Nugget")
+    Patches2.label = ("Patches")
+    Picket2.label = ("Picket")
+    Tantrum2.label = ("Tantrum")
+    Tink2.label = ("* Tink *")
+    playerTwoSelected = "Tink"
+    playerTwoActive = 1
+    buttonUpdate()
+end
+end
+
+function selectBoomer3()
+	if playerThreeSelected == "Boomer" then
+		clearPlayerThreeSelection()
+	elseif (playerOneSelected  == "Boomer") or (playerTwoSelected  == "Boomer") or (playerFourSelected  == "Boomer") then
+		broadcastToAll ( "Hero already selected by another player", {1, 0.5, 0.5} )
+	else
+    Boomer3.label = ("* Boomer *")
+    Ghillie3.label = ("Ghillie")
+    Nugget3.label = ("Nugget")
+    Patches3.label = ("Patches")
+    Picket3.label = ("Picket")
+    Tantrum3.label = ("Tantrum")
+    Tink3.label = ("Tink")
+    playerThreeSelected = "Boomer"
+    playerThreeActive = 1
+    buttonUpdate()
+end
+end
+
+function selectGhillie3()
+	if playerThreeSelected == "Ghillie" then
+		clearPlayerThreeSelection()
+	elseif (playerOneSelected  == "Ghillie") or (playerTwoSelected  == "Ghillie") or (playerFourSelected  == "Ghillie") then
+		broadcastToAll ( "Hero already selected by another player", {1, 0.5, 0.5} )
+	else
+    Boomer3.label = ("Boomer")
+    Ghillie3.label = ("* Ghillie *")
+    Nugget3.label = ("Nugget")
+    Patches3.label = ("Patches")
+    Picket3.label = ("Picket")
+    Tantrum3.label = ("Tantrum")
+    Tink3.label = ("Tink")
+    playerThreeSelected = "Ghillie"
+    playerThreeActive = 1
+    buttonUpdate()
+end
+end
+
+function selectNugget3()
+	if playerThreeSelected == "Nugget" then
+		clearPlayerThreeSelection()
+	elseif (playerOneSelected  == "Nugget") or (playerTwoSelected  == "Nugget") or (playerFourSelected  == "Nugget") then
+		broadcastToAll ( "Hero already selected by another player", {1, 0.5, 0.5} )
+	else
+    Boomer3.label = ("Boomer")
+    Ghillie3.label = ("Ghillie")
+    Nugget3.label = ("* Nugget *")
+    Patches3.label = ("Patches")
+    Picket3.label = ("Picket")
+    Tantrum3.label = ("Tantrum")
+    Tink3.label = ("Tink")
+    playerThreeSelected = "Nugget"
+    playerThreeActive = 1
+    buttonUpdate()
+end
+end
+
+function selectPatches3()
+	if playerThreeSelected == "Patches" then
+		clearPlayerThreeSelection()
+	elseif (playerOneSelected  == "Patches") or (playerTwoSelected  == "Patches") or (playerFourSelected  == "Patches") then
+		broadcastToAll ( "Hero already selected by another player", {1, 0.5, 0.5} )
+	else
+    Boomer3.label = ("Boomer")
+    Ghillie3.label = ("Ghillie")
+    Nugget3.label = ("Nugget")
+    Patches3.label = ("* Patches *")
+    Picket3.label = ("Picket")
+    Tantrum3.label = ("Tantrum")
+    Tink3.label = ("Tink")
+    playerThreeSelected = "Patches"
+    playerThreeActive = 1
+    buttonUpdate()
+end
+end
+
+function selectPicket3()
+	if playerThreeSelected == "Picket" then
+		clearPlayerThreeSelection()
+	elseif (playerOneSelected  == "Picket") or (playerTwoSelected  == "Picket") or (playerFourSelected  == "Picket") then
+		broadcastToAll ( "Hero already selected by another player", {1, 0.5, 0.5} )
+	else
+    Boomer3.label = ("Boomer")
+    Ghillie3.label = ("Ghillie")
+    Nugget3.label = ("Nugget")
+    Patches3.label = ("Patches")
+    Picket3.label = ("* Picket *")
+    Tantrum3.label = ("Tantrum")
+    Tink3.label = ("Tink")
+    playerThreeSelected = "Picket"
+    playerThreeActive = 1
+    buttonUpdate()
+end
+end
+
+function selectTantrum3()
+	if playerThreeSelected == "Tantrum" then
+		clearPlayerThreeSelection()
+	elseif (playerOneSelected  == "Tantrum") or (playerTwoSelected  == "Tantrum") or (playerFourSelected  == "Tantrum") then
+		broadcastToAll ( "Hero already selected by another player", {1, 0.5, 0.5} )
+	else
+    Boomer3.label = ("Boomer")
+    Ghillie3.label = ("Ghillie")
+    Nugget3.label = ("Nugget")
+    Patches3.label = ("Patches")
+    Picket3.label = ("Picket")
+    Tantrum3.label = ("* Tantrum *")
+    Tink3.label = ("Tink")
+    playerThreeSelected = "Tantrum"
+    playerThreeActive = 1
+    buttonUpdate()
+end
+end
+
+function selectTink3()
+	if playerThreeSelected == "Tink" then
+		clearPlayerThreeSelection()
+	elseif (playerOneSelected  == "Tink") or (playerTwoSelected  == "Tink") or (playerFourSelected  == "Tink") then
+		broadcastToAll ( "Hero already selected by another player", {1, 0.5, 0.5} )
+	else
+    Boomer3.label = ("Boomer")
+    Ghillie3.label = ("Ghillie")
+    Nugget3.label = ("Nugget")
+    Patches3.label = ("Patches")
+    Picket3.label = ("Picket")
+    Tantrum3.label = ("Tantrum")
+    Tink3.label = ("* Tink *")
+    playerThreeSelected = "Tink"
+    playerThreeActive = 1
+    buttonUpdate()
+end
+end
+
+function selectBoomer4()
+	if playerFourSelected == "Boomer" then
+		clearPlayerFourSelection()
+	elseif (playerOneSelected  == "Boomer") or (playerTwoSelected  == "Boomer") or (playerThreeSelected  == "Boomer") then
+		broadcastToAll ( "Hero already selected by another player", {1, 0.5, 0.5} )
+	else
+    Boomer4.label = ("* Boomer *")
+    Ghillie4.label = ("Ghillie")
+    Nugget4.label = ("Nugget")
+    Patches4.label = ("Patches")
+    Picket4.label = ("Picket")
+    Tantrum4.label = ("Tantrum")
+    Tink4.label = ("Tink")
+    playerFourSelected = "Boomer"
+    playerFourActive = 1
+    buttonUpdate()
+end
+end
+
+function selectGhillie4()
+	if playerFourSelected == "Ghillie" then
+		clearPlayerFourSelection()
+	elseif (playerOneSelected  == "Ghillie") or (playerTwoSelected  == "Ghillie") or (playerThreeSelected  == "Ghillie") then
+		broadcastToAll ( "Hero already selected by another player", {1, 0.5, 0.5} )
+	else
+    Boomer4.label = ("Boomer")
+    Ghillie4.label = ("* Ghillie *")
+    Nugget4.label = ("Nugget")
+    Patches4.label = ("Patches")
+    Picket4.label = ("Picket")
+    Tantrum4.label = ("Tantrum")
+    Tink4.label = ("Tink")
+    playerFourSelected = "Ghillie"
+    playerFourActive = 1
+    buttonUpdate()
+end
+end
+
+function selectNugget4()
+	if playerFourSelected == "Nugget" then
+		clearPlayerFourSelection()
+	elseif (playerOneSelected  == "Nugget") or (playerTwoSelected  == "Nugget") or (playerThreeSelected  == "Nugget") then
+		broadcastToAll ( "Hero already selected by another player", {1, 0.5, 0.5} )
+	else
+    Boomer4.label = ("Boomer")
+    Ghillie4.label = ("Ghillie")
+    Nugget4.label = ("* Nugget *")
+    Patches4.label = ("Patches")
+    Picket4.label = ("Picket")
+    Tantrum4.label = ("Tantrum")
+    Tink4.label = ("Tink")
+    playerFourSelected = "Nugget"
+    playerFourActive = 1
+    buttonUpdate()
+end
+end
+
+function selectPatches4()
+	if playerFourSelected == "Patches" then
+		clearPlayerFourSelection()
+	elseif (playerOneSelected  == "Patches") or (playerTwoSelected  == "Patches") or (playerThreeSelected  == "Patches") then
+		broadcastToAll ( "Hero already selected by another player", {1, 0.5, 0.5} )
+	else
+    Boomer4.label = ("Boomer")
+    Ghillie4.label = ("Ghillie")
+    Nugget4.label = ("Nugget")
+    Patches4.label = ("* Patches *")
+    Picket4.label = ("Picket")
+    Tantrum4.label = ("Tantrum")
+    Tink4.label = ("Tink")
+    playerFourSelected = "Patches"
+    playerFourActive = 1
+    buttonUpdate()
+end
+end
+
+function selectPicket4()
+	if playerFourSelected == "Picket" then
+		clearPlayerFourSelection()
+	elseif (playerOneSelected  == "Picket") or (playerTwoSelected  == "Picket") or (playerThreeSelected  == "Picket") then
+		broadcastToAll ( "Hero already selected by another player", {1, 0.5, 0.5} )
+	else
+    Boomer4.label = ("Boomer")
+    Ghillie4.label = ("Ghillie")
+    Nugget4.label = ("Nugget")
+    Patches4.label = ("Patches")
+    Picket4.label = ("* Picket *")
+    Tantrum4.label = ("Tantrum")
+    Tink4.label = ("Tink")
+    playerFourSelected = "Picket"
+    playerFourActive = 1
+    buttonUpdate()
+end
+end
+
+function selectTantrum4()
+	if playerFourSelected == "Tantrum" then
+		clearPlayerFourSelection()
+	elseif (playerOneSelected  == "Tantrum") or (playerTwoSelected  == "Tantrum") or (playerThreeSelected  == "Tantrum") then
+		broadcastToAll ( "Hero already selected by another player", {1, 0.5, 0.5} )
+	else
+    Boomer4.label = ("Boomer")
+    Ghillie4.label = ("Ghillie")
+    Nugget4.label = ("Nugget")
+    Patches4.label = ("Patches")
+    Picket4.label = ("Picket")
+    Tantrum4.label = ("* Tantrum *")
+    Tink4.label = ("Tink")
+    playerFourSelected = "Tantrum"
+    playerFourActive = 1
+    buttonUpdate()
+end
+end
+
+function selectTink4()
+	if playerFourSelected == "Tink" then
+		clearPlayerFourSelection()
+	elseif (playerOneSelected  == "Tink") or (playerTwoSelected  == "Tink") or (playerThreeSelected  == "Tink") then
+		broadcastToAll ( "Hero already selected by another player", {1, 0.5, 0.5} )
+	else
+    Boomer4.label = ("Boomer")
+    Ghillie4.label = ("Ghillie")
+    Nugget4.label = ("Nugget")
+    Patches4.label = ("Patches")
+    Picket4.label = ("Picket")
+    Tantrum4.label = ("Tantrum")
+    Tink4.label = ("* Tink *")
+    playerFourSelected = "Tink"
+    playerFourActive = 1
+    buttonUpdate()
+end
+end
+
+function selectNom()
+    Nom.label = ("* Nom *")
+    Drellen.label = ("Drellen")
+    Mulmesh.label = ("Mulmesh")
+    Gendricks.label = ("Gendricks")
+    Goblin.label = ("Goblin King")
+    Marrow.label = ("Marrow")
+    Duster.label = ("Duster")
+    tyrantSelected = "Nom"
+    clearActiveTyrant()
+    nomActive = 1
+    buttonUpdate()
+end
+
+function selectDrellen()
+    Nom.label = ("Nom")
+    Drellen.label = ("* Drellen *")
+    Mulmesh.label = ("Mulmesh")
+    Gendricks.label = ("Gendricks")
+    Goblin.label = ("Goblin King")
+    Marrow.label = ("Marrow")
+    Duster.label = ("Duster")
+    tyrantSelected = "Drellen"
+    clearActiveTyrant()
+    drellenActive = 1
+    buttonUpdate()
+end
+
+function selectMulmesh()
+    Nom.label = ("Nom")
+    Drellen.label = ("Drellen")
+    Mulmesh.label = ("* Mulmesh *")
+    Gendricks.label = ("Gendricks")
+    Goblin.label = ("Goblin King")
+    Marrow.label = ("Marrow")
+    Duster.label = ("Duster")
+    tyrantSelected = "Mulmesh"
+    clearActiveTyrant()
+    mulmeshActive = 1
+    buttonUpdate()
+end
+
+function selectGendricks()
+    Nom.label = ("Nom")
+    Drellen.label = ("Drellen")
+    Mulmesh.label = ("Mulmesh")
+    Gendricks.label = ("* Gendricks *")
+    Goblin.label = ("Goblin King")
+    Marrow.label = ("Marrow")
+    Duster.label = ("Duster")
+    tyrantSelected = "Gendricks"
+    clearActiveTyrant()
+    gendricksActive = 1
+    buttonUpdate()
+end
+
+function selectGoblin()
+    Nom.label = ("Nom")
+    Drellen.label = ("Drellen")
+    Mulmesh.label = ("Mulmesh")
+    Gendricks.label = ("Gendricks")
+    Goblin.label = ("* Goblin King *")
+    Marrow.label = ("Marrow")
+    Duster.label = ("Duster")
+    tyrantSelected = "Goblin"
+    clearActiveTyrant()
+    goblinActive = 1
+    buttonUpdate()
+end
+
+function selectMarrow()
+    Nom.label = ("Nom")
+    Drellen.label = ("Drellen")
+    Mulmesh.label = ("Mulmesh")
+    Gendricks.label = ("Gendricks")
+    Goblin.label = ("Goblin King")
+    Marrow.label = ("* Marrow *")
+    Duster.label = ("Duster")
+    tyrantSelected = "Marrow"
+    clearActiveTyrant()
+    marrowActive = 1
+    buttonUpdate()
+end
+
+function selectDuster()
+    Nom.label = ("Nom")
+    Drellen.label = ("Drellen")
+    Mulmesh.label = ("Mulmesh")
+    Gendricks.label = ("Gendricks")
+    Goblin.label = ("Goblin King")
+    Marrow.label = ("Marrow")
+    Duster.label = ("* Duster *")
+    tyrantSelected = "Duster"
+    clearActiveTyrant()
+    dusterActive = 1
+    buttonUpdate()
+end
+
+function buttonUpdate()
+    self = getObjectFromGUID("519c15")
+    self.editButton (Nom)
+    self.editButton (Drellen)
+    self.editButton (Mulmesh)
+    self.editButton (Gendricks)
+    self.editButton (Goblin)
+    self.editButton (Marrow)
+    self.editButton (Duster)
+    self.editButton (Boomer1)
+    self.editButton (Ghillie1)
+    self.editButton (Nugget1)
+    self.editButton (Patches1)
+    self.editButton (Picket1)
+    self.editButton (Tantrum1)
+    self.editButton (Tink1)
+    self.editButton (Boomer2)
+    self.editButton (Ghillie2)
+    self.editButton (Nugget2)
+    self.editButton (Patches2)
+    self.editButton (Picket2)
+    self.editButton (Tantrum2)
+    self.editButton (Tink2)
+    self.editButton (Boomer3)
+    self.editButton (Ghillie3)
+    self.editButton (Nugget3)
+    self.editButton (Patches3)
+    self.editButton (Picket3)
+    self.editButton (Tantrum3)
+    self.editButton (Tink3)
+    self.editButton (Boomer4)
+    self.editButton (Ghillie4)
+    self.editButton (Nugget4)
+    self.editButton (Patches4)
+    self.editButton (Picket4)
+    self.editButton (Tantrum4)
+    self.editButton (Tink4)
+end
+
+function clearPlayerOneSelection()
+    Boomer1.label = ("Boomer")
+    Ghillie1.label = ("Ghillie")
+    Nugget1.label = ("Nugget")
+    Patches1.label = ("Patches")
+    Picket1.label = ("Picket")
+    Tantrum1.label = ("Tantrum")
+    Tink1.label = ("Tink")
+    playerOneSelected = nil
+    playerOneActive = 0
+    buttonUpdate()
+end
+
+function clearPlayerTwoSelection()
+    Boomer2.label = ("Boomer")
+    Ghillie2.label = ("Ghillie")
+    Nugget2.label = ("Nugget")
+    Patches2.label = ("Patches")
+    Picket2.label = ("Picket")
+    Tantrum2.label = ("Tantrum")
+    Tink2.label = ("Tink")
+    playerTwoSelected = nil
+    playerTwoActive = 0
+    buttonUpdate()
+end
+
+function clearPlayerThreeSelection()
+    Boomer3.label = ("Boomer")
+    Ghillie3.label = ("Ghillie")
+    Nugget3.label = ("Nugget")
+    Patches3.label = ("Patches")
+    Picket3.label = ("Picket")
+    Tantrum3.label = ("Tantrum")
+    Tink3.label = ("Tink")
+    playerThreeSelected = nil
+    playerThreeActive = 0
+    buttonUpdate()
+end
+
+function clearPlayerFourSelection()
+    Boomer4.label = ("Boomer")
+    Ghillie4.label = ("Ghillie")
+    Nugget4.label = ("Nugget")
+    Patches4.label = ("Patches")
+    Picket4.label = ("Picket")
+    Tantrum4.label = ("Tantrum")
+    Tink4.label = ("Tink")
+    playerFourSelected = nil
+    playerFourActive = 0
+    buttonUpdate()
+end
+
+function sortNom()
+    local title = getObjectFromGUID(tyrantCards[1])
+    local map = getObjectFromGUID(tyrantMapChips[1])
+    local chip = getObjectFromGUID(tyrantBoardChips[1])
+    local die = getObjectFromGUID(tyrantDice[1])
+    map.setPositionSmooth( {2.36, 2, 7.21} )
+    title.takeObject({position = {14.22, 1.14, 0.96}})
+    chip.setPositionSmooth( {16.7, 1.5, 0.96} )
+    die.setPositionSmooth({16.7,2,0.96})
+    sortOnePointTroll()
+    sortFivePointTroll()
+    sortTwentyPointScale()
+	dealDelay()
+    setupEncounter()
+    sortOnePointOrc()
+    sortFivePointOrc()
+	dealDelay()
+    sortOnePointScale()
+    sortFivePointScale()
+	dealDelay()
+	dealDelay()
+	dealDelay()
+	dealDelay()
+	dealDelay()
+    setupSpecial()
+    dealBag()
+    dealDice()
+broadcastToAll ( "Game is Ready", {1, 1, 1} )
+self.destruct()
+finalClear()
+return 1
+end
+
+function sortDrellen()
+    local title = getObjectFromGUID(tyrantCards[2])
+    local map = getObjectFromGUID(tyrantMapChips[2])
+    local chip = getObjectFromGUID(tyrantBoardChips[2])
+    local die = getObjectFromGUID(tyrantDice[2])
+    map.setPositionSmooth( {2.36, 2, 7.21} )
+    title.takeObject({position = {14.22, 1.14, 0.96}})
+    chip.setPositionSmooth( {16.7, 1.5, 0.96} )
+    die.setPositionSmooth({16.7,2,0.96})
+    sortOnePointBog()
+    sortFivePointBog()
+    sortTwentyPointBog()
+	dealDelay()
+    setupEncounter()
+    sortOnePointGoblin()
+    sortFivePointGoblin()
+    sortTwentyPointBeast()
+	dealDelay()
+    sortOnePointBeast()
+    sortFivePointBeast()
+	dealDelay()
+	dealDelay()
+	dealDelay()
+	dealDelay()
+	dealDelay()
+    setupSpecial()
+    dealBag()
+    dealDice()
+broadcastToAll ( "Game is Ready", {1, 1, 1} )
+self.destruct()
+finalClear()
+return 1
+end
+
+function sortMulmesh()
+    local title = getObjectFromGUID(tyrantCards[3])
+    local map = getObjectFromGUID(tyrantMapChips[3])
+    local chip = getObjectFromGUID(tyrantBoardChips[3])
+    local die = getObjectFromGUID(tyrantDice[3])
+    map.setPositionSmooth( {2.36, 2, 7.21} )
+    title.takeObject({position = {14.22, 1.14, 0.96}})
+    chip.setPositionSmooth( {16.7, 1.5, 0.96} )
+    die.setPositionSmooth({16.7,2,0.96})
+    sortOnePointBog()
+    sortFivePointBog()
+    sortTwentyPointBog()
+	dealDelay()
+    setupEncounter()
+    sortOnePointScale()
+    sortFivePointScale()
+    sortTwentyPointScale()
+	dealDelay()
+    sortOnePointBeast()
+    sortFivePointBeast()
+    sortTwentyPointBeast()
+	dealDelay()
+	dealDelay()
+	dealDelay()
+	dealDelay()
+	dealDelay()
+    setupSpecial()
+    dealBag()
+    dealDice()
+broadcastToAll ( "Game is Ready", {1, 1, 1} )
+self.destruct()
+finalClear()
+return 1
+end
+
+function sortGendricks()
+    local title = getObjectFromGUID(tyrantCards[4])
+    local map = getObjectFromGUID(tyrantMapChips[4])
+    local chip = getObjectFromGUID(tyrantBoardChips[4])
+    local die = getObjectFromGUID(tyrantDice[4])
+    map.setPositionSmooth( {-4.52, 2, 11.83} )
+    title.takeObject({position = {14.22, 1.14, 0.96}})
+    chip.setPositionSmooth( {16.7, 1.5, 0.96} )
+    die.setPositionSmooth({16.7,2,0.96})
+    sortOnePointBog()
+    sortFivePointBog()
+    sortTwentyPointBog()
+	dealDelay()
+    setupEncounter()
+    sortOnePointScale()
+    sortFivePointScale()
+    sortTwentyPointScale()
+	dealDelay()
+    sortOnePointTroll()
+    sortFivePointTroll()
+	dealDelay()
+    sortOnePointOrc()
+    sortFivePointOrc()
+	dealDelay()
+	dealDelay()
+	dealDelay()
+	dealDelay()
+	dealDelay()
+    setupSpecial()
+    dealBag()
+    dealDice()
+broadcastToAll ( "Game is Ready", {1, 1, 1} )
+self.destruct()
+finalClear()
+return 1
+end
+
+function sortGoblin()
+    local title = getObjectFromGUID(tyrantCards[5])
+    local map = getObjectFromGUID(tyrantMapChips[5])
+    local chip = getObjectFromGUID(tyrantBoardChips[5])
+    local die = getObjectFromGUID(tyrantDice[5])
+    map.setPositionSmooth( {-4.52, 2, 11.83} )
+    title.takeObject({position = {14.22, 1.14, 0.96}})
+    chip.setPositionSmooth( {16.7, 1.5, 0.96} )
+    die.setPositionSmooth({16.7,2,0.96})
+    sortOnePointGoblin()
+    sortFivePointGoblin()
+    sortTwentyPointBog()
+	dealDelay()
+    setupEncounter()
+    sortOnePointOrc()
+    sortFivePointOrc()
+    sortTwentyPointBeast()
+	dealDelay()
+    sortOnePointBog()
+    sortFivePointBog()
+	dealDelay()
+    sortOnePointBeast()
+    sortFivePointBeast()
+	dealDelay()
+	dealDelay()
+	dealDelay()
+	dealDelay()
+	dealDelay()
+    setupSpecial()
+    dealBag()
+    dealDice()
+broadcastToAll ( "Game is Ready", {1, 1, 1} )
+self.destruct()
+finalClear()
+return 1
+end
+
+function sortMarrow()
+    local title = getObjectFromGUID(tyrantCards[6])
+    local map = getObjectFromGUID(tyrantMapChips[6])
+    local chip = getObjectFromGUID(tyrantBoardChips[6])
+    local die = getObjectFromGUID(tyrantDice[6])
+    map.setPositionSmooth( {5.38, 2, 10.62} )
+    title.takeObject({position = {14.22, 1.14, 0.96}})
+    chip.setPositionSmooth( {16.7, 1.5, 0.96} )
+    die.setPositionSmooth({16.7,2,0.96})
+    sortOnePointOrc()
+    sortFivePointOrc()
+    sortTwentyPointBog()
+	dealDelay()
+    setupEncounter()
+    sortOnePointGoblin()
+    sortFivePointGoblin()
+    sortTwentyPointScale()
+	dealDelay()
+    sortOnePointBog()
+    sortFivePointBog()
+	dealDelay()
+    sortOnePointScale()
+    sortFivePointScale()
+	dealDelay()
+	dealDelay()
+	dealDelay()
+	dealDelay()
+	dealDelay()
+    setupSpecial()
+    dealBag()
+    dealDice()
+broadcastToAll ( "Game is Ready", {1, 1, 1} )
+self.destruct()
+finalClear()
+return 1
+end
+
+function sortDuster()
+    local title = getObjectFromGUID(tyrantCards[7])
+    local map = getObjectFromGUID(tyrantMapChips[7])
+    local chip = getObjectFromGUID(tyrantBoardChips[7])
+    local die = getObjectFromGUID(tyrantDice[7])
+    map.setPositionSmooth( {5.38, 2, 10.62} )
+    title.takeObject({position = {14.22, 1.14, 0.96}})
+    chip.setPositionSmooth( {16.7, 1.5, 0.96} )
+    die.setPositionSmooth({16.7,2,0.96})
+    sortOnePointGoblin()
+    sortFivePointGoblin()
+    sortTwentyPointBog()
+	dealDelay()
+    setupEncounter()
+    sortOnePointTroll()
+    sortFivePointTroll()
+    sortTwentyPointBeast()
+	dealDelay()
+    sortOnePointBog()
+    sortFivePointBog()
+    sortTwentyPointScale()
+	dealDelay()
+    sortOnePointBeast()
+    sortFivePointBeast()
+	dealDelay()
+    sortOnePointScale()
+    sortFivePointScale()
+	dealDelay()
+	dealDelay()
+	dealDelay()
+	dealDelay()
+	dealDelay()
+    setupSpecial()
+    dealBag()
+    dealDice()
+broadcastToAll ( "Game is Ready", {1, 1, 1} )
+self.destruct()
+finalClear()
+return 1
+end
+
+function sortOnePointBog()
+    local Inc = 1
+    local heightInc = 5
+    for i = 1, 5 do
+        local grab = getObjectFromGUID(onePointBogChips[Inc])
+        grab.setPositionSmooth( {-10, heightInc, -2} )
+        Inc = Inc +1
+        heightInc = heightInc +1
+    end
+end
+
+function sortOnePointScale()
+    local Inc = 1
+    local heightInc = 5
+    for i = 1, 5 do
+        local grab = getObjectFromGUID(onePointScaleChips[Inc])
+        grab.setPositionSmooth( {-10, heightInc, -2} )
+        Inc = Inc +1
+        heightInc = heightInc +1
+    end
+end
+
+function sortOnePointBeast()
+    local Inc = 1
+    local heightInc = 5
+    for i = 1, 4 do
+        local grab = getObjectFromGUID(onePointBeastChips[Inc])
+        grab.setPositionSmooth( {-10, heightInc, -2} )
+        Inc = Inc +1
+        heightInc = heightInc +1
+    end
+end
+
+function sortOnePointOrc()
+    local Inc = 1
+    local heightInc = 5
+    for i = 1, 5 do
+        local grab = getObjectFromGUID(onePointOrcChips[Inc])
+        grab.setPositionSmooth( {-10, heightInc, -2} )
+        Inc = Inc +1
+        heightInc = heightInc +1
+    end
+end
+
+function sortOnePointGoblin()
+    local Inc = 1
+    local heightInc = 5
+    for i = 1, 4 do
+        local grab = getObjectFromGUID(onePointGoblinChips[Inc])
+        grab.setPositionSmooth( {-10, heightInc, -2} )
+        Inc = Inc +1
+        heightInc = heightInc +1
+    end
+end
+
+function sortOnePointTroll()
+    local Inc = 1
+    local heightInc = 5
+    for i = 1, 5 do
+        local grab = getObjectFromGUID(onePointTrollChips[Inc])
+        grab.setPositionSmooth( {-10, heightInc, -2} )
+        Inc = Inc +1
+        heightInc = heightInc +1
+    end
+end
+
+function sortFivePointBog()
+    local Inc = 1
+    local heightInc = 5
+    for i = 1, 3 do
+        local grab = getObjectFromGUID(fivePointBogChips[Inc])
+        grab.setPositionSmooth( {-10, heightInc, -7} )
+        Inc = Inc +1
+        heightInc = heightInc +1
+    end
+end
+
+function sortFivePointScale()
+    local Inc = 1
+    local heightInc = 5
+    for i = 1, 3 do
+        local grab = getObjectFromGUID(fivePointScaleChips[Inc])
+        grab.setPositionSmooth( {-10, heightInc, -7} )
+        Inc = Inc +1
+        heightInc = heightInc +1
+    end
+end
+
+function sortFivePointBeast()
+    local Inc = 1
+    local heightInc = 5
+    for i = 1, 4 do
+        local grab = getObjectFromGUID(fivePointBeastChips[Inc])
+        grab.setPositionSmooth( {-10, heightInc, -7} )
+        Inc = Inc +1
+        heightInc = heightInc +1
+    end
+end
+
+function sortFivePointOrc()
+    local Inc = 1
+    local heightInc = 5
+    for i = 1, 3 do
+        local grab = getObjectFromGUID(fivePointOrcChips[Inc])
+        grab.setPositionSmooth( {-10, heightInc, -7} )
+        Inc = Inc +1
+        heightInc = heightInc +1
+    end
+end
+
+function sortFivePointGoblin()
+    local Inc = 1
+    local heightInc = 5
+    for i = 1, 4 do
+        local grab = getObjectFromGUID(fivePointGoblinChips[Inc])
+        grab.setPositionSmooth( {-10, heightInc, -7} )
+        Inc = Inc +1
+        heightInc = heightInc +1
+    end
+end
+
+function sortFivePointTroll()
+    local Inc = 1
+    local heightInc = 5
+    for i = 1, 3 do
+        local grab = getObjectFromGUID(fivePointTrollChips[Inc])
+        grab.setPositionSmooth( {-10, heightInc, -7} )
+        Inc = Inc +1
+        heightInc = heightInc +1
+    end
+end
+
+function sortTwentyPointBog()
+    local Inc = 1
+    local heightInc = 5
+    for i = 1, 2 do
+        local grab = getObjectFromGUID(twentyPointBogChips[Inc])
+        grab.setPositionSmooth( {-10, heightInc, -10} )
+        Inc = Inc +1
+        heightInc = heightInc +1
+    end
+end
+
+function sortTwentyPointScale()
+    local Inc = 1
+    local heightInc = 5
+    for i = 1, 2 do
+        local grab = getObjectFromGUID(twentyPointScaleChips[Inc])
+        grab.setPositionSmooth( {-10, heightInc, -10} )
+        Inc = Inc +1
+        heightInc = heightInc +1
+    end
+end
+
+function sortTwentyPointBeast()
+    local Inc = 1
+    local heightInc = 5
+    for i = 1, 3 do
+        local grab = getObjectFromGUID(twentyPointBeastChips[Inc])
+        grab.setPositionSmooth( {-10, heightInc, -10} )
+        Inc = Inc +1
+        heightInc = heightInc +1
+    end
+end
+
+function dealTyrant()
+	if tyrantSelected == "Nom" then
+		startLuaCoroutine(self, "sortNom")
+	elseif tyrantSelected == "Drellen" then
+		startLuaCoroutine(self, "sortDrellen")
+	elseif tyrantSelected == "Mulmesh" then
+		startLuaCoroutine(self, "sortMulmesh")
+	elseif tyrantSelected == "Gendricks" then
+		startLuaCoroutine(self, "sortGendricks")
+	elseif tyrantSelected == "Goblin" then
+		startLuaCoroutine(self, "sortGoblin")
+	elseif tyrantSelected == "Marrow" then
+		startLuaCoroutine(self, "sortMarrow")
+	elseif tyrantSelected == "Duster" then
+		startLuaCoroutine(self, "sortDuster")
+	else
+	end
+end
+
+function dealDelay()
+	for i = 1, 60 do
+		coroutine.yield(0)
+	end
+end
+
+function dealBag()
+	local oneBag = getObjectFromGUID(shuffleOneBag[1])
+	local oneBagQuantity = oneBag.getObjects()
+	local fiveBag = getObjectFromGUID(shuffleFiveBag[1])
+	local fiveBagQuantity = fiveBag.getObjects()
+	local twentyBag = getObjectFromGUID(shuffleTwentyBag[1])
+	local twentyBagQuantity = twentyBag.getObjects()
+	local o = 0
+	local f = 0
+	local t = 0
+	for k,v in pairs(oneBagQuantity) do
+		o = o+1
+	end
+	for k,v in pairs(fiveBagQuantity) do
+		f = f+1
+	end
+	for k,v in pairs(twentyBagQuantity) do
+		t = t+1
+	end
+    	    oneBag.shuffle()
+	    fiveBag.shuffle()
+	    twentyBag.shuffle()
+	    local oneHeightInc = 1
+	    local fiveHeightInc = 1
+	    local twentyHeightInc = 1
+	    for i = 1, o do
+	        oneBag.takeObject({position = {-10, oneHeightInc, -2}, rotation = {0, 180, 180}})
+	        oneHeightInc = oneHeightInc + 0.3
+	        oneBag.destruct()
+	    end
+	    for i = 1, f do
+	        fiveBag.takeObject({position = {-10, fiveHeightInc, -6}, rotation = {0, 180, 180}})
+	        fiveHeightInc = fiveHeightInc + 0.3
+	        fiveBag.destruct()
+	    end
+	    for i = 1, t do
+	        twentyBag.takeObject({position = {-10, twentyHeightInc, -10}, rotation = {0, 180, 180}})
+	        twentyHeightInc = twentyHeightInc + 0.3
+	        twentyBag.destruct()
+	end
+end
+
+function getPlayerCount()
+	playerCount = playerOneActive + playerTwoActive + playerThreeActive + playerFourActive
+end
+
+function setupEncounter()
+	setupPlayers()
+	getPlayerCount()
+	if playerCount == 1 then
+		local generalDeck = getObjectFromGUID(generalDeck[1])
+		local heightInc = 5
+		for i = 1, 30 do
+			generalDeck.takeObject({position = {38.42, heightInc, 11.42}})
+			heightInc = heightInc + 1.5
+		end
+		local solo = getObjectFromGUID(soloDeck[1])
+		solo.shuffle()
+		local heightInc = 3
+		if nomActive == 1 then
+			for i = 1, 7 do
+				solo.takeObject({position = {38.42, heightInc, 11.42}})
+				heightInc = heightInc + 0.5
+			end
+			solo.setPositionSmooth({9.36, 1, 0.96})
+			local tyrantCard = getObjectFromGUID(tyrantCards[1])
+			tyrantCard.setPositionSmooth( {14, 1.5, 0.96} )
+			local tyrantEncounter = getObjectFromGUID(nomEncounterCards[1])
+			tyrantEncounter.putObject(solo)
+			solo.shuffle()
+		elseif drellenActive == 1 then
+			for i = 1, 5 do
+				solo.takeObject({position = {38.42, heightInc, 11.42}})
+				heightInc = heightInc + 0.5
+			end
+			solo.setPositionSmooth({9.36, 1, 0.96})
+			local tyrantCard = getObjectFromGUID(tyrantCards[2])
+			tyrantCard.setPositionSmooth( {14, 1.5, 0.96} )
+			local tyrantEncounter = getObjectFromGUID(drellenEncounterCards[1])
+			tyrantEncounter.putObject(solo)
+			solo.shuffle()
+		elseif mulmeshActive == 1 then
+			for i = 1, 6 do
+				solo.takeObject({position = {38.42, heightInc, 11.42}})
+				heightInc = heightInc + 0.5
+			end
+			solo.setPositionSmooth({9.36, 1, 0.96})
+			local tyrantCard = getObjectFromGUID(tyrantCards[3])
+			tyrantCard.setPositionSmooth( {14, 1.5, 0.96} )
+			local tyrantEncounter = getObjectFromGUID(mulmeshEncounterCards[1])
+			tyrantEncounter.putObject(solo)
+			solo.shuffle()
+		elseif gendricksActive == 1 then
+			for i = 1, 5 do
+				solo.takeObject({position = {38.42, heightInc, 11.42}})
+				heightInc = heightInc + 0.5
+			end
+			solo.setPositionSmooth({9.36, 1, 0.96})
+			local tyrantCard = getObjectFromGUID(tyrantCards[4])
+			tyrantCard.setPositionSmooth( {14, 1.5, 0.96} )
+			local tyrantEncounter1 = getObjectFromGUID(gendricksEncounterCards[1])
+			local tyrantEncounter2 = getObjectFromGUID(gendricksEncounterCards[2])
+			tyrantEncounter1.putObject(solo)
+			tyrantEncounter2.putObject(solo)
+			solo.shuffle()
+		elseif goblinActive == 1 then
+			for i = 1, 3 do
+				solo.takeObject({position = {38.42, heightInc, 11.42}})
+				heightInc = heightInc + 0.5
+			end
+			solo.setPositionSmooth({9.36, 1, 0.96})
+			local tyrantCard = getObjectFromGUID(tyrantCards[5])
+			tyrantCard.setPositionSmooth( {14, 1.5, 0.96} )
+			local tyrantEncounter1 = getObjectFromGUID(goblinEncounterCards[1])
+			local tyrantEncounter2 = getObjectFromGUID(goblinEncounterCards[2])
+			tyrantEncounter1.putObject(solo)
+			tyrantEncounter2.putObject(solo)
+			solo.shuffle()
+		elseif marrowActive == 1 then
+			for i = 1, 3 do
+				solo.takeObject({position = {38.42, heightInc, 11.42}})
+				heightInc = heightInc + 0.5
+			end
+			solo.setPositionSmooth({9.36, 1, 0.96})
+			local tyrantCard = getObjectFromGUID(tyrantCards[6])
+			tyrantCard.setPositionSmooth( {14, 1.5, 0.96} )
+			local tyrantEncounter1 = getObjectFromGUID(marrowEncounterCards[1])
+			local tyrantEncounter2 = getObjectFromGUID(marrowEncounterCards[2])
+			tyrantEncounter1.putObject(solo)
+			tyrantEncounter2.putObject(solo)
+			solo.shuffle()
+		elseif dusterActive == 1 then
+			for i = 1, 2 do
+				solo.takeObject({position = {38.42, heightInc, 11.42}})
+				heightInc = heightInc + 0.5
+			end
+			solo.setPositionSmooth({9.36, 1, 0.96})
+			local tyrantCard = getObjectFromGUID(tyrantCards[7])
+			tyrantCard.setPositionSmooth( {14, 1.5, 0.96} )
+			local tyrantEncounter1 = getObjectFromGUID(dusterEncounterCards[1])
+			local tyrantEncounter2 = getObjectFromGUID(dusterEncounterCards[2])
+			local tyrantEncounter3 = getObjectFromGUID(dusterEncounterCards[3])
+			tyrantEncounter1.putObject(solo)
+			tyrantEncounter2.putObject(solo)
+			tyrantEncounter3.putObject(solo)
+			solo.shuffle()
+		else
+		end
+	else
+		local soloDeck = getObjectFromGUID(soloDeck[1])
+		local heightInc = 5
+		for i = 1, 12 do
+			soloDeck.takeObject({position = {38.42, heightInc, 11.42}})
+			heightInc = heightInc + 1.5
+		end
+		local solo = getObjectFromGUID(generalDeck[1])
+		solo.shuffle()
+		local heightInc = 3
+		if nomActive == 1 then
+			for i = 1, 25 do
+				solo.takeObject({position = {38.42, heightInc, 11.42}})
+				heightInc = heightInc + 0.5
+			end
+			solo.setPositionSmooth({9.36, 1, 0.96})
+			local tyrantCard = getObjectFromGUID(tyrantCards[1])
+			tyrantCard.setPositionSmooth( {14, 1.5, 0.96} )
+			local tyrantEncounter = getObjectFromGUID(nomEncounterCards[1])
+			tyrantEncounter.putObject(solo)
+			solo.shuffle()
+		elseif drellenActive == 1 then
+			for i = 1, 23 do
+				solo.takeObject({position = {38.42, heightInc, 11.42}})
+				heightInc = heightInc + 0.5
+			end
+			solo.setPositionSmooth({9.36, 1, 0.96})
+			local tyrantCard = getObjectFromGUID(tyrantCards[2])
+			tyrantCard.setPositionSmooth( {14, 1.5, 0.96} )
+			local tyrantEncounter = getObjectFromGUID(drellenEncounterCards[1])
+			tyrantEncounter.putObject(solo)
+			solo.shuffle()
+		elseif mulmeshActive == 1 then
+			for i = 1, 24 do
+				solo.takeObject({position = {38.42, heightInc, 11.42}})
+				heightInc = heightInc + 0.5
+			end
+			solo.setPositionSmooth({9.36, 1, 0.96})
+			local tyrantCard = getObjectFromGUID(tyrantCards[3])
+			tyrantCard.setPositionSmooth( {14, 1.5, 0.96} )
+			local tyrantEncounter = getObjectFromGUID(mulmeshEncounterCards[1])
+			tyrantEncounter.putObject(solo)
+			solo.shuffle()
+		elseif gendricksActive == 1 then
+			for i = 1, 23 do
+				solo.takeObject({position = {38.42, heightInc, 11.42}})
+				heightInc = heightInc + 0.5
+			end
+			solo.setPositionSmooth({9.36, 1, 0.96})
+			local tyrantCard = getObjectFromGUID(tyrantCards[4])
+			tyrantCard.setPositionSmooth( {14, 1.5, 0.96} )
+			local tyrantEncounter1 = getObjectFromGUID(gendricksEncounterCards[1])
+			local tyrantEncounter2 = getObjectFromGUID(gendricksEncounterCards[2])
+			tyrantEncounter1.putObject(solo)
+			tyrantEncounter2.putObject(solo)
+			solo.shuffle()
+		elseif goblinActive == 1 then
+			for i = 1, 21 do
+				solo.takeObject({position = {38.42, heightInc, 11.42}})
+				heightInc = heightInc + 0.5
+			end
+			solo.setPositionSmooth({9.36, 1, 0.96})
+			local tyrantCard = getObjectFromGUID(tyrantCards[5])
+			tyrantCard.setPositionSmooth( {14, 1.5, 0.96} )
+			local tyrantEncounter1 = getObjectFromGUID(goblinEncounterCards[1])
+			local tyrantEncounter2 = getObjectFromGUID(goblinEncounterCards[2])
+			tyrantEncounter1.putObject(solo)
+			tyrantEncounter2.putObject(solo)
+			solo.shuffle()
+		elseif marrowActive == 1 then
+			for i = 1, 21 do
+				solo.takeObject({position = {38.42, heightInc, 11.42}})
+				heightInc = heightInc + 0.5
+			end
+			solo.setPositionSmooth({9.36, 1, 0.96})
+			local tyrantCard = getObjectFromGUID(tyrantCards[6])
+			tyrantCard.setPositionSmooth( {14, 1.5, 0.96} )
+			local tyrantEncounter1 = getObjectFromGUID(marrowEncounterCards[1])
+			local tyrantEncounter2 = getObjectFromGUID(marrowEncounterCards[2])
+			tyrantEncounter1.putObject(solo)
+			tyrantEncounter2.putObject(solo)
+			solo.shuffle()
+		elseif dusterActive == 1 then
+			for i = 1, 20 do
+				solo.takeObject({position = {38.42, heightInc, 11.42}})
+				heightInc = heightInc + 0.5
+			end
+			solo.setPositionSmooth({9.36, 1, 0.96})
+			local tyrantCard = getObjectFromGUID(tyrantCards[7])
+			tyrantCard.setPositionSmooth( {14, 1.5, 0.96} )
+			local tyrantEncounter1 = getObjectFromGUID(dusterEncounterCards[1])
+			local tyrantEncounter2 = getObjectFromGUID(dusterEncounterCards[2])
+			local tyrantEncounter3 = getObjectFromGUID(dusterEncounterCards[3])
+			tyrantEncounter1.putObject(solo)
+			tyrantEncounter2.putObject(solo)
+			tyrantEncounter3.putObject(solo)
+			solo.shuffle()
+		else
+		end
+	end
+end
+
+function setupSpecial()
+	local special = getObjectFromGUID(specialDeck[1])
+	local heightInc = 5
+	for i = 1, 3 do
+		special.takeObject({position = {9.36, heightInc, 0.96}})
+		heightInc = heightInc - 1
+	end
+end
+
+function gameStart()
+    if tyrantSelected == nil then
+        broadcastToAll ( "Cannot Start, No Tyrant Selected", {1, 0.5, 0.5} )
+    elseif (playerOneSelected == nil) and (playerTwoSelected == nil) and (playerThreeSelected == nil) and (playerFourSelected == nil) then
+        broadcastToAll ( "Cannot Start, No Players Selected", {1, 0.5, 0.5} )
+    else
+	dealTyrant()
+	local loot = getObjectFromGUID(lootDeck[1])
+	local trove = getObjectFromGUID(troveLootDeck[1])
+	local progressMarker = getObjectFromGUID(progressMarker[1])
+	loot.shuffle()
+	trove.shuffle()
+	progressMarker.setPositionSmooth({-5.12, 2, 0.74})
+    end
+end
+
+function clearActiveTyrant()
+	nomActive = 0
+	drellenActive = 0
+	mulmeshActive = 0
+	gendricksActive = 0
+	goblinActive = 0
+	marrowActive = 0
+	dusterActive = 0
+end
+
+function setupPlayers()
+	local playerOneBoard = getObjectFromGUID(playerOneBoard[1])
+	local playerOneChip = getObjectFromGUID(playerOneChip[1])
+	local playerOneBag = getObjectFromGUID(playerOneBag[1])
+	local playerOneReferenceA = getObjectFromGUID(playerOneReferenceA[1])
+	local playerOneReferenceB = getObjectFromGUID(playerOneReferenceB[1])
+	local playerTwoBoard = getObjectFromGUID(playerTwoBoard[1])
+	local playerTwoChip = getObjectFromGUID(playerTwoChip[1])
+	local playerTwoBag = getObjectFromGUID(playerTwoBag[1])
+	local playerTwoReferenceA = getObjectFromGUID(playerTwoReferenceA[1])
+	local playerTwoReferenceB = getObjectFromGUID(playerTwoReferenceB[1])
+	local playerThreeBoard = getObjectFromGUID(playerThreeBoard[1])
+	local playerThreeChip = getObjectFromGUID(playerThreeChip[1])
+	local playerThreeBag = getObjectFromGUID(playerThreeBag[1])
+	local playerThreeReferenceA = getObjectFromGUID(playerThreeReferenceA[1])
+	local playerThreeReferenceB = getObjectFromGUID(playerThreeReferenceB[1])
+	local playerFourBoard = getObjectFromGUID(playerFourBoard[1])
+	local playerFourChip = getObjectFromGUID(playerFourChip[1])
+	local playerFourBag = getObjectFromGUID(playerFourBag[1])
+	local playerFourReferenceA = getObjectFromGUID(playerFourReferenceA[1])
+	local playerFourReferenceB = getObjectFromGUID(playerFourReferenceB[1])
+	if playerOneSelected == "Boomer" then
+	elseif playerOneSelected == "Ghillie" then
+		playerOneBoard.setState(2)
+		playerOneChip.setState(2)
+		playerOneBag.setState(2)
+		playerOneReferenceA.setState(2)
+		playerOneReferenceB.setState(2)
+	elseif playerOneSelected == "Nugget" then
+		playerOneBoard.setState(3)
+		playerOneChip.setState(3)
+		playerOneBag.setState(3)
+		playerOneReferenceA.setState(3)
+		playerOneReferenceB.setState(3)
+	elseif playerOneSelected == "Patches" then
+		playerOneBoard.setState(4)
+		playerOneChip.setState(4)
+		playerOneBag.setState(4)
+		playerOneReferenceA.setState(4)
+		playerOneReferenceB.setState(4)
+	elseif playerOneSelected == "Picket" then
+		playerOneBoard.setState(5)
+		playerOneChip.setState(5)
+		playerOneBag.setState(5)
+		playerOneReferenceA.setState(5)
+		playerOneReferenceB.setState(5)
+	elseif playerOneSelected == "Tantrum" then
+		playerOneBoard.setState(6)
+		playerOneChip.setState(6)
+		playerOneBag.setState(6)
+		playerOneReferenceA.setState(6)
+		playerOneReferenceB.setState(6)
+	elseif playerOneSelected == "Tink" then
+		playerOneBoard.setState(7)
+		playerOneChip.setState(7)
+		playerOneBag.setState(7)
+		playerOneReferenceA.setState(7)
+		playerOneReferenceB.setState(7)
+	else
+		playerOneBoard.destruct()
+		playerOneChip.destruct()
+		playerOneBag.destruct()
+		playerOneReferenceA.destruct()
+		playerOneReferenceB.destruct()
+	end
+	if playerTwoSelected == "Boomer" then
+		playerTwoBoard.setState(1)
+		playerTwoChip.setState(1)
+		playerTwoBag.setState(1)
+		playerTwoReferenceA.setState(1)
+		playerTwoReferenceB.setState(1)
+	elseif playerTwoSelected == "Ghillie" then
+	elseif playerTwoSelected == "Nugget" then
+		playerTwoBoard.setState(3)
+		playerTwoChip.setState(3)
+		playerTwoBag.setState(3)
+		playerTwoReferenceA.setState(3)
+		playerTwoReferenceB.setState(3)
+	elseif playerTwoSelected == "Patches" then
+		playerTwoBoard.setState(4)
+		playerTwoChip.setState(4)
+		playerTwoBag.setState(4)
+		playerTwoReferenceA.setState(4)
+		playerTwoReferenceB.setState(4)
+	elseif playerTwoSelected == "Picket" then
+		playerTwoBoard.setState(5)
+		playerTwoChip.setState(5)
+		playerTwoBag.setState(5)
+		playerTwoReferenceA.setState(5)
+		playerTwoReferenceB.setState(5)
+	elseif playerTwoSelected == "Tantrum" then
+		playerTwoBoard.setState(6)
+		playerTwoChip.setState(6)
+		playerTwoBag.setState(6)
+		playerTwoReferenceA.setState(6)
+		playerTwoReferenceB.setState(6)
+	elseif playerTwoSelected == "Tink" then
+		playerTwoBoard.setState(7)
+		playerTwoChip.setState(7)
+		playerTwoBag.setState(7)
+		playerTwoReferenceA.setState(7)
+		playerTwoReferenceB.setState(7)
+	else
+		playerTwoBoard.destruct()
+		playerTwoChip.destruct()
+		playerTwoBag.destruct()
+		playerTwoReferenceA.destruct()
+		playerTwoReferenceB.destruct()
+	end
+	if playerThreeSelected == "Boomer" then
+		playerThreeBoard.setState(1)
+		playerThreeChip.setState(1)
+		playerThreeBag.setState(1)
+		playerThreeReferenceA.setState(1)
+		playerThreeReferenceB.setState(1)
+	elseif playerThreeSelected == "Ghillie" then
+		playerThreeBoard.setState(2)
+		playerThreeChip.setState(2)
+		playerThreeBag.setState(2)
+		playerThreeReferenceA.setState(2)
+		playerThreeReferenceB.setState(2)
+	elseif playerThreeSelected == "Nugget" then
+	elseif playerThreeSelected == "Patches" then
+		playerThreeBoard.setState(4)
+		playerThreeChip.setState(4)
+		playerThreeBag.setState(4)
+		playerThreeReferenceA.setState(4)
+		playerThreeReferenceB.setState(4)
+	elseif playerThreeSelected == "Picket" then
+		playerThreeBoard.setState(5)
+		playerThreeChip.setState(5)
+		playerThreeBag.setState(5)
+		playerThreeReferenceA.setState(5)
+		playerThreeReferenceB.setState(5)
+	elseif playerThreeSelected == "Tantrum" then
+		playerThreeBoard.setState(6)
+		playerThreeChip.setState(6)
+		playerThreeBag.setState(6)
+		playerThreeReferenceA.setState(6)
+		playerThreeReferenceB.setState(6)
+	elseif playerThreeSelected == "Tink" then
+		playerThreeBoard.setState(7)
+		playerThreeChip.setState(7)
+		playerThreeBag.setState(7)
+		playerThreeReferenceA.setState(7)
+		playerThreeReferenceB.setState(7)
+	else
+		playerThreeBoard.destruct()
+		playerThreeChip.destruct()
+		playerThreeBag.destruct()
+		playerThreeReferenceA.destruct()
+		playerThreeReferenceB.destruct()
+	end
+	if playerFourSelected == "Boomer" then
+		playerFourBoard.setState(1)
+		playerFourChip.setState(1)
+		playerFourBag.setState(1)
+		playerFourReferenceA.setState(1)
+		playerFourReferenceB.setState(1)
+	elseif playerFourSelected == "Ghillie" then
+		playerFourBoard.setState(2)
+		playerFourChip.setState(2)
+		playerFourBag.setState(2)
+		playerFourReferenceA.setState(2)
+		playerFourReferenceB.setState(2)
+	elseif playerFourSelected == "Nugget" then
+		playerFourBoard.setState(3)
+		playerFourChip.setState(3)
+		playerFourBag.setState(3)
+		playerFourReferenceA.setState(3)
+		playerFourReferenceB.setState(3)
+	elseif playerFourSelected == "Patches" then
+	elseif playerFourSelected == "Picket" then
+		playerFourBoard.setState(5)
+		playerFourChip.setState(5)
+		playerFourBag.setState(5)
+		playerFourReferenceA.setState(5)
+		playerFourReferenceB.setState(5)
+	elseif playerFourSelected == "Tantrum" then
+		playerFourBoard.setState(6)
+		playerFourChip.setState(6)
+		playerFourBag.setState(6)
+		playerFourReferenceA.setState(6)
+		playerFourReferenceB.setState(6)
+	elseif playerFourSelected == "Tink" then
+		playerFourBoard.setState(7)
+		playerFourChip.setState(7)
+		playerFourBag.setState(7)
+		playerFourReferenceA.setState(7)
+		playerFourReferenceB.setState(7)
+	else
+		playerFourBoard.destruct()
+		playerFourChip.destruct()
+		playerFourBag.destruct()
+		playerFourReferenceA.destruct()
+		playerFourReferenceB.destruct()
+	end
+end
+
+function dealDice()
+	if playerOneActive == 1 then
+		local xOff = -29.6
+		local zOff = -22.1
+		if playerOneSelected == "Boomer" then
+			local diceBag = getObjectFromGUID(playerOneDiceBags[1])
+			for i = 1, 4 do
+				diceBag.takeObject({position = {xOff, 1.9, zOff}})
+				xOff = xOff + 0.75
+			end
+			xOff = xOff - 3
+			zOff = zOff - 0.75
+			for i = 1, 4 do
+				diceBag.takeObject({position = {xOff, 1.9, zOff}})
+				xOff = xOff + 0.75
+			end
+			xOff = xOff - 3
+			zOff = zOff - 0.75
+			for i = 1, 4 do
+				diceBag.takeObject({position = {xOff, 1.9, zOff}})
+				xOff = xOff + 0.75
+			end
+			xOff = xOff - 3
+			zOff = zOff - 0.75
+			for i = 1, 4 do
+				diceBag.takeObject({position = {xOff, 1.9, zOff}})
+				xOff = xOff + 0.75
+			end
+			xOff = xOff - 3
+			zOff = zOff - 0.75
+			for i = 1, 4 do
+				diceBag.takeObject({position = {xOff, 1.9, zOff}})
+				xOff = xOff + 0.75
+			end
+			xOff = xOff - 3
+			zOff = -14.96
+			diceBag.takeObject({position = {xOff, 1.9, zOff}})
+			diceBag.destruct()
+		elseif playerOneSelected == "Ghillie" then
+			local diceBag = getObjectFromGUID(playerOneDiceBags[2])
+			for i = 1, 4 do
+				diceBag.takeObject({position = {xOff, 1.9, zOff}})
+				xOff = xOff + 0.75
+			end
+			xOff = xOff - 3
+			zOff = zOff - 0.75
+			for i = 1, 4 do
+				diceBag.takeObject({position = {xOff, 1.9, zOff}})
+				xOff = xOff + 0.75
+			end
+			xOff = xOff - 3
+			zOff = zOff - 0.75
+			for i = 1, 4 do
+				diceBag.takeObject({position = {xOff, 1.9, zOff}})
+				xOff = xOff + 0.75
+			end
+			xOff = xOff - 3
+			zOff = zOff - 0.75
+			for i = 1, 4 do
+				diceBag.takeObject({position = {xOff, 1.9, zOff}})
+				xOff = xOff + 0.75
+			end
+			xOff = xOff - 3
+			zOff = zOff - 0.75
+			for i = 1, 4 do
+				diceBag.takeObject({position = {xOff, 1.9, zOff}})
+				xOff = xOff + 0.75
+			end
+			xOff = xOff - 3
+			zOff = -14.96
+			diceBag.takeObject({position = {xOff, 1.9, zOff}})
+			diceBag.destruct()
+		elseif playerOneSelected == "Nugget" then
+			local diceBag = getObjectFromGUID(playerOneDiceBags[3])
+			for i = 1, 4 do
+				diceBag.takeObject({position = {xOff, 1.9, zOff}})
+				xOff = xOff + 0.75
+			end
+			xOff = xOff - 3
+			zOff = zOff - 0.75
+			for i = 1, 4 do
+				diceBag.takeObject({position = {xOff, 1.9, zOff}})
+				xOff = xOff + 0.75
+			end
+			xOff = xOff - 3
+			zOff = zOff - 0.75
+			for i = 1, 4 do
+				diceBag.takeObject({position = {xOff, 1.9, zOff}})
+				xOff = xOff + 0.75
+			end
+			xOff = xOff - 3
+			zOff = zOff - 0.75
+			for i = 1, 4 do
+				diceBag.takeObject({position = {xOff, 1.9, zOff}})
+				xOff = xOff + 0.75
+			end
+			xOff = xOff - 3
+			zOff = zOff - 0.75
+			for i = 1, 4 do
+				diceBag.takeObject({position = {xOff, 1.9, zOff}})
+				xOff = xOff + 0.75
+			end
+			xOff = xOff - 3
+			zOff = -14.96
+			diceBag.takeObject({position = {xOff, 1.9, zOff}})
+			diceBag.destruct()
+		elseif playerOneSelected == "Patches" then
+			local diceBag = getObjectFromGUID(playerOneDiceBags[4])
+			for i = 1, 4 do
+				diceBag.takeObject({position = {xOff, 1.9, zOff}})
+				xOff = xOff + 0.75
+			end
+			xOff = xOff - 3
+			zOff = zOff - 0.75
+			for i = 1, 4 do
+				diceBag.takeObject({position = {xOff, 1.9, zOff}})
+				xOff = xOff + 0.75
+			end
+			xOff = xOff - 3
+			zOff = zOff - 0.75
+			for i = 1, 4 do
+				diceBag.takeObject({position = {xOff, 1.9, zOff}})
+				xOff = xOff + 0.75
+			end
+			xOff = xOff - 3
+			zOff = zOff - 0.75
+			for i = 1, 4 do
+				diceBag.takeObject({position = {xOff, 1.9, zOff}})
+				xOff = xOff + 0.75
+			end
+			xOff = xOff - 3
+			zOff = zOff - 0.75
+			for i = 1, 4 do
+				diceBag.takeObject({position = {xOff, 1.9, zOff}})
+				xOff = xOff + 0.75
+			end
+			xOff = xOff - 3
+			zOff = -14.96
+			diceBag.takeObject({position = {xOff, 1.9, zOff}})
+			diceBag.destruct()
+		elseif playerOneSelected == "Picket" then
+			local diceBag = getObjectFromGUID(playerOneDiceBags[5])
+			for i = 1, 4 do
+				diceBag.takeObject({position = {xOff, 1.9, zOff}})
+				xOff = xOff + 0.75
+			end
+			xOff = xOff - 3
+			zOff = zOff - 0.75
+			for i = 1, 4 do
+				diceBag.takeObject({position = {xOff, 1.9, zOff}})
+				xOff = xOff + 0.75
+			end
+			xOff = xOff - 3
+			zOff = zOff - 0.75
+			for i = 1, 4 do
+				diceBag.takeObject({position = {xOff, 1.9, zOff}})
+				xOff = xOff + 0.75
+			end
+			xOff = xOff - 3
+			zOff = zOff - 0.75
+			for i = 1, 4 do
+				diceBag.takeObject({position = {xOff, 1.9, zOff}})
+				xOff = xOff + 0.75
+			end
+			xOff = xOff - 3
+			zOff = zOff - 0.75
+			for i = 1, 4 do
+				diceBag.takeObject({position = {xOff, 1.9, zOff}})
+				xOff = xOff + 0.75
+			end
+			xOff = xOff - 3
+			zOff = -14.96
+			diceBag.takeObject({position = {xOff, 1.9, zOff}})
+			diceBag.destruct()
+		elseif playerOneSelected == "Tantrum" then
+			local diceBag = getObjectFromGUID(playerOneDiceBags[6])
+			for i = 1, 4 do
+				diceBag.takeObject({position = {xOff, 1.9, zOff}})
+				xOff = xOff + 0.75
+			end
+			xOff = xOff - 3
+			zOff = zOff - 0.75
+			for i = 1, 4 do
+				diceBag.takeObject({position = {xOff, 1.9, zOff}})
+				xOff = xOff + 0.75
+			end
+			xOff = xOff - 3
+			zOff = zOff - 0.75
+			for i = 1, 4 do
+				diceBag.takeObject({position = {xOff, 1.9, zOff}})
+				xOff = xOff + 0.75
+			end
+			xOff = xOff - 3
+			zOff = zOff - 0.75
+			for i = 1, 4 do
+				diceBag.takeObject({position = {xOff, 1.9, zOff}})
+				xOff = xOff + 0.75
+			end
+			xOff = xOff - 3
+			zOff = zOff - 0.75
+			for i = 1, 4 do
+				diceBag.takeObject({position = {xOff, 1.9, zOff}})
+				xOff = xOff + 0.75
+			end
+			xOff = xOff - 3
+			zOff = -14.96
+			diceBag.takeObject({position = {xOff, 1.9, zOff}})
+			diceBag.destruct()
+		elseif playerOneSelected == "Tink" then
+			local diceBag = getObjectFromGUID(playerOneDiceBags[7])
+			for i = 1, 4 do
+				diceBag.takeObject({position = {xOff, 1.9, zOff}})
+				xOff = xOff + 0.75
+			end
+			xOff = xOff - 3
+			zOff = zOff - 0.75
+			for i = 1, 4 do
+				diceBag.takeObject({position = {xOff, 1.9, zOff}})
+				xOff = xOff + 0.75
+			end
+			xOff = xOff - 3
+			zOff = zOff - 0.75
+			for i = 1, 4 do
+				diceBag.takeObject({position = {xOff, 1.9, zOff}})
+				xOff = xOff + 0.75
+			end
+			xOff = xOff - 3
+			zOff = zOff - 0.75
+			for i = 1, 4 do
+				diceBag.takeObject({position = {xOff, 1.9, zOff}})
+				xOff = xOff + 0.75
+			end
+			xOff = xOff - 3
+			zOff = zOff - 0.75
+			for i = 1, 4 do
+				diceBag.takeObject({position = {xOff, 1.9, zOff}})
+				xOff = xOff + 0.75
+			end
+			xOff = xOff - 3
+			zOff = -14.96
+			diceBag.takeObject({position = {xOff, 1.9, zOff}})
+			diceBag.destruct()
+		else
+		end
+	else
+	end
+	if playerTwoActive == 1 then
+		local xOff = -23.7
+		local zOff = -22.1
+		if playerTwoSelected == "Boomer" then
+			local diceBag = getObjectFromGUID(playerTwoDiceBags[1])
+			for i = 1, 4 do
+				diceBag.takeObject({position = {xOff, 1.9, zOff}})
+				xOff = xOff + 0.75
+			end
+			xOff = xOff - 3
+			zOff = zOff - 0.75
+			for i = 1, 4 do
+				diceBag.takeObject({position = {xOff, 1.9, zOff}})
+				xOff = xOff + 0.75
+			end
+			xOff = xOff - 3
+			zOff = zOff - 0.75
+			for i = 1, 4 do
+				diceBag.takeObject({position = {xOff, 1.9, zOff}})
+				xOff = xOff + 0.75
+			end
+			xOff = xOff - 3
+			zOff = zOff - 0.75
+			for i = 1, 4 do
+				diceBag.takeObject({position = {xOff, 1.9, zOff}})
+				xOff = xOff + 0.75
+			end
+			xOff = xOff - 3
+			zOff = zOff - 0.75
+			for i = 1, 4 do
+				diceBag.takeObject({position = {xOff, 1.9, zOff}})
+				xOff = xOff + 0.75
+			end
+			zOff = -14.96
+			diceBag.takeObject({position = {xOff, 1.9, zOff}})
+			diceBag.destruct()
+		elseif playerTwoSelected == "Ghillie" then
+			local diceBag = getObjectFromGUID(playerTwoDiceBags[2])
+			for i = 1, 4 do
+				diceBag.takeObject({position = {xOff, 1.9, zOff}})
+				xOff = xOff + 0.75
+			end
+			xOff = xOff - 3
+			zOff = zOff - 0.75
+			for i = 1, 4 do
+				diceBag.takeObject({position = {xOff, 1.9, zOff}})
+				xOff = xOff + 0.75
+			end
+			xOff = xOff - 3
+			zOff = zOff - 0.75
+			for i = 1, 4 do
+				diceBag.takeObject({position = {xOff, 1.9, zOff}})
+				xOff = xOff + 0.75
+			end
+			xOff = xOff - 3
+			zOff = zOff - 0.75
+			for i = 1, 4 do
+				diceBag.takeObject({position = {xOff, 1.9, zOff}})
+				xOff = xOff + 0.75
+			end
+			xOff = xOff - 3
+			zOff = zOff - 0.75
+			for i = 1, 4 do
+				diceBag.takeObject({position = {xOff, 1.9, zOff}})
+				xOff = xOff + 0.75
+			end
+			zOff = -14.96
+			diceBag.takeObject({position = {xOff, 1.9, zOff}})
+			diceBag.destruct()
+		elseif playerTwoSelected == "Nugget" then
+			local diceBag = getObjectFromGUID(playerTwoDiceBags[3])
+			for i = 1, 4 do
+				diceBag.takeObject({position = {xOff, 1.9, zOff}})
+				xOff = xOff + 0.75
+			end
+			xOff = xOff - 3
+			zOff = zOff - 0.75
+			for i = 1, 4 do
+				diceBag.takeObject({position = {xOff, 1.9, zOff}})
+				xOff = xOff + 0.75
+			end
+			xOff = xOff - 3
+			zOff = zOff - 0.75
+			for i = 1, 4 do
+				diceBag.takeObject({position = {xOff, 1.9, zOff}})
+				xOff = xOff + 0.75
+			end
+			xOff = xOff - 3
+			zOff = zOff - 0.75
+			for i = 1, 4 do
+				diceBag.takeObject({position = {xOff, 1.9, zOff}})
+				xOff = xOff + 0.75
+			end
+			xOff = xOff - 3
+			zOff = zOff - 0.75
+			for i = 1, 4 do
+				diceBag.takeObject({position = {xOff, 1.9, zOff}})
+				xOff = xOff + 0.75
+			end
+			zOff = -14.96
+			diceBag.takeObject({position = {xOff, 1.9, zOff}})
+			diceBag.destruct()
+		elseif playerTwoSelected == "Patches" then
+			local diceBag = getObjectFromGUID(playerTwoDiceBags[4])
+			for i = 1, 4 do
+				diceBag.takeObject({position = {xOff, 1.9, zOff}})
+				xOff = xOff + 0.75
+			end
+			xOff = xOff - 3
+			zOff = zOff - 0.75
+			for i = 1, 4 do
+				diceBag.takeObject({position = {xOff, 1.9, zOff}})
+				xOff = xOff + 0.75
+			end
+			xOff = xOff - 3
+			zOff = zOff - 0.75
+			for i = 1, 4 do
+				diceBag.takeObject({position = {xOff, 1.9, zOff}})
+				xOff = xOff + 0.75
+			end
+			xOff = xOff - 3
+			zOff = zOff - 0.75
+			for i = 1, 4 do
+				diceBag.takeObject({position = {xOff, 1.9, zOff}})
+				xOff = xOff + 0.75
+			end
+			xOff = xOff - 3
+			zOff = zOff - 0.75
+			for i = 1, 4 do
+				diceBag.takeObject({position = {xOff, 1.9, zOff}})
+				xOff = xOff + 0.75
+			end
+			zOff = -14.96
+			diceBag.takeObject({position = {xOff, 1.9, zOff}})
+			diceBag.destruct()
+		elseif playerTwoSelected == "Picket" then
+			local diceBag = getObjectFromGUID(playerTwoDiceBags[5])
+			for i = 1, 4 do
+				diceBag.takeObject({position = {xOff, 1.9, zOff}})
+				xOff = xOff + 0.75
+			end
+			xOff = xOff - 3
+			zOff = zOff - 0.75
+			for i = 1, 4 do
+				diceBag.takeObject({position = {xOff, 1.9, zOff}})
+				xOff = xOff + 0.75
+			end
+			xOff = xOff - 3
+			zOff = zOff - 0.75
+			for i = 1, 4 do
+				diceBag.takeObject({position = {xOff, 1.9, zOff}})
+				xOff = xOff + 0.75
+			end
+			xOff = xOff - 3
+			zOff = zOff - 0.75
+			for i = 1, 4 do
+				diceBag.takeObject({position = {xOff, 1.9, zOff}})
+				xOff = xOff + 0.75
+			end
+			xOff = xOff - 3
+			zOff = zOff - 0.75
+			for i = 1, 4 do
+				diceBag.takeObject({position = {xOff, 1.9, zOff}})
+				xOff = xOff + 0.75
+			end
+			zOff = -14.96
+			diceBag.takeObject({position = {xOff, 1.9, zOff}})
+			diceBag.destruct()
+		elseif playerTwoSelected == "Tantrum" then
+			local diceBag = getObjectFromGUID(playerTwoDiceBags[6])
+			for i = 1, 4 do
+				diceBag.takeObject({position = {xOff, 1.9, zOff}})
+				xOff = xOff + 0.75
+			end
+			xOff = xOff - 3
+			zOff = zOff - 0.75
+			for i = 1, 4 do
+				diceBag.takeObject({position = {xOff, 1.9, zOff}})
+				xOff = xOff + 0.75
+			end
+			xOff = xOff - 3
+			zOff = zOff - 0.75
+			for i = 1, 4 do
+				diceBag.takeObject({position = {xOff, 1.9, zOff}})
+				xOff = xOff + 0.75
+			end
+			xOff = xOff - 3
+			zOff = zOff - 0.75
+			for i = 1, 4 do
+				diceBag.takeObject({position = {xOff, 1.9, zOff}})
+				xOff = xOff + 0.75
+			end
+			xOff = xOff - 3
+			zOff = zOff - 0.75
+			for i = 1, 4 do
+				diceBag.takeObject({position = {xOff, 1.9, zOff}})
+				xOff = xOff + 0.75
+			end
+			zOff = -14.96
+			diceBag.takeObject({position = {xOff, 1.9, zOff}})
+			diceBag.destruct()
+		elseif playerTwoSelected == "Tink" then
+			local diceBag = getObjectFromGUID(playerTwoDiceBags[7])
+			for i = 1, 4 do
+				diceBag.takeObject({position = {xOff, 1.9, zOff}})
+				xOff = xOff + 0.75
+			end
+			xOff = xOff - 3
+			zOff = zOff - 0.75
+			for i = 1, 4 do
+				diceBag.takeObject({position = {xOff, 1.9, zOff}})
+				xOff = xOff + 0.75
+			end
+			xOff = xOff - 3
+			zOff = zOff - 0.75
+			for i = 1, 4 do
+				diceBag.takeObject({position = {xOff, 1.9, zOff}})
+				xOff = xOff + 0.75
+			end
+			xOff = xOff - 3
+			zOff = zOff - 0.75
+			for i = 1, 4 do
+				diceBag.takeObject({position = {xOff, 1.9, zOff}})
+				xOff = xOff + 0.75
+			end
+			xOff = xOff - 3
+			zOff = zOff - 0.75
+			for i = 1, 4 do
+				diceBag.takeObject({position = {xOff, 1.9, zOff}})
+				xOff = xOff + 0.75
+			end
+			zOff = -14.96
+			diceBag.takeObject({position = {xOff, 1.9, zOff}})
+			diceBag.destruct()
+		else
+		end
+	else
+	end
+	if playerThreeActive == 1 then
+		local xOff = 21.4
+		local zOff = -22.1
+		if playerThreeSelected == "Boomer" then
+			local diceBag = getObjectFromGUID(playerThreeDiceBags[1])
+			for i = 1, 4 do
+				diceBag.takeObject({position = {xOff, 1.9, zOff}})
+				xOff = xOff + 0.75
+			end
+			xOff = xOff - 3
+			zOff = zOff - 0.75
+			for i = 1, 4 do
+				diceBag.takeObject({position = {xOff, 1.9, zOff}})
+				xOff = xOff + 0.75
+			end
+			xOff = xOff - 3
+			zOff = zOff - 0.75
+			for i = 1, 4 do
+				diceBag.takeObject({position = {xOff, 1.9, zOff}})
+				xOff = xOff + 0.75
+			end
+			xOff = xOff - 3
+			zOff = zOff - 0.75
+			for i = 1, 4 do
+				diceBag.takeObject({position = {xOff, 1.9, zOff}})
+				xOff = xOff + 0.75
+			end
+			xOff = xOff - 3
+			zOff = zOff - 0.75
+			for i = 1, 4 do
+				diceBag.takeObject({position = {xOff, 1.9, zOff}})
+				xOff = xOff + 0.75
+			end
+			xOff = xOff - 3
+			zOff = -14.96
+			diceBag.takeObject({position = {xOff, 1.9, zOff}})
+			diceBag.destruct()
+		elseif playerThreeSelected == "Ghillie" then
+			local diceBag = getObjectFromGUID(playerThreeDiceBags[2])
+			for i = 1, 4 do
+				diceBag.takeObject({position = {xOff, 1.9, zOff}})
+				xOff = xOff + 0.75
+			end
+			xOff = xOff - 3
+			zOff = zOff - 0.75
+			for i = 1, 4 do
+				diceBag.takeObject({position = {xOff, 1.9, zOff}})
+				xOff = xOff + 0.75
+			end
+			xOff = xOff - 3
+			zOff = zOff - 0.75
+			for i = 1, 4 do
+				diceBag.takeObject({position = {xOff, 1.9, zOff}})
+				xOff = xOff + 0.75
+			end
+			xOff = xOff - 3
+			zOff = zOff - 0.75
+			for i = 1, 4 do
+				diceBag.takeObject({position = {xOff, 1.9, zOff}})
+				xOff = xOff + 0.75
+			end
+			xOff = xOff - 3
+			zOff = zOff - 0.75
+			for i = 1, 4 do
+				diceBag.takeObject({position = {xOff, 1.9, zOff}})
+				xOff = xOff + 0.75
+			end
+			xOff = xOff - 3
+			zOff = -14.96
+			diceBag.takeObject({position = {xOff, 1.9, zOff}})
+			diceBag.destruct()
+		elseif playerThreeSelected == "Nugget" then
+			local diceBag = getObjectFromGUID(playerThreeDiceBags[3])
+			for i = 1, 4 do
+				diceBag.takeObject({position = {xOff, 1.9, zOff}})
+				xOff = xOff + 0.75
+			end
+			xOff = xOff - 3
+			zOff = zOff - 0.75
+			for i = 1, 4 do
+				diceBag.takeObject({position = {xOff, 1.9, zOff}})
+				xOff = xOff + 0.75
+			end
+			xOff = xOff - 3
+			zOff = zOff - 0.75
+			for i = 1, 4 do
+				diceBag.takeObject({position = {xOff, 1.9, zOff}})
+				xOff = xOff + 0.75
+			end
+			xOff = xOff - 3
+			zOff = zOff - 0.75
+			for i = 1, 4 do
+				diceBag.takeObject({position = {xOff, 1.9, zOff}})
+				xOff = xOff + 0.75
+			end
+			xOff = xOff - 3
+			zOff = zOff - 0.75
+			for i = 1, 4 do
+				diceBag.takeObject({position = {xOff, 1.9, zOff}})
+				xOff = xOff + 0.75
+			end
+			xOff = xOff - 3
+			zOff = -14.96
+			diceBag.takeObject({position = {xOff, 1.9, zOff}})
+			diceBag.destruct()
+		elseif playerThreeSelected == "Patches" then
+			local diceBag = getObjectFromGUID(playerThreeDiceBags[4])
+			for i = 1, 4 do
+				diceBag.takeObject({position = {xOff, 1.9, zOff}})
+				xOff = xOff + 0.75
+			end
+			xOff = xOff - 3
+			zOff = zOff - 0.75
+			for i = 1, 4 do
+				diceBag.takeObject({position = {xOff, 1.9, zOff}})
+				xOff = xOff + 0.75
+			end
+			xOff = xOff - 3
+			zOff = zOff - 0.75
+			for i = 1, 4 do
+				diceBag.takeObject({position = {xOff, 1.9, zOff}})
+				xOff = xOff + 0.75
+			end
+			xOff = xOff - 3
+			zOff = zOff - 0.75
+			for i = 1, 4 do
+				diceBag.takeObject({position = {xOff, 1.9, zOff}})
+				xOff = xOff + 0.75
+			end
+			xOff = xOff - 3
+			zOff = zOff - 0.75
+			for i = 1, 4 do
+				diceBag.takeObject({position = {xOff, 1.9, zOff}})
+				xOff = xOff + 0.75
+			end
+			xOff = xOff - 3
+			zOff = -14.96
+			diceBag.takeObject({position = {xOff, 1.9, zOff}})
+			diceBag.destruct()
+		elseif playerThreeSelected == "Picket" then
+			local diceBag = getObjectFromGUID(playerThreeDiceBags[5])
+			for i = 1, 4 do
+				diceBag.takeObject({position = {xOff, 1.9, zOff}})
+				xOff = xOff + 0.75
+			end
+			xOff = xOff - 3
+			zOff = zOff - 0.75
+			for i = 1, 4 do
+				diceBag.takeObject({position = {xOff, 1.9, zOff}})
+				xOff = xOff + 0.75
+			end
+			xOff = xOff - 3
+			zOff = zOff - 0.75
+			for i = 1, 4 do
+				diceBag.takeObject({position = {xOff, 1.9, zOff}})
+				xOff = xOff + 0.75
+			end
+			xOff = xOff - 3
+			zOff = zOff - 0.75
+			for i = 1, 4 do
+				diceBag.takeObject({position = {xOff, 1.9, zOff}})
+				xOff = xOff + 0.75
+			end
+			xOff = xOff - 3
+			zOff = zOff - 0.75
+			for i = 1, 4 do
+				diceBag.takeObject({position = {xOff, 1.9, zOff}})
+				xOff = xOff + 0.75
+			end
+			xOff = xOff - 3
+			zOff = -14.96
+			diceBag.takeObject({position = {xOff, 1.9, zOff}})
+			diceBag.destruct()
+		elseif playerThreeSelected == "Tantrum" then
+			local diceBag = getObjectFromGUID(playerThreeDiceBags[6])
+			for i = 1, 4 do
+				diceBag.takeObject({position = {xOff, 1.9, zOff}})
+				xOff = xOff + 0.75
+			end
+			xOff = xOff - 3
+			zOff = zOff - 0.75
+			for i = 1, 4 do
+				diceBag.takeObject({position = {xOff, 1.9, zOff}})
+				xOff = xOff + 0.75
+			end
+			xOff = xOff - 3
+			zOff = zOff - 0.75
+			for i = 1, 4 do
+				diceBag.takeObject({position = {xOff, 1.9, zOff}})
+				xOff = xOff + 0.75
+			end
+			xOff = xOff - 3
+			zOff = zOff - 0.75
+			for i = 1, 4 do
+				diceBag.takeObject({position = {xOff, 1.9, zOff}})
+				xOff = xOff + 0.75
+			end
+			xOff = xOff - 3
+			zOff = zOff - 0.75
+			for i = 1, 4 do
+				diceBag.takeObject({position = {xOff, 1.9, zOff}})
+				xOff = xOff + 0.75
+			end
+			xOff = xOff - 3
+			zOff = -14.96
+			diceBag.takeObject({position = {xOff, 1.9, zOff}})
+			diceBag.destruct()
+		elseif playerThreeSelected == "Tink" then
+			local diceBag = getObjectFromGUID(playerThreeDiceBags[7])
+			for i = 1, 4 do
+				diceBag.takeObject({position = {xOff, 1.9, zOff}})
+				xOff = xOff + 0.75
+			end
+			xOff = xOff - 3
+			zOff = zOff - 0.75
+			for i = 1, 4 do
+				diceBag.takeObject({position = {xOff, 1.9, zOff}})
+				xOff = xOff + 0.75
+			end
+			xOff = xOff - 3
+			zOff = zOff - 0.75
+			for i = 1, 4 do
+				diceBag.takeObject({position = {xOff, 1.9, zOff}})
+				xOff = xOff + 0.75
+			end
+			xOff = xOff - 3
+			zOff = zOff - 0.75
+			for i = 1, 4 do
+				diceBag.takeObject({position = {xOff, 1.9, zOff}})
+				xOff = xOff + 0.75
+			end
+			xOff = xOff - 3
+			zOff = zOff - 0.75
+			for i = 1, 4 do
+				diceBag.takeObject({position = {xOff, 1.9, zOff}})
+				xOff = xOff + 0.75
+			end
+			xOff = xOff - 3
+			zOff = -14.96
+			diceBag.takeObject({position = {xOff, 1.9, zOff}})
+			diceBag.destruct()
+		else
+		end
+	else
+	end
+	if playerFourActive == 1 then
+		local xOff = 27.5
+		local zOff = -22.1
+		if playerFourSelected == "Boomer" then
+			local diceBag = getObjectFromGUID(playerFourDiceBags[1])
+			for i = 1, 4 do
+				diceBag.takeObject({position = {xOff, 1.9, zOff}})
+				xOff = xOff + 0.75
+			end
+			xOff = xOff - 3
+			zOff = zOff - 0.75
+			for i = 1, 4 do
+				diceBag.takeObject({position = {xOff, 1.9, zOff}})
+				xOff = xOff + 0.75
+			end
+			xOff = xOff - 3
+			zOff = zOff - 0.75
+			for i = 1, 4 do
+				diceBag.takeObject({position = {xOff, 1.9, zOff}})
+				xOff = xOff + 0.75
+			end
+			xOff = xOff - 3
+			zOff = zOff - 0.75
+			for i = 1, 4 do
+				diceBag.takeObject({position = {xOff, 1.9, zOff}})
+				xOff = xOff + 0.75
+			end
+			xOff = xOff - 3
+			zOff = zOff - 0.75
+			for i = 1, 4 do
+				diceBag.takeObject({position = {xOff, 1.9, zOff}})
+				xOff = xOff + 0.75
+			end
+			zOff = -14.96
+			diceBag.takeObject({position = {xOff, 1.9, zOff}})
+			diceBag.destruct()
+		elseif playerFourSelected == "Ghillie" then
+			local diceBag = getObjectFromGUID(playerFourDiceBags[2])
+			for i = 1, 4 do
+				diceBag.takeObject({position = {xOff, 1.9, zOff}})
+				xOff = xOff + 0.75
+			end
+			xOff = xOff - 3
+			zOff = zOff - 0.75
+			for i = 1, 4 do
+				diceBag.takeObject({position = {xOff, 1.9, zOff}})
+				xOff = xOff + 0.75
+			end
+			xOff = xOff - 3
+			zOff = zOff - 0.75
+			for i = 1, 4 do
+				diceBag.takeObject({position = {xOff, 1.9, zOff}})
+				xOff = xOff + 0.75
+			end
+			xOff = xOff - 3
+			zOff = zOff - 0.75
+			for i = 1, 4 do
+				diceBag.takeObject({position = {xOff, 1.9, zOff}})
+				xOff = xOff + 0.75
+			end
+			xOff = xOff - 3
+			zOff = zOff - 0.75
+			for i = 1, 4 do
+				diceBag.takeObject({position = {xOff, 1.9, zOff}})
+				xOff = xOff + 0.75
+			end
+			zOff = -14.96
+			diceBag.takeObject({position = {xOff, 1.9, zOff}})
+			diceBag.destruct()
+		elseif playerFourSelected == "Nugget" then
+			local diceBag = getObjectFromGUID(playerFourDiceBags[3])
+			for i = 1, 4 do
+				diceBag.takeObject({position = {xOff, 1.9, zOff}})
+				xOff = xOff + 0.75
+			end
+			xOff = xOff - 3
+			zOff = zOff - 0.75
+			for i = 1, 4 do
+				diceBag.takeObject({position = {xOff, 1.9, zOff}})
+				xOff = xOff + 0.75
+			end
+			xOff = xOff - 3
+			zOff = zOff - 0.75
+			for i = 1, 4 do
+				diceBag.takeObject({position = {xOff, 1.9, zOff}})
+				xOff = xOff + 0.75
+			end
+			xOff = xOff - 3
+			zOff = zOff - 0.75
+			for i = 1, 4 do
+				diceBag.takeObject({position = {xOff, 1.9, zOff}})
+				xOff = xOff + 0.75
+			end
+			xOff = xOff - 3
+			zOff = zOff - 0.75
+			for i = 1, 4 do
+				diceBag.takeObject({position = {xOff, 1.9, zOff}})
+				xOff = xOff + 0.75
+			end
+			zOff = -14.96
+			diceBag.takeObject({position = {xOff, 1.9, zOff}})
+			diceBag.destruct()
+		elseif playerFourSelected == "Patches" then
+			local diceBag = getObjectFromGUID(playerFourDiceBags[4])
+			for i = 1, 4 do
+				diceBag.takeObject({position = {xOff, 1.9, zOff}})
+				xOff = xOff + 0.75
+			end
+			xOff = xOff - 3
+			zOff = zOff - 0.75
+			for i = 1, 4 do
+				diceBag.takeObject({position = {xOff, 1.9, zOff}})
+				xOff = xOff + 0.75
+			end
+			xOff = xOff - 3
+			zOff = zOff - 0.75
+			for i = 1, 4 do
+				diceBag.takeObject({position = {xOff, 1.9, zOff}})
+				xOff = xOff + 0.75
+			end
+			xOff = xOff - 3
+			zOff = zOff - 0.75
+			for i = 1, 4 do
+				diceBag.takeObject({position = {xOff, 1.9, zOff}})
+				xOff = xOff + 0.75
+			end
+			xOff = xOff - 3
+			zOff = zOff - 0.75
+			for i = 1, 4 do
+				diceBag.takeObject({position = {xOff, 1.9, zOff}})
+				xOff = xOff + 0.75
+			end
+			zOff = -14.96
+			diceBag.takeObject({position = {xOff, 1.9, zOff}})
+			diceBag.destruct()
+		elseif playerFourSelected == "Picket" then
+			local diceBag = getObjectFromGUID(playerFourDiceBags[5])
+			for i = 1, 4 do
+				diceBag.takeObject({position = {xOff, 1.9, zOff}})
+				xOff = xOff + 0.75
+			end
+			xOff = xOff - 3
+			zOff = zOff - 0.75
+			for i = 1, 4 do
+				diceBag.takeObject({position = {xOff, 1.9, zOff}})
+				xOff = xOff + 0.75
+			end
+			xOff = xOff - 3
+			zOff = zOff - 0.75
+			for i = 1, 4 do
+				diceBag.takeObject({position = {xOff, 1.9, zOff}})
+				xOff = xOff + 0.75
+			end
+			xOff = xOff - 3
+			zOff = zOff - 0.75
+			for i = 1, 4 do
+				diceBag.takeObject({position = {xOff, 1.9, zOff}})
+				xOff = xOff + 0.75
+			end
+			xOff = xOff - 3
+			zOff = zOff - 0.75
+			for i = 1, 4 do
+				diceBag.takeObject({position = {xOff, 1.9, zOff}})
+				xOff = xOff + 0.75
+			end
+			zOff = -14.96
+			diceBag.takeObject({position = {xOff, 1.9, zOff}})
+			diceBag.destruct()
+		elseif playerFourSelected == "Tantrum" then
+			local diceBag = getObjectFromGUID(playerFourDiceBags[6])
+			for i = 1, 4 do
+				diceBag.takeObject({position = {xOff, 1.9, zOff}})
+				xOff = xOff + 0.75
+			end
+			xOff = xOff - 3
+			zOff = zOff - 0.75
+			for i = 1, 4 do
+				diceBag.takeObject({position = {xOff, 1.9, zOff}})
+				xOff = xOff + 0.75
+			end
+			xOff = xOff - 3
+			zOff = zOff - 0.75
+			for i = 1, 4 do
+				diceBag.takeObject({position = {xOff, 1.9, zOff}})
+				xOff = xOff + 0.75
+			end
+			xOff = xOff - 3
+			zOff = zOff - 0.75
+			for i = 1, 4 do
+				diceBag.takeObject({position = {xOff, 1.9, zOff}})
+				xOff = xOff + 0.75
+			end
+			xOff = xOff - 3
+			zOff = zOff - 0.75
+			for i = 1, 4 do
+				diceBag.takeObject({position = {xOff, 1.9, zOff}})
+				xOff = xOff + 0.75
+			end
+			zOff = -14.96
+			diceBag.takeObject({position = {xOff, 1.9, zOff}})
+			diceBag.destruct()
+		elseif playerFourSelected == "Tink" then
+			local diceBag = getObjectFromGUID(playerFourDiceBags[7])
+			for i = 1, 4 do
+				diceBag.takeObject({position = {xOff, 1.9, zOff}})
+				xOff = xOff + 0.75
+			end
+			xOff = xOff - 3
+			zOff = zOff - 0.75
+			for i = 1, 4 do
+				diceBag.takeObject({position = {xOff, 1.9, zOff}})
+				xOff = xOff + 0.75
+			end
+			xOff = xOff - 3
+			zOff = zOff - 0.75
+			for i = 1, 4 do
+				diceBag.takeObject({position = {xOff, 1.9, zOff}})
+				xOff = xOff + 0.75
+			end
+			xOff = xOff - 3
+			zOff = zOff - 0.75
+			for i = 1, 4 do
+				diceBag.takeObject({position = {xOff, 1.9, zOff}})
+				xOff = xOff + 0.75
+			end
+			xOff = xOff - 3
+			zOff = zOff - 0.75
+			for i = 1, 4 do
+				diceBag.takeObject({position = {xOff, 1.9, zOff}})
+				xOff = xOff + 0.75
+			end
+			zOff = -14.96
+			diceBag.takeObject({position = {xOff, 1.9, zOff}})
+			diceBag.destruct()
+		else
+		end
+	else
+	end
+end
+
+function finalClear()
+        local destroyZone = getObjectFromGUID(clearZone[1])
+	local clearObjects = destroyZone.getObjects()
+	for i, object in ipairs(clearObjects) do
+		destroyObject(object)
+	end
+end
