@@ -1,5 +1,3 @@
-print('hi')  
-
 shuffleOneBag = {"a9c070"}
 shuffleFiveBag = {"6d9668"}
 shuffleTwentyBag = {"a4a36d"}

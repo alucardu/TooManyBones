@@ -1,48 +1,75 @@
-height = 12
-rollingDice = false
+local height = 18
+local rollingDice = false
 
-function onObjectEnterContainer(self, object)
-  if not rollingDice then
-    rollingDice = true
-    function callback()
-      if self.getQuantity() > 0 then
-           allDice = {}
-           emptyContents(self)
-       end
-      rollingDice = false
+local selfRot = self.getRotation()
+local selfPos = self.getPosition()
+
+local xPos = selfPos.x
+local yPos = selfPos.y
+local zPos = selfPos.z
+local q = 0
+
+local arrayData = {}
+local runOnce = 0
+
+function createArray(amountOfDice)
+  if runOnce <= 1 then
+    if amountOfDice ~= nill then
+      amount = 0
+      xposition = 10
+      zposition = -0
+      for i = math.ceil(amountOfDice / 6), 1, -1 do
+        amount = amount + 6
+        xposition = xposition + 7.4
+        zposition = zposition -2
+        x = {amount, xposition, zposition}
+        table.insert(arrayData, x)
+      end
     end
-    Wait.time(callback, 0.1)
   end
 end
 
+function onObjectEnterContainer(self, object)
+  if self.getQuantity() > 0 then
+    createArray()
+    function do_after_1_second()
+      runOnce = runOnce + 1
+      createArray(self.getQuantity())
+      emptyContents()
+    end
+    Wait.time(do_after_1_second, 0.2)
+    xPos = selfPos.x
+    runOnce = 0
+  end
+end
 
 function emptyContents()
-    local contents = self.getObjects()
-    local selfRot = self.getRotation()
-    local selfPos = self.getPosition()
-
-    local yRot = selfRot.y - 180
-    local xPos = selfPos.x
-    local yPos = selfPos.y
-    local zPos = selfPos.z
-
-    for i, v in pairs(contents) do
-            xPos = xPos + 1.25
-            local xp = xPos - 5
-            local yp = yPos + height
-            local zp = zPos +20
-
-            takeParam = {
-                position = {xp,yp,zp},
-                rotation = {math.random(1,720),math.random(1,360),math.random(1,360)},
-                callback = 'roll'
-            }
-
-        local die = self.takeObject(takeParam)
-        allDice[i] = die
+  contents = self.getObjects()
+    for i, _ in ipairs(self.getObjects()) do
+        for _, v in ipairs(arrayData) do
+          local l, p1, p2 = unpack(v)
+          if i <= l then
+              self.takeObject(setPosition(p1, p2))
+              break
+          end
+        end
     end
 end
 
 function roll(dieObject)
-    dieObject.addTorque( {math.random()*3600, math.random()*5400, math.random()*3600} )
+  dieObject.addTorque( {math.random()*3600, math.random()*5400, math.random()*3600} )
+end
+
+function setPosition(negativeXPos, zPos)
+  xPos = xPos + 1.25
+  xp = xPos - 0 - negativeXPos
+  yp = yPos + height
+  zp = zPos
+
+  takeParam = {
+      position = {xp,yp,zp},
+      rotation = {math.random(1,720),math.random(1,360),math.random(1,360)},
+      callback = 'roll'
+  }
+  return takeParam
 end

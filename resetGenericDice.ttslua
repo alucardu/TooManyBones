@@ -1,0 +1,43 @@
+self.setPosition({-32, -1, 1.7})
+local allDice = {}
+local diceCleanUp = {}
+    diceCleanUp.click_function = 'cleanup'
+    diceCleanUp.function_owner = self
+    diceCleanUp.label = 'Clean up dies'
+    diceCleanUp.position = {0, 2.5, 2.5}
+    diceCleanUp.width = 1600
+    diceCleanUp.height = 500
+    diceCleanUp.font_size = 240
+    diceCleanUp.index = 0
+
+local dice = {}
+
+local function addDie( uniqueGUID, position, rotation)
+  die = {
+    dieGuid = uniqueGUID,
+    diePosition = position,
+    dieRotation = rotation
+  }
+  table.insert(dice, die)
+end
+
+function onload()
+  diceZone = getObjectFromGUID('cc6e72')
+  genericDice = diceZone.getObjects()
+  for i, die in pairs(genericDice) do
+    addDie(
+      die.getGUID(),
+      die.getPosition(),
+      die.getRotation()
+    )
+  end
+  self.createButton(diceCleanUp)
+end
+
+function cleanup()
+  for k, v in ipairs(dice) do
+    x = getObjectFromGUID(v.dieGuid)
+    x.setPositionSmooth(v.diePosition)
+    x.setRotation(v.dieRotation)
+  end
+end
