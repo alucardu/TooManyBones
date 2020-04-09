@@ -14,7 +14,6 @@ function onLoad()
 end
 
 function shuffle()
-    print(self)
     local bagQuantity = self.getObjects()
     local x = 0
     for k, v in pairs(bagQuantity) do
