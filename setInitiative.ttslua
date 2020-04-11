@@ -1,0 +1,167 @@
+function onload()
+  setLaneObjects()
+  setBaddieQueue()
+  setInitiativeDice()
+  setBaddies()
+  setInitiativePosition()
+
+  self.createButton(setInitiativeBtn)
+end
+
+function setInitiativeOrder()
+  for i, baddieQueuePos in ipairs(baddieQueuesPosition) do
+    local baddie = getObjectFromGUID(findHitsInRadius(baddieQueuePos, 1.2, 'guid'))
+    if baddie ~= nill then
+      pos = lane[i].getPosition()
+      pos.y = pos.y + 2
+      baddie.setPositionSmooth(pos)
+      moveWatch = function() return not baddie.isSmoothMoving() end
+      Wait.condition(setInitiativeDie, moveWatch)
+    end
+  end
+end
+
+function setInitiativeDie()
+  for i, lane in ipairs(lane) do
+    baddieInitiativeValue = findHitsInRadius(lane.getPosition(), 2, 'initiative')
+    if baddieInitiativeValue ~= nill then
+      initiativeDie[i].setRotationSmooth(sides_table[baddieInitiativeValue])
+      position = initiativePosition[i + 1]
+      position.y = position.y + 6
+      initiativeDie[i].setPositionSmooth(position)
+      position.y = 0
+    end
+  end
+end
+
+function findHitsInRadius(pos, ypos, reason)
+  pos.y = 1
+  pos.y = pos.y + ypos
+  local radius = (radius or 1)
+  local hitList = Physics.cast({
+      origin       = {x=pos.x, y=pos.y, z=pos.z},
+      direction    = {0,1,0},
+      type         = 3,
+      size         = {2,2,2},
+      max_distance = 0,
+      debug        = false,
+  })
+  pos.y = 1
+
+  for _, baddie in ipairs(hitList) do
+    if reason == 'initiative' then
+      return JSON.decode(baddie.hit_object.getGMNotes()).initiative
+  	elseif reason == 'guid' then
+      return JSON.decode(baddie.hit_object.getGMNotes()).guid
+    end
+  end
+
+end
+
+sides_table = {
+  {-90, 0, 0},
+  {0, 0, 360},
+  {0, 0, 270},
+  {0, 0, 90},
+  {0, 0, 180},
+  {90, 0, 0}
+}
+
+function setInitiativePosition()
+  initiativePosition = {
+    getObjectFromGUID('fdab05').getPosition(),
+    getObjectFromGUID('7ab4bb').getPosition(),
+    getObjectFromGUID('634099').getPosition(),
+    getObjectFromGUID('7ad94b').getPosition(),
+    getObjectFromGUID('01124a').getPosition(),
+    getObjectFromGUID('6bda36').getPosition(),
+    getObjectFromGUID('dffb26').getPosition(),
+    getObjectFromGUID('e86414').getPosition(),
+    getObjectFromGUID('1dcd7e').getPosition()
+  }
+end
+
+function setLaneObjects()
+  lane = {
+    getObjectFromGUID('e37ccf'),
+    getObjectFromGUID('2a9f73'),
+    getObjectFromGUID('fd1416'),
+    getObjectFromGUID('cc47f5')
+  }
+end
+
+function setBaddieQueue()
+  baddieQueuesPosition = {
+    getObjectFromGUID('54c5d6').getPosition(),
+    getObjectFromGUID('2bd8ff').getPosition(),
+    getObjectFromGUID('3590ab').getPosition(),
+    getObjectFromGUID('2af659').getPosition(),
+  }
+end
+
+function setInitiativeDice()
+  initiativeDie = {
+    getObjectFromGUID('7c1582'),
+    getObjectFromGUID('4d2834'),
+    getObjectFromGUID('3aaaf7'),
+    getObjectFromGUID('28d12b'),
+  }
+end
+
+function setBaddies()
+  x = getObjectFromGUID('75faa0')
+  x.setGMNotes(JSON.encode({
+    guid = '75faa0',
+    initiative = 6,
+    health = 2,
+    attack = 'melee',
+    name = 'Kobold Tracker'
+  }))
+  baddie1 = x.getGMNotes()
+  baddie1 = JSON.decode(baddie1)
+
+  x = getObjectFromGUID('3212e1')
+  x.setGMNotes(JSON.encode({
+    guid = '3212e1',
+    initiative = 5,
+    health = 3,
+    attack = 'melee',
+    name = 'Goblin Bomber'
+  }))
+  baddie2 = x.getGMNotes()
+  baddie2 = JSON.decode(baddie2)
+
+  x = getObjectFromGUID('23def6')
+  x.setGMNotes(JSON.encode({
+    guid = '23def6',
+    initiative = 5,
+    health = 3,
+    attack = 'melee',
+    name = 'Goblin Bomber'
+  }))
+  baddie3 = x.getGMNotes()
+  baddie3 = JSON.decode(baddie3)
+
+  x = getObjectFromGUID('1021b1')
+  x.setGMNotes(JSON.encode({
+    guid = '1021b1',
+    initiative = 5,
+    health = 3,
+    attack = 'melee',
+    name = 'Goblin Bomber'
+  }))
+  baddie4 = x.getGMNotes()
+  baddie4 = JSON.decode(baddie4)
+end
+
+self.setPosition({10, -1, 1.7})
+setInitiativeBtn = {
+  click_function = 'setInitiativeOrder',
+  function_owner = self,
+  label = 'Set initiative',
+  position = {0, 2, 2.5},
+  width = 1600,
+  height = 500,
+  font_size = 240,
+  index = 0
+}
