@@ -8,27 +8,50 @@ function onload()
   self.createButton(setInitiativeBtn)
 end
 
-function setInitiativeOrder()
+local runOnceSetInitiativeDie = 0
+local runOnceSetInitiativeOrder = 0
+
+local intiativeDice = {}
+
+function setInitiative()
   for i, baddieQueuePos in ipairs(baddieQueuesPosition) do
     local baddie = getObjectFromGUID(findHitsInRadius(baddieQueuePos, 1.2, 'guid'))
     if baddie ~= nill then
       pos = lane[i].getPosition()
       pos.y = pos.y + 2
       baddie.setPositionSmooth(pos)
+      local setInitiativeDie = function() setInitiativeDie() runOnceSetInitiativeDie = runOnceSetInitiativeDie + 1 end
       moveWatch = function() return not baddie.isSmoothMoving() end
       Wait.condition(setInitiativeDie, moveWatch)
     end
   end
+  runOnceSetInitiativeDie = 0
 end
 
 function setInitiativeDie()
-  for i, lane in ipairs(lane) do
-    baddieInitiativeValue = findHitsInRadius(lane.getPosition(), 2, 'initiative')
-    if baddieInitiativeValue ~= nill then
-      initiativeDie[i].setRotationSmooth(sides_table[baddieInitiativeValue])
+  if runOnceSetInitiativeDie <= 0 then
+    for i, lane in ipairs(lane) do
+      baddieInitiativeValue = findHitsInRadius(lane.getPosition(), 2, 'initiative')
+      if baddieInitiativeValue ~= nill then
+        initiativeDie[i].setValue(baddieInitiativeValue)
+        table.insert(intiativeDice, initiativeDie[i])
+        rotateWatch = function() return not initiativeDie[i].isSmoothMoving() end
+        local setInitiativeOrder = function() setInitiativeOrder() runOnceSetInitiativeOrder = runOnceSetInitiativeOrder + 1 end
+        Wait.condition(setInitiativeOrder, rotateWatch)
+      end
+    end
+  end
+  runOnceSetInitiativeOrder = 0
+end
+
+function setInitiativeOrder()
+  table.sort(intiativeDice, function(v1, v2) return v1.getValue() > v2.getValue() end)
+
+  if runOnceSetInitiativeOrder <= 0 then
+    for i, initiativeDie in ipairs(intiativeDice) do
       position = initiativePosition[i + 1]
       position.y = position.y + 6
-      initiativeDie[i].setPositionSmooth(position)
+      initiativeDie.setPositionSmooth(position)
       position.y = 0
     end
   end
@@ -57,15 +80,6 @@ function findHitsInRadius(pos, ypos, reason)
   end
 
 end
-
-sides_table = {
-  {-90, 0, 0},
-  {0, 0, 360},
-  {0, 0, 270},
-  {0, 0, 90},
-  {0, 0, 180},
-  {90, 0, 0}
-}
 
 function setInitiativePosition()
   initiativePosition = {
@@ -156,7 +170,7 @@ end
 
 self.setPosition({10, -1, 1.7})
 setInitiativeBtn = {
-  click_function = 'setInitiativeOrder',
+  click_function = 'setInitiative',
   function_owner = self,
   label = 'Set initiative',
   position = {0, 2, 2.5},
