@@ -1,0 +1,390 @@
+function onload()
+  setGearlockInitiativeDiceValues()
+  setGearlockInitiativeDice()
+  setLaneObjects()
+  setBaddieQueue()
+  setBaddieInitiativeDice()
+  setBaddies()
+  setInitiativePosition()
+  self.createButton(setInitiativeBtn)
+end
+
+-- step 1 // set baddie initiativeDieValue
+local runSetGearlockInitiativeDieValue = 0
+function setBaddieInitiativeDieValue()
+  for i, baddieQueuePos in ipairs(baddieQueuesPosition) do
+    local baddie = getObjectFromGUID(findHitsInRadius(baddieQueuePos, 1.2, 'guid'))
+    if baddie ~= nill then
+      pos = lane[i].getPosition()
+      pos.y = pos.y + 2
+      baddie.setPositionSmooth(pos)
+      local setGearlockInitiativeDieValue = function() setGearlockInitiativeDieValue() runSetGearlockInitiativeDieValue = runSetGearlockInitiativeDieValue + 1 end
+      moveWatch = function() return not baddie.isSmoothMoving() end
+      Wait.condition(setGearlockInitiativeDieValue, moveWatch)
+    end
+  end
+  runSetGearlockInitiativeDieValue = 0
+end
+
+-- step 2 // set gearlock initiativeDieValue
+function setGearlockInitiativeDieValue()
+  if runSetGearlockInitiativeDieValue <= 0 then
+    for i, gearlockInitiativeDie in ipairs(availableGearlockInititiativeDice) do
+      gearlockInitiativeDie.roll()
+      local addGearlockInitiativeDieToTable = function() addGearlockInitiativeDieToTable(gearlockInitiativeDie, #availableGearlockInititiativeDice) end
+      rollWatch = function() return gearlockInitiativeDie.resting end
+      Wait.condition(addGearlockInitiativeDieToTable, rollWatch)
+    end
+  end
+  runSetInitiativeMeter = 0
+end
+
+-- step 3 // add gearlock initiativeDieValue to initiativeDice table
+local runAddBaddieInitiativeDieToTable = 0
+function addGearlockInitiativeDieToTable(gearlockInitiativeDie, numberOfGearlockInitiativeDie)
+  runAddBaddieInitiativeDieToTable = runAddBaddieInitiativeDieToTable + 1
+  for i, availableGearlockInititiativeDie in ipairs(gearlockInitiativeDice) do
+    gearlockInitiativeDieGuid = JSON.decode(availableGearlockInititiativeDie).guid
+    if gearlockInitiativeDieGuid == gearlockInitiativeDie.getGUID() then
+      gearlockInitiativeDie.setValue(gearlockInitiativeDie.getValue())
+      gearlockInitiativeDie.setGMNotes(JSON.encode({
+        value = JSON.decode(availableGearlockInititiativeDie).gearlockDie[gearlockInitiativeDie.getValue()],
+        type = JSON.decode(availableGearlockInititiativeDie).type,
+        gearlock = JSON.decode(availableGearlockInititiativeDie).gearlock
+      }))
+      print(JSON.decode(availableGearlockInititiativeDie).gearlock .. ' has rolled ' .. gearlockInitiativeDie.getValue() .. ' and initiative has been set to ' .. JSON.decode(availableGearlockInititiativeDie).gearlockDie[gearlockInitiativeDie.getValue()])
+      table.insert(initiativeDice, gearlockInitiativeDie)
+    end
+  end
+  if runAddBaddieInitiativeDieToTable == numberOfGearlockInitiativeDie then
+    Wait.time(addBaddieInitiativeDieToTable, 0.5)
+  end
+end
+
+-- step 4 // add baddie initiativeDieValue to initiativeDice table
+function addBaddieInitiativeDieToTable()
+  for i, lane in ipairs(lane) do
+    baddieInitiativeValue = findHitsInRadius(lane.getPosition(), 1.2, 'initiative')
+    if baddieInitiativeValue ~= nill then
+      baddieInitiativeDie[i].setValue(baddieInitiativeValue)
+      baddieInitiativeDie[i].setGMNotes(JSON.encode({
+        value = baddieInitiativeValue,
+        type = 'baddie'
+      }))
+      table.insert(initiativeDice, baddieInitiativeDie[i])
+    end
+    if i == 4 then
+      sortInitiativeMeter()
+    end
+  end
+end
+
+-- step 5 // sort initiativeDice table from high to low with ties in favor of gearlock
+function sortInitiativeMeter()
+  table.sort(initiativeDice, customSort)
+  createInitiativeMeter()
+end
+
+-- step 6 // move all initiative dice to the initiative track in order
+local runSetInitiativeMeter = 0
+function createInitiativeMeter()
+  if runSetInitiativeMeter <= 0 then
+    for i, initiativeDie in ipairs(initiativeDice) do
+      local position = initiativePosition[i + 1]
+      position.y = position.y + 6
+      initiativeDie.setPositionSmooth(position)
+      position.y = 0
+    end
+  end
+  initiativeDice = {}
+end
+
+runPrintTiedInitiativeValue = 0
+function customSort(a, b)
+  if JSON.decode(a.getGMNotes()).value == JSON.decode(b.getGMNotes()).value then
+    if JSON.decode(a.getGMNotes()).type == 'gearlock' and JSON.decode(b.getGMNotes()).type == 'gearlock' then
+      if runPrintTiedInitiativeValue <= 0 then
+        print('----')
+        print('Some gearlocks have tied initiative, please set the tied gearlocks order manually in the initiative meter if needed')
+        print('----')
+        runPrintTiedInitiativeValue = 1
+      end
+    end
+  end
+  if JSON.decode(a.getGMNotes()).value == JSON.decode(b.getGMNotes()).value then
+      return JSON.decode(a.getGMNotes()).type == 'gearlock' and JSON.decode(b.getGMNotes()).type ~= 'gearlock'
+  else
+      return JSON.decode(a.getGMNotes()).value > JSON.decode(b.getGMNotes()).value
+  end
+end
+
+function roll(dieObject)
+  dieObject.addTorque( {math.random()*3600, math.random()*5400, math.random()*3600} )
+end
+
+
+function findHitsInRadius(pos, ypos, reason)
+  pos.y = 1
+  pos.y = pos.y + ypos
+  local radius = (radius or 1)
+  local hitList = Physics.cast({
+      origin       = {x=pos.x, y=pos.y, z=pos.z},
+      direction    = {0,1,0},
+      type         = 3,
+      size         = {2,2,2},
+      max_distance = 0,
+      debug        = false,
+  })
+  pos.y = 1
+
+  for _, baddie in ipairs(hitList) do
+    if reason == 'initiative' then
+      return JSON.decode(baddie.hit_object.getGMNotes()).initiative
+  	elseif reason == 'guid' then
+      return JSON.decode(baddie.hit_object.getGMNotes()).guid
+    end
+  end
+
+end
+
+function setInitiativePosition()
+  initiativePosition = {
+    getObjectFromGUID('fdab05').getPosition(),
+    getObjectFromGUID('7ab4bb').getPosition(),
+    getObjectFromGUID('634099').getPosition(),
+    getObjectFromGUID('7ad94b').getPosition(),
+    getObjectFromGUID('01124a').getPosition(),
+    getObjectFromGUID('6bda36').getPosition(),
+    getObjectFromGUID('dffb26').getPosition(),
+    getObjectFromGUID('e86414').getPosition(),
+    getObjectFromGUID('1dcd7e').getPosition()
+  }
+end
+
+function setLaneObjects()
+  lane = {
+    getObjectFromGUID('e37ccf'),
+    getObjectFromGUID('2a9f73'),
+    getObjectFromGUID('fd1416'),
+    getObjectFromGUID('cc47f5')
+  }
+end
+
+function setBaddieQueue()
+  baddieQueuesPosition = {
+    getObjectFromGUID('54c5d6').getPosition(),
+    getObjectFromGUID('2bd8ff').getPosition(),
+    getObjectFromGUID('3590ab').getPosition(),
+    getObjectFromGUID('2af659').getPosition(),
+  }
+end
+
+function setBaddieInitiativeDice()
+  baddieInitiativeDie = {
+    getObjectFromGUID('7c1582'),
+    getObjectFromGUID('4d2834'),
+    getObjectFromGUID('3aaaf7'),
+    getObjectFromGUID('28d12b'),
+  }
+end
+
+function setBaddies()
+  x = getObjectFromGUID('4e5b7b')
+  x.setGMNotes(JSON.encode({
+    guid = '4e5b7b',
+    initiative = 2,
+    health = 3,
+    attack = 'melee',
+    name = 'Troll Romper'
+  }))
+  baddie1 = x.getGMNotes()
+  baddie1 = JSON.decode(baddie1)
+
+  x = getObjectFromGUID('a855a5')
+  x.setGMNotes(JSON.encode({
+    guid = 'a855a5',
+    initiative = 1,
+    health = 3,
+    attack = 'melee',
+    name = 'Troll Brute'
+  }))
+  baddie2 = x.getGMNotes()
+  baddie2 = JSON.decode(baddie2)
+
+  x = getObjectFromGUID('fe4785')
+  x.setGMNotes(JSON.encode({
+    guid = 'fe4785',
+    initiative = 3,
+    health = 4,
+    attack = 'melee',
+    name = 'Troll YoungUn'
+  }))
+  baddie3 = x.getGMNotes()
+  baddie3 = JSON.decode(baddie3)
+
+  x = getObjectFromGUID('f84b03')
+  x.setGMNotes(JSON.encode({
+    guid = 'f84b03',
+    initiative = 4,
+    health = 3,
+    attack = 'ranged',
+    name = 'Orc Scout'
+  }))
+  baddie4 = x.getGMNotes()
+  baddie4 = JSON.decode(baddie4)
+
+
+  x = getObjectFromGUID('3212e1')
+  x.setGMNotes(JSON.encode({
+    type = 'baddie',
+    guid = '3212e1',
+    initiative = 4,
+    health = 3,
+    attack = 'ranged',
+    name = 'Orc Scout'
+  }))
+  baddie5 = x.getGMNotes()
+  baddie5 = JSON.decode(baddie5)
+
+  x = getObjectFromGUID('23def6')
+  x.setGMNotes(JSON.encode({
+    type = 'baddie',
+    guid = '23def6',
+    initiative = 5,
+    health = 3,
+    attack = 'ranged',
+    name = 'Orc Scout'
+  }))
+  baddie6 = x.getGMNotes()
+  baddie6 = JSON.decode(baddie6)
+
+  x = getObjectFromGUID('3212e1')
+  x.setGMNotes(JSON.encode({
+    type = 'baddie',
+    guid = '3212e1',
+    initiative = 5,
+    health = 3,
+    attack = 'melee',
+    name = 'Gobblin Bomber'
+  }))
+  baddie7 = x.getGMNotes()
+  baddie7 = JSON.decode(baddie7)
+
+  x = getObjectFromGUID('a855a5')
+  x.setGMNotes(JSON.encode({
+    type = 'baddie',
+    guid = 'a855a5',
+    initiative = 3,
+    health = 3,
+    attack = 'ranged',
+    name = 'Orc Scout'
+  }))
+  baddie8 = x.getGMNotes()
+  baddie8 = JSON.decode(baddie8)
+
+  x = getObjectFromGUID('29ef21')
+  x.setGMNotes(JSON.encode({
+    type = 'baddie',
+    guid = '29ef21',
+    initiative = 3,
+    health = 3,
+    attack = 'ranged',
+    name = 'Bog Pole'
+  }))
+  baddie9 = x.getGMNotes()
+  baddie9 = JSON.decode(baddie9)
+
+  x = getObjectFromGUID('28a6bf')
+  x.setGMNotes(JSON.encode({
+    type = 'baddie',
+    guid = '28a6bf',
+    initiative = 5,
+    health = 2,
+    attack = 'melee',
+    name = 'Clay Golem'
+  }))
+  baddie10 = x.getGMNotes()
+  baddie10 = JSON.decode(baddie10)
+
+  x = getObjectFromGUID('0e1b36')
+  x.setGMNotes(JSON.encode({
+    type = 'baddie',
+    guid = '0e1b36',
+    initiative = 4,
+    health = 2,
+    attack = 'ranged',
+    name = 'Goblin Sandbagger'
+  }))
+  baddie11 = x.getGMNotes()
+  baddie11 = JSON.decode(baddie11)
+end
+
+function setGearlockInitiativeDice()
+  gearlockInitiativeDice = {
+    JSON.encode({
+      guid = '96b1fa',
+      gearlock = 'Patches',
+      gearlockDie = PatchesInitiativeDie,
+      type = 'gearlock'
+    }),
+    JSON.encode({
+      guid = 'f4f615',
+      gearlock = 'Nugget',
+      gearlockDie = NuggetInitiativeDie,
+      type = 'gearlock'
+    }),
+    JSON.encode({
+      guid = 'ef8dcc',
+      gearlock = 'Ghillie',
+      gearlockDie = GhillieInitiativeDie,
+      type = 'gearlock'
+    }),
+    JSON.encode({
+      guid = '85c726',
+      gearlock = 'Boomer',
+      gearlockDie = BoomerInitiativeDie,
+      type = 'gearlock'
+    }),
+    JSON.encode({
+      guid = 'eef847',
+      gearlock = 'Picket',
+      gearlockDie = PicketInitiativeDie,
+      type = 'gearlock'
+    }),
+    JSON.encode({
+      guid = '545238',
+      gearlock = 'Tantrum',
+      gearlockDie = TantrumInitiativeDie,
+      type = 'gearlock'
+    }),
+    JSON.encode({
+      guid = '73e679',
+      gearlock = 'Tink',
+      gearlockDie = TinkInitiativeDie,
+      type = 'gearlock'
+    })
+  }
+end
+
+function setGearlockInitiativeDiceValues()
+  BoomerInitiativeDie = {2,3,4,4,5,6}
+  GhillieInitiativeDie = {3,4,4,5,5,6}
+  NuggetInitiativeDie = {2,3,3,4,4,5}
+  PatchesInitiativeDie = {3,3,3,3,4,4}
+  PicketInitiativeDie = {2,2,3,3,3,5}
+  TantrumInitiativeDie = {3,4,4,4,5,5}
+  TinkInitiativeDie = {3,3,4,4,4,5}
+end
+
+initiativeDice = {}
+self.setPosition({10, -1, 1.7})
+setInitiativeBtn = {
+  click_function = 'setBaddieInitiativeDieValue',
+  function_owner = self,
+  label = 'Set initiative',
+  position = {0, 2, 2.5},
+  width = 1600,
+  height = 500,
+  font_size = 240,
+  index = 0
+}
