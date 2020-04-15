@@ -1,4 +1,6 @@
 function onload()
+  setPlayerInitiativeDiceValues()
+  setPlayerInitiativeDice()
   setLaneObjects()
   setBaddieQueue()
   setInitiativeDice()
@@ -11,47 +13,14 @@ local runOnceSetInitiativeDie = 0
 local runOnceSetInitiativeOrder = 0
 local initiativePlayerDice = 0
 
-BoomerInitiativeDie = {2,3,4,4,5,6}
-GhillieInitiativeDie = {3,4,4,5,5,6}
-NuggetInitiativeDie = {2,3,3,4,4,5}
-PatchesInitiativeDie = {3,3,3,3,4,4}
-
-playerInitiativeDice = {
-  JSON.encode({
-    guid = '96b1fa',
-    gearlock = 'Patches',
-    gearlockDie = PatchesInitiativeDie,
-    type = 'gearlock'
-  }),
-  JSON.encode({
-    guid = 'f4f615',
-    gearlock = 'Nugget',
-    gearlockDie = NuggetInitiativeDie,
-    type = 'gearlock'
-  }),
-  JSON.encode({
-    guid = 'ef8dcc',
-    gearlock = 'Ghillie',
-    gearlockDie = GhillieInitiativeDie,
-    type = 'gearlock'
-  }),
-  JSON.encode({
-    guid = '85c726',
-    gearlock = 'Boomer',
-    gearlockDie = BoomerInitiativeDie,
-    type = 'gearlock'
-  })
-}
-
--- check if player initiative die are equal
-
 function setPlayerInitiativeDieValue(initiaitivePlayerDie, value)
   for p, playerInitiativeDie in ipairs(playerInitiativeDice) do
     initiaitivePlayerDieGuid = JSON.decode(playerInitiativeDie).guid
     if initiaitivePlayerDieGuid == initiaitivePlayerDie.getGUID() then
       print(JSON.decode(playerInitiativeDie).gearlock .. ' has rolled ' .. value)
       initiaitivePlayerDie.setGMNotes(JSON.encode({
-        value = JSON.decode(playerInitiativeDie).gearlockDie[value]
+        value = JSON.decode(playerInitiativeDie).gearlockDie[value],
+        type = JSON.decode(playerInitiativeDie).type
       }))
     end
   end
@@ -85,7 +54,8 @@ function setInitiativeDie()
       if baddieInitiativeValue ~= nill then
         initiativeDie[i].setValue(baddieInitiativeValue)
         initiativeDie[i].setGMNotes(JSON.encode({
-          value = baddieInitiativeValue
+          value = baddieInitiativeValue,
+          type = 'baddie'
         }))
         table.insert(intiativeDice, initiativeDie[i])
       end
@@ -109,10 +79,16 @@ function roll(dieObject)
   dieObject.addTorque( {math.random()*3600, math.random()*5400, math.random()*3600} )
 end
 
+local function customSort(a, b)
+    if JSON.decode(a.getGMNotes()).value == JSON.decode(b.getGMNotes()).value then
+        return JSON.decode(a.getGMNotes()).type == 'gearlock' and JSON.decode(b.getGMNotes()).type ~= 'gearlock'
+    else
+        return JSON.decode(a.getGMNotes()).value > JSON.decode(b.getGMNotes()).value
+    end
+end
+
 function setInitiativeOrder()
   table.sort(intiativeDice, customSort)
-  reverseArray(intiativeDice)
-
   if runOnceSetInitiativeOrder <= 0 then
     for i, initiativeDie in ipairs(intiativeDice) do
       local position = initiativePosition[i + 1]
@@ -122,25 +98,6 @@ function setInitiativeOrder()
     end
   end
   intiativeDice = {}
-end
-
-function customSort(v1, v2)
-  v1 = JSON.decode(v1.getGMNotes())
-  v2 = JSON.decode(v2.getGMNotes())
-  if v1.value == v2.value then
-    return v1.type == 'player' and v2.type ~= 'player'
-  else
-    return v1.value < v2.value
-  end
-end
-
-function reverseArray (arr)
-	local i, j = 1, #arr
-	while i < j do
-		arr[i], arr[j] = arr[j], arr[i]
-		i = i + 1
-		j = j - 1
-	end
 end
 
 function findHitsInRadius(pos, ypos, reason)
@@ -209,49 +166,49 @@ function setInitiativeDice()
 end
 
 function setBaddies()
---   x = getObjectFromGUID('4e5b7b')
---   x.setGMNotes(JSON.encode({
---     guid = '4e5b7b',
---     initiative = 2,
---     health = 3,
---     attack = 'melee',
---     name = 'Troll Romper'
---   }))
---   baddie1 = x.getGMNotes()
---   baddie1 = JSON.decode(baddie1)
---
---   x = getObjectFromGUID('a855a5')
---   x.setGMNotes(JSON.encode({
---     guid = 'a855a5',
---     initiative = 1,
---     health = 3,
---     attack = 'melee',
---     name = 'Troll Brute'
---   }))
---   baddie2 = x.getGMNotes()
---   baddie2 = JSON.decode(baddie2)
---
---   x = getObjectFromGUID('fe4785')
---   x.setGMNotes(JSON.encode({
---     guid = 'fe4785',
---     initiative = 3,
---     health = 4,
---     attack = 'melee',
---     name = 'Troll YoungUn'
---   }))
---   baddie3 = x.getGMNotes()
---   baddie3 = JSON.decode(baddie3)
---
---   x = getObjectFromGUID('f84b03')
---   x.setGMNotes(JSON.encode({
---     guid = 'f84b03',
---     initiative = 4,
---     health = 3,
---     attack = 'ranged',
---     name = 'Orc Scout'
---   }))
---   baddie4 = x.getGMNotes()
---   baddie4 = JSON.decode(baddie4)
+  x = getObjectFromGUID('4e5b7b')
+  x.setGMNotes(JSON.encode({
+    guid = '4e5b7b',
+    initiative = 2,
+    health = 3,
+    attack = 'melee',
+    name = 'Troll Romper'
+  }))
+  baddie1 = x.getGMNotes()
+  baddie1 = JSON.decode(baddie1)
+
+  x = getObjectFromGUID('a855a5')
+  x.setGMNotes(JSON.encode({
+    guid = 'a855a5',
+    initiative = 1,
+    health = 3,
+    attack = 'melee',
+    name = 'Troll Brute'
+  }))
+  baddie2 = x.getGMNotes()
+  baddie2 = JSON.decode(baddie2)
+
+  x = getObjectFromGUID('fe4785')
+  x.setGMNotes(JSON.encode({
+    guid = 'fe4785',
+    initiative = 3,
+    health = 4,
+    attack = 'melee',
+    name = 'Troll YoungUn'
+  }))
+  baddie3 = x.getGMNotes()
+  baddie3 = JSON.decode(baddie3)
+
+  x = getObjectFromGUID('f84b03')
+  x.setGMNotes(JSON.encode({
+    guid = 'f84b03',
+    initiative = 4,
+    health = 3,
+    attack = 'ranged',
+    name = 'Orc Scout'
+  }))
+  baddie4 = x.getGMNotes()
+  baddie4 = JSON.decode(baddie4)
 
   x = getObjectFromGUID('3212e1')
   x.setGMNotes(JSON.encode({
@@ -300,7 +257,42 @@ function setBaddies()
   }))
   baddie8 = x.getGMNotes()
   baddie8 = JSON.decode(baddie8)
+end
 
+function setPlayerInitiativeDice()
+  playerInitiativeDice = {
+    JSON.encode({
+      guid = '96b1fa',
+      gearlock = 'Patches',
+      gearlockDie = PatchesInitiativeDie,
+      type = 'gearlock'
+    }),
+    JSON.encode({
+      guid = 'f4f615',
+      gearlock = 'Nugget',
+      gearlockDie = NuggetInitiativeDie,
+      type = 'gearlock'
+    }),
+    JSON.encode({
+      guid = 'ef8dcc',
+      gearlock = 'Ghillie',
+      gearlockDie = GhillieInitiativeDie,
+      type = 'gearlock'
+    }),
+    JSON.encode({
+      guid = '85c726',
+      gearlock = 'Boomer',
+      gearlockDie = BoomerInitiativeDie,
+      type = 'gearlock'
+    })
+  }
+end
+
+function setPlayerInitiativeDiceValues()
+  BoomerInitiativeDie = {2,3,4,4,5,6}
+  GhillieInitiativeDie = {3,4,4,5,5,6}
+  NuggetInitiativeDie = {2,3,3,4,4,5}
+  PatchesInitiativeDie = {3,3,3,3,4,4}
 end
 
 intiativeDice = {}
