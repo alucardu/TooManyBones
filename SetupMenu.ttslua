@@ -3230,10 +3230,10 @@ function finalClear()
 end
 
 initiativeDiceZones = {
-  '5e8b7d',
-  '77237c',
-  '412082',
-  'b5cafa'
+  'c71639',
+  '14158a',
+  'e98ce1',
+  'e18b4a'
 }
 
 initiativeDiePlayers = {

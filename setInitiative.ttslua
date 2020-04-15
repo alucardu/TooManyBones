@@ -105,7 +105,7 @@ function customSort(a, b)
     if JSON.decode(a.getGMNotes()).type == 'gearlock' and JSON.decode(b.getGMNotes()).type == 'gearlock' then
       if runPrintTiedInitiativeValue <= 0 then
         print('----')
-        print('Some gearlocks have tied initiative, please set the tied gearlocks order manually in the initiative meter')
+        print('Some gearlocks have tied initiative, please set the tied gearlocks order manually in the initiative meter if needed')
         print('----')
         runPrintTiedInitiativeValue = 1
       end
@@ -233,6 +233,7 @@ function setBaddies()
   baddie4 = x.getGMNotes()
   baddie4 = JSON.decode(baddie4)
 
+
   x = getObjectFromGUID('3212e1')
   x.setGMNotes(JSON.encode({
     type = 'baddie',
@@ -257,22 +258,22 @@ function setBaddies()
   baddie6 = x.getGMNotes()
   baddie6 = JSON.decode(baddie6)
 
-  x = getObjectFromGUID('1021b1')
+  x = getObjectFromGUID('3212e1')
   x.setGMNotes(JSON.encode({
     type = 'baddie',
-    guid = '1021b1',
-    initiative = 2,
+    guid = '3212e1',
+    initiative = 5,
     health = 3,
-    attack = 'ranged',
-    name = 'Orc Scout'
+    attack = 'melee',
+    name = 'Gobblin Bomber'
   }))
   baddie7 = x.getGMNotes()
   baddie7 = JSON.decode(baddie7)
 
-  x = getObjectFromGUID('929081')
+  x = getObjectFromGUID('a855a5')
   x.setGMNotes(JSON.encode({
     type = 'baddie',
-    guid = '929081',
+    guid = 'a855a5',
     initiative = 3,
     health = 3,
     attack = 'ranged',
@@ -280,6 +281,42 @@ function setBaddies()
   }))
   baddie8 = x.getGMNotes()
   baddie8 = JSON.decode(baddie8)
+
+  x = getObjectFromGUID('29ef21')
+  x.setGMNotes(JSON.encode({
+    type = 'baddie',
+    guid = '29ef21',
+    initiative = 3,
+    health = 3,
+    attack = 'ranged',
+    name = 'Bog Pole'
+  }))
+  baddie9 = x.getGMNotes()
+  baddie9 = JSON.decode(baddie9)
+
+  x = getObjectFromGUID('28a6bf')
+  x.setGMNotes(JSON.encode({
+    type = 'baddie',
+    guid = '28a6bf',
+    initiative = 5,
+    health = 2,
+    attack = 'melee',
+    name = 'Clay Golem'
+  }))
+  baddie10 = x.getGMNotes()
+  baddie10 = JSON.decode(baddie10)
+
+  x = getObjectFromGUID('0e1b36')
+  x.setGMNotes(JSON.encode({
+    type = 'baddie',
+    guid = '0e1b36',
+    initiative = 4,
+    health = 2,
+    attack = 'ranged',
+    name = 'Goblin Sandbagger'
+  }))
+  baddie11 = x.getGMNotes()
+  baddie11 = JSON.decode(baddie11)
 end
 
 function setGearlockInitiativeDice()
