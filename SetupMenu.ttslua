@@ -3255,5 +3255,3 @@ function setInitiativeDice()
     end
   end
 end
-
-print('q')

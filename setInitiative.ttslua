@@ -49,13 +49,14 @@ function addGearlockInitiativeDieToTable(gearlockInitiativeDie, numberOfGearlock
       gearlockInitiativeDie.setValue(gearlockInitiativeDie.getValue())
       gearlockInitiativeDie.setGMNotes(JSON.encode({
         value = JSON.decode(availableGearlockInititiativeDie).gearlockDie[gearlockInitiativeDie.getValue()],
-        type = JSON.decode(availableGearlockInititiativeDie).type
+        type = JSON.decode(availableGearlockInititiativeDie).type,
+        gearlock = JSON.decode(availableGearlockInititiativeDie).gearlock
       }))
       print(JSON.decode(availableGearlockInititiativeDie).gearlock .. ' has rolled ' .. gearlockInitiativeDie.getValue() .. ' and initiative has been set to ' .. JSON.decode(availableGearlockInititiativeDie).gearlockDie[gearlockInitiativeDie.getValue()])
       table.insert(initiativeDice, gearlockInitiativeDie)
     end
   end
-  if runAddBaddieInitiativeDieToTable == 4 then
+  if runAddBaddieInitiativeDieToTable == numberOfGearlockInitiativeDie then
     Wait.time(addBaddieInitiativeDieToTable, 0.5)
   end
 end
@@ -98,12 +99,23 @@ function createInitiativeMeter()
   initiativeDice = {}
 end
 
+runPrintTiedInitiativeValue = 0
 function customSort(a, b)
-    if JSON.decode(a.getGMNotes()).value == JSON.decode(b.getGMNotes()).value then
-        return JSON.decode(a.getGMNotes()).type == 'gearlock' and JSON.decode(b.getGMNotes()).type ~= 'gearlock'
-    else
-        return JSON.decode(a.getGMNotes()).value > JSON.decode(b.getGMNotes()).value
+  if JSON.decode(a.getGMNotes()).value == JSON.decode(b.getGMNotes()).value then
+    if JSON.decode(a.getGMNotes()).type == 'gearlock' and JSON.decode(b.getGMNotes()).type == 'gearlock' then
+      if runPrintTiedInitiativeValue <= 0 then
+        print('----')
+        print('Some gearlocks have tied initiative, please set the tied gearlocks order manually in the initiative meter')
+        print('----')
+        runPrintTiedInitiativeValue = 1
+      end
     end
+  end
+  if JSON.decode(a.getGMNotes()).value == JSON.decode(b.getGMNotes()).value then
+      return JSON.decode(a.getGMNotes()).type == 'gearlock' and JSON.decode(b.getGMNotes()).type ~= 'gearlock'
+  else
+      return JSON.decode(a.getGMNotes()).value > JSON.decode(b.getGMNotes()).value
+  end
 end
 
 function roll(dieObject)
