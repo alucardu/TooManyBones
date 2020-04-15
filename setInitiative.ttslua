@@ -238,7 +238,7 @@ function setBaddies()
   x.setGMNotes(JSON.encode({
     type = 'baddie',
     guid = '3212e1',
-    initiative = 4,
+    initiative = 5,
     health = 3,
     attack = 'ranged',
     name = 'Orc Scout'
@@ -298,8 +298,8 @@ function setBaddies()
   x.setGMNotes(JSON.encode({
     type = 'baddie',
     guid = '28a6bf',
-    initiative = 5,
-    health = 2,
+    initiative = 2,
+    health = 5,
     attack = 'melee',
     name = 'Clay Golem'
   }))
