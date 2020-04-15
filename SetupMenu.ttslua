@@ -71,12 +71,11 @@ gendricksEncounterCards = {"804059", "9fa8c3"}
 goblinEncounterCards = {"1f748a", "73c890"}
 marrowEncounterCards = {"c3dc3b", "404893"}
 dusterEncounterCards = {"e6315d", "2709cb", "cae580"}
-
-    tyrantSelected = nil
-    playerOneSelected = nil
-    playeTwoSelected = nil
-    playerThreeSelected = nil
-    playerFourSelected = nil
+  tyrantSelected = nil
+  playerOneSelected = nil
+  playeTwoSelected = nil
+  playerThreeSelected = nil
+  playerFourSelected = nil
 
 	playerCount = 0
 	playerOneActive =  0
@@ -545,6 +544,7 @@ dusterActive = 0
     startGame.index = 35
 
 function onload()
+    setInitiativeObject = getObjectFromGUID('8d4497')
     self.createButton(Nom)
     self.createButton(Drellen)
     self.createButton(Mulmesh)
@@ -2008,6 +2008,10 @@ function setupSpecial()
 end
 
 function gameStart()
+  setInitiativeObject.setVar('playerOneSelected', playerOneSelected)
+  setInitiativeObject.setVar('playerTwoSelected', playerTwoSelected)
+  setInitiativeObject.setVar('playerThreeSelected', playerThreeSelected)
+  setInitiativeObject.setVar('playerFourSelected', playerFourSelected)
     if tyrantSelected == nil then
         broadcastToAll ( "Cannot Start, No Tyrant Selected", {1, 0.5, 0.5} )
     elseif (playerOneSelected == nil) and (playerTwoSelected == nil) and (playerThreeSelected == nil) and (playerFourSelected == nil) then
@@ -2512,6 +2516,7 @@ function dealDice()
 				xOff = xOff + 0.75
 			end
 			zOff = -14.96
+      xOff = -21.7
 			diceBag.takeObject({position = {xOff, 1.9, zOff}})
 			diceBag.destruct()
 		elseif playerTwoSelected == "Ghillie" then
@@ -2545,6 +2550,7 @@ function dealDice()
 				xOff = xOff + 0.75
 			end
 			zOff = -14.96
+      xOff = -21.7
 			diceBag.takeObject({position = {xOff, 1.9, zOff}})
 			diceBag.destruct()
 		elseif playerTwoSelected == "Nugget" then
@@ -2578,6 +2584,7 @@ function dealDice()
 				xOff = xOff + 0.75
 			end
 			zOff = -14.96
+      xOff = -21.7
 			diceBag.takeObject({position = {xOff, 1.9, zOff}})
 			diceBag.destruct()
 		elseif playerTwoSelected == "Patches" then
@@ -2611,6 +2618,7 @@ function dealDice()
 				xOff = xOff + 0.75
 			end
 			zOff = -14.96
+      xOff = -21.7
 			diceBag.takeObject({position = {xOff, 1.9, zOff}})
 			diceBag.destruct()
 		elseif playerTwoSelected == "Picket" then
@@ -2644,6 +2652,7 @@ function dealDice()
 				xOff = xOff + 0.75
 			end
 			zOff = -14.96
+      xOff = -21.7
 			diceBag.takeObject({position = {xOff, 1.9, zOff}})
 			diceBag.destruct()
 		elseif playerTwoSelected == "Tantrum" then
@@ -2677,6 +2686,7 @@ function dealDice()
 				xOff = xOff + 0.75
 			end
 			zOff = -14.96
+      xOff = -21.7
 			diceBag.takeObject({position = {xOff, 1.9, zOff}})
 			diceBag.destruct()
 		elseif playerTwoSelected == "Tink" then
@@ -2710,6 +2720,7 @@ function dealDice()
 				xOff = xOff + 0.75
 			end
 			zOff = -14.96
+      xOff = -21.7
 			diceBag.takeObject({position = {xOff, 1.9, zOff}})
 			diceBag.destruct()
 		else
@@ -2995,6 +3006,7 @@ function dealDice()
 				xOff = xOff + 0.75
 			end
 			zOff = -14.96
+      xOff = 29.35
 			diceBag.takeObject({position = {xOff, 1.9, zOff}})
 			diceBag.destruct()
 		elseif playerFourSelected == "Ghillie" then
@@ -3028,6 +3040,7 @@ function dealDice()
 				xOff = xOff + 0.75
 			end
 			zOff = -14.96
+      xOff = 29.35
 			diceBag.takeObject({position = {xOff, 1.9, zOff}})
 			diceBag.destruct()
 		elseif playerFourSelected == "Nugget" then
@@ -3061,6 +3074,7 @@ function dealDice()
 				xOff = xOff + 0.75
 			end
 			zOff = -14.96
+      xOff = 29.35
 			diceBag.takeObject({position = {xOff, 1.9, zOff}})
 			diceBag.destruct()
 		elseif playerFourSelected == "Patches" then
@@ -3094,6 +3108,7 @@ function dealDice()
 				xOff = xOff + 0.75
 			end
 			zOff = -14.96
+      xOff = 29.35
 			diceBag.takeObject({position = {xOff, 1.9, zOff}})
 			diceBag.destruct()
 		elseif playerFourSelected == "Picket" then
@@ -3127,6 +3142,7 @@ function dealDice()
 				xOff = xOff + 0.75
 			end
 			zOff = -14.96
+      xOff = 29.35
 			diceBag.takeObject({position = {xOff, 1.9, zOff}})
 			diceBag.destruct()
 		elseif playerFourSelected == "Tantrum" then
@@ -3160,6 +3176,7 @@ function dealDice()
 				xOff = xOff + 0.75
 			end
 			zOff = -14.96
+      xOff = 29.35
 			diceBag.takeObject({position = {xOff, 1.9, zOff}})
 			diceBag.destruct()
 		elseif playerFourSelected == "Tink" then
@@ -3193,12 +3210,15 @@ function dealDice()
 				xOff = xOff + 0.75
 			end
 			zOff = -14.96
+      xOff = 29.35
 			diceBag.takeObject({position = {xOff, 1.9, zOff}})
 			diceBag.destruct()
 		else
 		end
 	else
+
 	end
+  Wait.time(setInitiativeDice, 2)
 end
 
 function finalClear()
@@ -3207,4 +3227,31 @@ function finalClear()
 	for i, object in ipairs(clearObjects) do
 		destroyObject(object)
 	end
+end
+
+initiativeDiceZones = {
+  '5e8b7d',
+  '77237c',
+  '412082',
+  'b5cafa'
+}
+
+initiativeDiePlayers = {
+  'initiativeDiePlayerOne',
+  'initiativeDiePlayerTwo',
+  'initiativeDiePlayerThree',
+  'initiativeDiePlayerFour',
+}
+
+y = {}
+
+function setInitiativeDice()
+  for i, initiativeDiceZone in pairs(initiativeDiceZones) do
+    initiativeDie = getObjectFromGUID(initiativeDiceZone).getObjects()[1]
+    table.insert(y, initiativeDie)
+    x = i
+    if i == 4 then
+      setInitiativeObject.setTable('initiativePlayersDice', y)
+    end
+  end
 end
