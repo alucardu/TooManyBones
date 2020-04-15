@@ -3251,7 +3251,9 @@ function setInitiativeDice()
     table.insert(y, initiativeDie)
     x = i
     if i == 4 then
-      setInitiativeObject.setTable('initiativePlayersDice', y)
+      setInitiativeObject.setTable('availableGearlockInititiativeDice', y)
     end
   end
 end
+
+print('q')

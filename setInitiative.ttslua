@@ -1,9 +1,9 @@
 function onload()
-  setPlayerInitiativeDiceValues()
-  setPlayerInitiativeDice()
+  setGearlockInitiativeDiceValues()
+  setGearlockInitiativeDice()
   setLaneObjects()
   setBaddieQueue()
-  setInitiativeDice()
+  setBaddieInitiativeDice()
   setBaddies()
   setInitiativePosition()
   self.createButton(setInitiativeBtn)
@@ -13,72 +13,75 @@ local runOnceSetInitiativeDie = 0
 local runOnceSetInitiativeOrder = 0
 local initiativePlayerDice = 0
 
-function setPlayerInitiativeDieValue(initiaitivePlayerDie, value)
-  for p, playerInitiativeDie in ipairs(playerInitiativeDice) do
-    initiaitivePlayerDieGuid = JSON.decode(playerInitiativeDie).guid
-    if initiaitivePlayerDieGuid == initiaitivePlayerDie.getGUID() then
-      print(JSON.decode(playerInitiativeDie).gearlock .. ' has rolled ' .. value)
-      initiaitivePlayerDie.setGMNotes(JSON.encode({
-        value = JSON.decode(playerInitiativeDie).gearlockDie[value],
-        type = JSON.decode(playerInitiativeDie).type
-      }))
-    end
-  end
-end
-
-function setInitiative()
+-- step 1 // set baddie initiativeDieValue
+function setBaddieInitiativeDieValue()
   for i, baddieQueuePos in ipairs(baddieQueuesPosition) do
     local baddie = getObjectFromGUID(findHitsInRadius(baddieQueuePos, 1.2, 'guid'))
     if baddie ~= nill then
       pos = lane[i].getPosition()
       pos.y = pos.y + 2
       baddie.setPositionSmooth(pos)
-      local setInitiativeDie = function() setInitiativeDie() runOnceSetInitiativeDie = runOnceSetInitiativeDie + 1 end
+      local setGearlockInitiativeDieValue = function() setGearlockInitiativeDieValue() runOnceSetInitiativeDie = runOnceSetInitiativeDie + 1 end
       moveWatch = function() return not baddie.isSmoothMoving() end
-      Wait.condition(setInitiativeDie, moveWatch)
+      Wait.condition(setGearlockInitiativeDieValue, moveWatch)
     end
   end
   runOnceSetInitiativeDie = 0
 end
 
-function setInitiativeDie()
+-- step 2 // set gearlock initiativeDieValue
+function setGearlockInitiativeDieValue()
   if runOnceSetInitiativeDie <= 0 then
-    for i, initiaitivePlayerDie in ipairs(initiativePlayersDice) do
-      initiaitivePlayerDie.roll()
-      local setInitiativePlayerDie = function() setInitiativePlayerDie(initiaitivePlayerDie, #initiativePlayersDice) end
-      rollWatch = function() return initiaitivePlayerDie.resting end
-      Wait.condition(setInitiativePlayerDie, rollWatch)
-    end
-    for i, lane in ipairs(lane) do
-      baddieInitiativeValue = findHitsInRadius(lane.getPosition(), 2, 'initiative')
-      if baddieInitiativeValue ~= nill then
-        initiativeDie[i].setValue(baddieInitiativeValue)
-        initiativeDie[i].setGMNotes(JSON.encode({
-          value = baddieInitiativeValue,
-          type = 'baddie'
-        }))
-        table.insert(intiativeDice, initiativeDie[i])
-      end
+    for i, gearlockInitiativeDie in ipairs(availableGearlockInititiativeDice) do
+      local addGearlockInitiativeDieToTable = function() addGearlockInitiativeDieToTable(gearlockInitiativeDie, #availableGearlockInititiativeDice) end
+      rollWatch = function() return gearlockInitiativeDie.resting end
+      Wait.condition(addGearlockInitiativeDieToTable, rollWatch)
     end
   end
   runOnceSetInitiativeOrder = 0
 end
 
-function setInitiativePlayerDie(initiaitivePlayerDie, numberOfInitiativePlayerDice)
-  initiativePlayerDice = initiativePlayerDice + 1
-  value = initiaitivePlayerDie.getValue()
-  setPlayerInitiativeDieValue(initiaitivePlayerDie, value)
-  initiaitivePlayerDie.setValue(value)
-  table.insert(intiativeDice, initiaitivePlayerDie)
-  if initiativePlayerDice == numberOfInitiativePlayerDice then
-    setInitiativeOrder() runOnceSetInitiativeOrder = runOnceSetInitiativeOrder + 1
+-- step 3 // add gearlock initiativeDieValue to initiativeDice table
+pol = 0
+function addGearlockInitiativeDieToTable(gearlockInitiativeDie, numberOfGearlockInitiativeDie)
+  pol = pol + 1
+  for i, availableGearlockInititiativeDie in ipairs(gearlockInitiativeDice) do
+    gearlockInitiativeDieGuid = JSON.decode(availableGearlockInititiativeDie).guid
+    if gearlockInitiativeDieGuid == gearlockInitiativeDie.getGUID() then
+      print(JSON.decode(availableGearlockInititiativeDie).gearlock .. ' has rolled ' .. gearlockInitiativeDie.getValue())
+      gearlockInitiativeDie.setValue(gearlockInitiativeDie.getValue())
+      gearlockInitiativeDie.setGMNotes(JSON.encode({
+        value = JSON.decode(availableGearlockInititiativeDie).gearlockDie[gearlockInitiativeDie.getValue()],
+        type = JSON.decode(availableGearlockInititiativeDie).type
+      }))
+      table.insert(intiativeDice, gearlockInitiativeDie)
+    end
+  end
+  if pol == 4 then
+    Wait.time(addBaddieInitiativeDieToTable, 0.5)
   end
 end
 
-function roll(dieObject)
-  dieObject.addTorque( {math.random()*3600, math.random()*5400, math.random()*3600} )
+-- step 4 // add baddie initiativeDieValue to initiativeDice table
+function addBaddieInitiativeDieToTable()
+  for i, lane in ipairs(lane) do
+    baddieInitiativeValue = findHitsInRadius(lane.getPosition(), 1.2, 'initiative')
+    if baddieInitiativeValue ~= nill then
+      baddieInitiativeDie[i].setValue(baddieInitiativeValue)
+      print('Baddie has initiative ' .. baddieInitiativeValue)
+      baddieInitiativeDie[i].setGMNotes(JSON.encode({
+        value = baddieInitiativeValue,
+        type = 'baddie'
+      }))
+      table.insert(intiativeDice, baddieInitiativeDie[i])
+    end
+    if i == 4 then
+      setInitiativeMeter()
+    end
+  end
 end
 
+-- step 6 // move all initiative dice to the initiative track in order
 local function customSort(a, b)
     if JSON.decode(a.getGMNotes()).value == JSON.decode(b.getGMNotes()).value then
         return JSON.decode(a.getGMNotes()).type == 'gearlock' and JSON.decode(b.getGMNotes()).type ~= 'gearlock'
@@ -87,7 +90,8 @@ local function customSort(a, b)
     end
 end
 
-function setInitiativeOrder()
+-- step 5 // sort initiativeDice table from high to low with ties in favor of gearlock
+function setInitiativeMeter()
   table.sort(intiativeDice, customSort)
   if runOnceSetInitiativeOrder <= 0 then
     for i, initiativeDie in ipairs(intiativeDice) do
@@ -99,6 +103,11 @@ function setInitiativeOrder()
   end
   intiativeDice = {}
 end
+
+function roll(dieObject)
+  dieObject.addTorque( {math.random()*3600, math.random()*5400, math.random()*3600} )
+end
+
 
 function findHitsInRadius(pos, ypos, reason)
   pos.y = 1
@@ -156,8 +165,8 @@ function setBaddieQueue()
   }
 end
 
-function setInitiativeDice()
-  initiativeDie = {
+function setBaddieInitiativeDice()
+  baddieInitiativeDie = {
     getObjectFromGUID('7c1582'),
     getObjectFromGUID('4d2834'),
     getObjectFromGUID('3aaaf7'),
@@ -259,8 +268,8 @@ function setBaddies()
   baddie8 = JSON.decode(baddie8)
 end
 
-function setPlayerInitiativeDice()
-  playerInitiativeDice = {
+function setGearlockInitiativeDice()
+  gearlockInitiativeDice = {
     JSON.encode({
       guid = '96b1fa',
       gearlock = 'Patches',
@@ -284,21 +293,42 @@ function setPlayerInitiativeDice()
       gearlock = 'Boomer',
       gearlockDie = BoomerInitiativeDie,
       type = 'gearlock'
+    }),
+    JSON.encode({
+      guid = 'eef847',
+      gearlock = 'Picket',
+      gearlockDie = PicketInitiativeDie,
+      type = 'gearlock'
+    }),
+    JSON.encode({
+      guid = '545238',
+      gearlock = 'Tantrum',
+      gearlockDie = TantrumInitiativeDie,
+      type = 'gearlock'
+    }),
+    JSON.encode({
+      guid = '73e679',
+      gearlock = 'Tink',
+      gearlockDie = TinkInitiativeDie,
+      type = 'gearlock'
     })
   }
 end
 
-function setPlayerInitiativeDiceValues()
+function setGearlockInitiativeDiceValues()
   BoomerInitiativeDie = {2,3,4,4,5,6}
   GhillieInitiativeDie = {3,4,4,5,5,6}
   NuggetInitiativeDie = {2,3,3,4,4,5}
   PatchesInitiativeDie = {3,3,3,3,4,4}
+  PicketInitiativeDie = {2,2,3,3,3,5}
+  TantrumInitiativeDie = {3,4,4,4,5,5}
+  TinkInitiativeDie = {3,3,4,4,4,5}
 end
 
 intiativeDice = {}
 self.setPosition({10, -1, 1.7})
 setInitiativeBtn = {
-  click_function = 'setInitiative',
+  click_function = 'setBaddieInitiativeDieValue',
   function_owner = self,
   label = 'Set initiative',
   position = {0, 2, 2.5},
