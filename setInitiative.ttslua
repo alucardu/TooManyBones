@@ -5,7 +5,7 @@ function onload()
   setBaddieQueue()
   setBaddieInitiativeDice()
   setBaddies()
-  setInitiativePosition()
+  setInitiativePositions()
   self.createButton(setInitiativeBtn)
 end
 
@@ -13,7 +13,7 @@ end
 local runSetGearlockInitiativeDieValue = 0
 function setBaddieInitiativeDieValue()
   for i, baddieQueuePos in ipairs(baddieQueuesPosition) do
-    local baddie = getObjectFromGUID(findHitsInRadius(baddieQueuePos, 1.2, 'guid'))
+    local baddie = getObjectFromGUID(findHitsInRadius(baddieQueuePos, 1.2, 2, 'guid'))
     if baddie ~= nill then
       pos = lane[i].getPosition()
       pos.y = pos.y + 2
@@ -50,9 +50,9 @@ function addGearlockInitiativeDieToTable(gearlockInitiativeDie, numberOfGearlock
       gearlockInitiativeDie.setGMNotes(JSON.encode({
         value = JSON.decode(availableGearlockInititiativeDie).gearlockDie[gearlockInitiativeDie.getValue()],
         type = JSON.decode(availableGearlockInititiativeDie).type,
-        gearlock = JSON.decode(availableGearlockInititiativeDie).gearlock
+        name = JSON.decode(availableGearlockInititiativeDie).name
       }))
-      print(JSON.decode(availableGearlockInititiativeDie).gearlock .. ' has rolled ' .. gearlockInitiativeDie.getValue() .. ' and initiative has been set to ' .. JSON.decode(availableGearlockInititiativeDie).gearlockDie[gearlockInitiativeDie.getValue()])
+      print(JSON.decode(availableGearlockInititiativeDie).name .. ' has rolled ' .. gearlockInitiativeDie.getValue() .. ' and initiative has been set to ' .. JSON.decode(availableGearlockInititiativeDie).gearlockDie[gearlockInitiativeDie.getValue()])
       table.insert(initiativeDice, gearlockInitiativeDie)
     end
   end
@@ -64,12 +64,13 @@ end
 -- step 4 // add baddie initiativeDieValue to initiativeDice table
 function addBaddieInitiativeDieToTable()
   for i, lane in ipairs(lane) do
-    baddieInitiativeValue = findHitsInRadius(lane.getPosition(), 1.2, 'initiative')
-    if baddieInitiativeValue ~= nill then
-      baddieInitiativeDie[i].setValue(baddieInitiativeValue)
+    baddie = findHitsInRadius(lane.getPosition(), 1.2, 2, 'initiative')
+    if baddie ~= nill then
+      baddieInitiativeDie[i].setValue(JSON.decode(baddie.getGMNotes()).initiative)
       baddieInitiativeDie[i].setGMNotes(JSON.encode({
-        value = baddieInitiativeValue,
-        type = 'baddie'
+        value = JSON.decode(baddie.getGMNotes()).initiative,
+        type = JSON.decode(baddie.getGMNotes()).type,
+        name = JSON.decode(baddie.getGMNotes()).name
       }))
       table.insert(initiativeDice, baddieInitiativeDie[i])
     end
@@ -90,13 +91,70 @@ local runSetInitiativeMeter = 0
 function createInitiativeMeter()
   if runSetInitiativeMeter <= 0 then
     for i, initiativeDie in ipairs(initiativeDice) do
-      local position = initiativePosition[i + 1]
+      local position = initiativePositions[i + 1].getPosition()
       position.y = position.y + 6
       initiativeDie.setPositionSmooth(position)
       position.y = 0
+      if i == #initiativeDice then
+        local functionToCall = function() getDice() end
+        moveWatch = function() return not initiativeDie.isSmoothMoving() and initiativeDie.resting end
+        Wait.condition(functionToCall, moveWatch)
+      end
+    end
+  end
+end
+
+-- step 7 // get all the dice objects and pass them to the setIninitiativeTracker object to create the Initiative Tracker
+initiativeMeterDice = {}
+function getDice()
+  numberOfInitiativeDice = #initiativeDice
+  setIninitiativeTracker = getObjectFromGUID('0dc670')
+  for i, initiativePosition in ipairs(initiativePositions) do
+    if i > 1 then
+      intitiativeDie = findHitsInRadius(initiativePosition.getPosition(), 1, 1, 'die')
+      if intitiativeDie ~= nill then
+        table.insert(initiativeMeterDice, intitiativeDie)
+        if i == numberOfInitiativeDice + 1 then
+          setIninitiativeTracker.call('initiateInitiativeMeter', initiativeMeterDice)
+        end
+      end
     end
   end
   initiativeDice = {}
+end
+
+function addDieFromInitiativeMeter()
+  initiativeMeterDice = {}
+  setInitiativePositions()
+  setIninitiativeTracker = getObjectFromGUID('0dc670')
+  for i, initiativePosition in ipairs(initiativePositions) do
+    if i > 1 then
+      intitiativeDie = findHitsInRadius(initiativePosition.getPosition(), 1, 1, 'die')
+      if intitiativeDie ~= nill then
+        table.insert(initiativeMeterDice, intitiativeDie)
+      end
+      if i == 9 then
+        setIninitiativeTracker.call('updateInitiativeMeter', initiativeMeterDice)
+      end
+    end
+  end
+end
+
+function removeDieFromInitiativeMeter()
+  initiativeMeterDice = {}
+  setInitiativePositions()
+  setIninitiativeTracker = getObjectFromGUID('0dc670')
+  for i, initiativePosition in ipairs(initiativePositions) do
+    if i > 1 then
+      intitiativeDie = findHitsInRadius(initiativePosition.getPosition(), 1, 1, 'die')
+      if intitiativeDie ~= nill then
+        table.insert(initiativeMeterDice, intitiativeDie)
+      end
+      if i == 9 then
+        setIninitiativeTracker.call('updateInitiativeMeter', initiativeMeterDice)
+      end
+    end
+  end
 end
 
 runPrintTiedInitiativeValue = 0
@@ -122,8 +180,7 @@ function roll(dieObject)
   dieObject.addTorque( {math.random()*3600, math.random()*5400, math.random()*3600} )
 end
 
-
-function findHitsInRadius(pos, ypos, reason)
+function findHitsInRadius(pos, ypos, size, reason)
   pos.y = 1
   pos.y = pos.y + ypos
   local radius = (radius or 1)
@@ -131,33 +188,37 @@ function findHitsInRadius(pos, ypos, reason)
       origin       = {x=pos.x, y=pos.y, z=pos.z},
       direction    = {0,1,0},
       type         = 3,
-      size         = {2,2,2},
+      size         = {size,size,size},
       max_distance = 0,
       debug        = false,
   })
   pos.y = 1
-
-  for _, baddie in ipairs(hitList) do
+  for _, hit in ipairs(hitList) do
     if reason == 'initiative' then
-      return JSON.decode(baddie.hit_object.getGMNotes()).initiative
-  	elseif reason == 'guid' then
-      return JSON.decode(baddie.hit_object.getGMNotes()).guid
+      -- return JSON.decode(hit.hit_object.getGMNotes()).initiative
+      return hit.hit_object
+    elseif reason == 'guid' then
+      return JSON.decode(hit.hit_object.getGMNotes()).guid
+    elseif reason == 'value' then
+      return JSON.decode(hit.hit_object.getGMNotes()).value
+    elseif reason == 'die' then
+      return hit.hit_object
     end
   end
 
 end
 
-function setInitiativePosition()
-  initiativePosition = {
-    getObjectFromGUID('fdab05').getPosition(),
-    getObjectFromGUID('7ab4bb').getPosition(),
-    getObjectFromGUID('634099').getPosition(),
-    getObjectFromGUID('7ad94b').getPosition(),
-    getObjectFromGUID('01124a').getPosition(),
-    getObjectFromGUID('6bda36').getPosition(),
-    getObjectFromGUID('dffb26').getPosition(),
-    getObjectFromGUID('e86414').getPosition(),
-    getObjectFromGUID('1dcd7e').getPosition()
+function setInitiativePositions()
+  initiativePositions = {
+    getObjectFromGUID('fdab05'),
+    getObjectFromGUID('7ab4bb'),
+    getObjectFromGUID('634099'),
+    getObjectFromGUID('7ad94b'),
+    getObjectFromGUID('01124a'),
+    getObjectFromGUID('6bda36'),
+    getObjectFromGUID('dffb26'),
+    getObjectFromGUID('e86414'),
+    getObjectFromGUID('1dcd7e')
   }
 end
 
@@ -238,7 +299,7 @@ function setBaddies()
   x.setGMNotes(JSON.encode({
     type = 'baddie',
     guid = '3212e1',
-    initiative = 4,
+    initiative = 5,
     health = 3,
     attack = 'ranged',
     name = 'Orc Scout'
@@ -298,8 +359,8 @@ function setBaddies()
   x.setGMNotes(JSON.encode({
     type = 'baddie',
     guid = '28a6bf',
-    initiative = 5,
-    health = 2,
+    initiative = 2,
+    health = 5,
     attack = 'melee',
     name = 'Clay Golem'
   }))
@@ -323,43 +384,37 @@ function setGearlockInitiativeDice()
   gearlockInitiativeDice = {
     JSON.encode({
       guid = '96b1fa',
-      gearlock = 'Patches',
+      name = 'Patches',
       gearlockDie = PatchesInitiativeDie,
-      type = 'gearlock'
-    }),
+      type = 'gearlock'}),
     JSON.encode({
       guid = 'f4f615',
-      gearlock = 'Nugget',
+      name = 'Nugget',
       gearlockDie = NuggetInitiativeDie,
-      type = 'gearlock'
-    }),
+      type = 'gearlock'}),
     JSON.encode({
       guid = 'ef8dcc',
-      gearlock = 'Ghillie',
+      name = 'Ghillie',
       gearlockDie = GhillieInitiativeDie,
-      type = 'gearlock'
-    }),
+      type = 'gearlock'}),
     JSON.encode({
       guid = '85c726',
-      gearlock = 'Boomer',
+      name = 'Boomer',
       gearlockDie = BoomerInitiativeDie,
-      type = 'gearlock'
-    }),
+      type = 'gearlock'}),
     JSON.encode({
       guid = 'eef847',
-      gearlock = 'Picket',
+      name = 'Picket',
       gearlockDie = PicketInitiativeDie,
-      type = 'gearlock'
-    }),
+      type = 'gearlock'}),
     JSON.encode({
       guid = '545238',
-      gearlock = 'Tantrum',
+      name = 'Tantrum',
       gearlockDie = TantrumInitiativeDie,
-      type = 'gearlock'
-    }),
+      type = 'gearlock'}),
     JSON.encode({
       guid = '73e679',
-      gearlock = 'Tink',
+      name = 'Tink',
       gearlockDie = TinkInitiativeDie,
       type = 'gearlock'
     })
@@ -381,9 +436,9 @@ self.setPosition({10, -1, 1.7})
 setInitiativeBtn = {
   click_function = 'setBaddieInitiativeDieValue',
   function_owner = self,
-  label = 'Set initiative',
-  position = {0, 2, 2.5},
-  width = 1600,
+  label = 'Initialize initiative meter',
+  position = {2, 2, 2.5},
+  width = 2800,
   height = 500,
   font_size = 240,
   index = 0
