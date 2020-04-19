@@ -89,40 +89,19 @@ end
 -- step 6 // move all initiative dice to the initiative track in order
 local runSetInitiativeMeter = 0
 function createInitiativeMeter()
+  setIninitiativeTracker = getObjectFromGUID('0dc670')
+  setIninitiativeTracker.setVar('enable', true)
   if runSetInitiativeMeter <= 0 then
     for i, initiativeDie in ipairs(initiativeDice) do
       local position = initiativePositions[i + 1].getPosition()
       position.y = position.y + 6
       initiativeDie.setPositionSmooth(position)
       position.y = 0
-      if i == #initiativeDice then
-        local functionToCall = function() getDice() end
-        moveWatch = function() return not initiativeDie.isSmoothMoving() and initiativeDie.resting end
-        Wait.condition(functionToCall, moveWatch)
-      end
     end
   end
 end
 
 -- step 7 // get all the dice objects and pass them to the setIninitiativeTracker object to create the Initiative Tracker
-initiativeMeterDice = {}
-function getDice()
-  numberOfInitiativeDice = #initiativeDice
-  setIninitiativeTracker = getObjectFromGUID('0dc670')
-  for i, initiativePosition in ipairs(initiativePositions) do
-    if i > 1 then
-      intitiativeDie = findHitsInRadius(initiativePosition.getPosition(), 1, 1, 'die')
-      if intitiativeDie ~= nill then
-        table.insert(initiativeMeterDice, intitiativeDie)
-        if i == numberOfInitiativeDice + 1 then
-          setIninitiativeTracker.call('initiateInitiativeMeter', initiativeMeterDice)
-        end
-      end
-    end
-  end
-  initiativeDice = {}
-end
-
 function addDieFromInitiativeMeter()
   initiativeMeterDice = {}
   setInitiativePositions()
