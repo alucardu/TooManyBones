@@ -1,242 +1,121 @@
 enable = false
 function onLoad()
-  -- getObjectFromGUID('47ef9a').setPosition({4.75, -1.3, -7.8})
   setInitiativeMeterPanels()
   setInitiativeNameMeterPanels()
-  -- setInitiativeColorMeterPanels()
   setInitiativeDice()
   setInitiativeInitiativeMeterPanels()
+  setInitiativeTypeMeterPanels()
+  initializeInitiativeTracker()
+  setEndTurnButtons()
 end
 
-function initiateInitiativeMeter(initiativeMeterDice)
-  initializeInitiativeTracker(initiativeMeterDice)
-end
+function initializeInitiativeTracker()
+  setInitiativeTableLayout()
+  click = true
+  set = "asd"
 
-function initializeInitiativeTracker(initiativeMeterDice)
   UI.setXmlTable({
-
     {
-      tag="VerticalLayout",
+      tag="TableLayout",
       attributes={
+        id="InitiativeTracker",
+        active=false,
         offsetXY="-25 -50",
-        width=150,
-        height=50,
+        childForceExpandWidth=false,
+        width=200,
         rectAlignment="UpperRight",
-        color="rgba(0,0,0,0.7)",},
+        columnWidths="50 150",
+      },
       children={
+        initiativeTableLayout[1],
+        initiativeTableLayout[2],
+        initiativeTableLayout[3],
+        initiativeTableLayout[4],
+        initiativeTableLayout[5],
+        initiativeTableLayout[6],
+        initiativeTableLayout[7],
+        initiativeTableLayout[8],
         {
-          tag="VerticalLayout",
+          tag="Row",
           attributes={
-          id="InitiativeTrackerText",
-          color="brown",
+            id="StartCombat",
+            childForceExpandWidth=false,
+            dontUseTableRowBackground="true",
+            color="orange"
           },
           children={
-            {tag="Text",
+            {
+              tag="Button",
               attributes={
-              id="initiative",
-              fontSize=15,
-              color="black",
-              text="Initiative Tracker"
+                dontUseTableCellBackground=true,
+                color="#fff0f000",
+                onClick = "0dc670/startCombat(set)",
+                text="Start Combat"
               }
             }
           }
         }
       }
-    },
-    {
-      tag="VerticalLayout",
+    }
+  })
+end
+
+function setInitiativeTableLayout()
+  initiativeTableLayout = {{},{},{},{},{},{},{},{},}
+  for i = 1, 8 do
+    initiativeTableLayout[i] = {
+      tag="Row",
       attributes={
-        offsetXY="-25 -100",
-        width=150,
-        height=50,
-        id="test",
-        rectAlignment="UpperRight",
-        color="rgba(0,0,0,0.7)",},
+        id="initiative-" .. i,
+        childForceExpandWidth=false,
+        dontUseTableRowBackground="true",
+      },
       children={
         {
-          tag="VerticalLayout",
+          tag="Cell",
           attributes={
-            offsetXY="-25 -50",
-            width=150,
-            height=50,
-            rectAlignment="UpperRight",
-            color="rgba(0,0,0,0.7)",},
+            dontUseTableCellBackground=true,
+            color="blue"
+          },
           children={
-            {tag="VerticalLayout",
+            {
+              tag="Button",
               attributes={
-              offsetXY="10,10",
-              id="initiative-1",
-              active=false,
-              color="blue",
-              },
+                id="endTurnButton-" ..i,
+                active=false,
+                dontUseTableCellBackground=true,
+                color="#fff0f000",
+                onClick = "0dc670/endTurn()",
+                text="X"
+              }
+            }
+          }
+        },
+        {
+          tag="Cell",
+          attributes={
+            id="initiative-" .. i .. "-type",
+            dontUseTableCellBackground=true,
+          },
+          children={
+            {
+              tag="VerticalLayout",
               children={
                 {
                   tag="Text",
                   attributes={
-                  id="initiative-1-name",
-                  color="black",
+                    id="initiative-" .. i .. "-name",
+                    fontSize=13,
+                    color="white",
                   },
                 },
                 {
                   tag="Text",
                   attributes={
-                  id="initiative-1-initiative",
-                  color="black",
-                  },
-                },
-              },
-            },
-              {tag="VerticalLayout",
-              attributes={
-              id="initiative-2",
-              active=false,
-              color="blue",},
-              children={
-                {
-                  tag="Text",
-                  attributes={
-                  id="initiative-2-name",
-                  color="black",
-                  },
-                },
-                {
-                  tag="Text",
-                  attributes={
-                  id="initiative-2-initiative",
-                  color="black",
-                  },
-                },
-              },
-            },
-              {tag="VerticalLayout",
-              attributes={
-              id="initiative-3",
-              active=false,
-              color="blue",},
-              children={
-                {
-                  tag="Text",
-                  attributes={
-                  id="initiative-3-name",
-                  color="black",
-                  },
-                },
-                {
-                  tag="Text",
-                  attributes={
-                  id="initiative-3-initiative",
-                  color="black",
-                  },
-                },
-              },
-            },
-              {tag="VerticalLayout",
-              attributes={
-              id="initiative-4",
-              active=false,
-              color="blue",},
-              children={
-                {
-                  tag="Text",
-                  attributes={
-                  id="initiative-4-name",
-                  color="black",
-                  },
-                },
-                {
-                  tag="Text",
-                  attributes={
-                  id="initiative-4-initiative",
-                  color="black",
-                  },
-                },
-              },
-            },
-              {tag="VerticalLayout",
-              attributes={
-              id="initiative-5",
-              active=false,
-              color="blue",},
-              children={
-                {
-                  tag="Text",
-                  attributes={
-                  id="initiative-5-name",
-                  color="black",
-                  },
-                },
-                {
-                  tag="Text",
-                  attributes={
-                  id="initiative-5-initiative",
-                  color="black",
-                  },
-                },
-              },
-            },
-              {tag="VerticalLayout",
-              attributes={
-              id="initiative-6",
-              active=false,
-              color="blue",
-              },
-              children={
-                {
-                  tag="Text",
-                  attributes={
-                  id="initiative-6-name",
-                  color="black",
-                  },
-                },
-                {
-                  tag="Text",
-                  attributes={
-                  id="initiative-6-initiative",
-                  color="black",
-                  },
-                },
-              },
-            },
-              {tag="VerticalLayout",
-              attributes={
-              id="initiative-7",
-              active=false,
-              color="blue",},
-              children={
-                {
-                  tag="Text",
-                  attributes={
-                  id="initiative-7-name",
-                  color="black",
-                  },
-                },
-                {
-                  tag="Text",
-                  attributes={
-                  id="initiative-7-initiative",
-                  color="black",
-                  },
-                },
-              },
-            },
-              {tag="VerticalLayout",
-              attributes={
-              id="initiative-8",
-              active=false,
-              color="blue",},
-              children={
-                {
-                  tag="Text",
-                  attributes={
-                  id="initiative-8-name",
-                  color="black",
-                  },
-                },
-                {
-                  tag="Text",
-                  attributes={
-                  id="initiative-8-initiative",
-                  color="black",
+                    id="initiative-" .. i .. "-initiative",
+                    fontSize=13,
+                    width="100",
+                    color="white",
                   },
                 }
               }
@@ -245,8 +124,7 @@ function initializeInitiativeTracker(initiativeMeterDice)
         }
       }
     }
-})
-  Wait.time(function() click(initiativeMeterDice) end, 0.1)
+  end
 end
 
 function setInitiativeMeterPanels()
@@ -267,33 +145,96 @@ function setInitiativeInitiativeMeterPanels()
   }
 end
 
-height = 0
-function click(initiativeMeterDice)
-  for i, initiativeMeterDie in ipairs(initiativeMeterDice) do
-    height = height + 50
-    UI.setAttribute("test", "height", height)
-    UI.setAttribute(initiativeMeterPanels[i], "active", true)
-
-    UI.setAttribute(initiativeNameMeterPanels[i], "text", JSON.decode(initiativeMeterDie.getGMNotes()).name)
-    UI.setAttribute(initiativeInitiativeMeterPanels[i], "text", 'Initiative: ' .. JSON.decode(initiativeMeterDie.getGMNotes()).value)
-
-    UI.setAttribute(initiativeNameMeterPanels[i], "fontSize", 12)
-    UI.setAttribute(initiativeInitiativeMeterPanels[i], "fontSize", 12)
-
-    if JSON.decode(initiativeMeterDie.getGMNotes()).type == 'baddie' then
-      UI.setAttribute(initiativeMeterPanels[i], "color", "purple")
-    elseif JSON.decode(initiativeMeterDie.getGMNotes()).type == 'gearlock' then
-      UI.setAttribute(initiativeMeterPanels[i], "color", "green")
-    end
-  end
-  enable = true
+function setInitiativeTypeMeterPanels()
+  initiativeTypeMeterPanels = {
+    "initiative-1-type","initiative-2-type","initiative-3-type","initiative-4-type","initiative-5-type","initiative-6-type","initiative-7-type","initiative-8-type",
+  }
 end
 
+function setEndTurnButtons()
+  endTurnButtons = {
+    "endTurnButton-1","endTurnButton-2","endTurnButton-3","endTurnButton-4","endTurnButton-5","endTurnButton-6","endTurnButton-7","endTurnButton-8",
+  }
+end
+
+
+
+function startCombat(player, set)
+  setIninitiativeMeter = getObjectFromGUID('8d4497')
+  initiativeMeterDice = setIninitiativeMeter.getTable('initiativeMeterDice')
+  if set == 'set' then
+    UI.setAttribute(initiativeMeterPanels[1], "color", "pink")
+    UI.setAttribute(endTurnButtons[1], "active", true)
+    msg = "Everything is set. The first combat round starts with " .. JSON.decode(initiativeMeterDice[1].getGMNotes()).name
+    rgb = {r=0, g=1, b=0}
+    broadcastToAll(msg, rgb)
+    UI.setAttribute("InitiativeTracker", "height", height - 50)
+    UI.setAttribute('StartCombat', "active", false)
+  end
+end
+
+activePlayer = 1
+round = 1
+function endTurn()
+  if activePlayer == #initiativeMeterDice then
+    for i, initiativeMeterDie in ipairs(initiativeMeterDice) do
+      if JSON.decode(initiativeMeterDie.getGMNotes()).type == 'baddie' then
+        UI.setAttribute(initiativeMeterPanels[i], "color", "purple")
+      elseif JSON.decode(initiativeMeterDie.getGMNotes()).type == 'gearlock' then
+        UI.setAttribute(initiativeMeterPanels[i], "color", "green")
+      end
+    end
+    if round >= 5 then
+      msg = "Everyone takes on point of real damage"
+      rgb = {r=1, g=0, b=0}
+      broadcastToAll(msg, rgb)
+    end
+    round = round + 1
+    msg = "Start of round " .. round
+    rgb = {r=0, g=1, b=0}
+    broadcastToAll(msg, rgb)
+    activePlayer = 0
+    UI.setAttribute(initiativeMeterPanels[1], "color", "pink")
+    roundDie = getObjectFromGUID('95be0e')
+    roundDie.setValue(round)
+  end
+
+  initiativeMeterDice = setIninitiativeMeter.getTable('initiativeMeterDice')
+  if activePlayer <= #initiativeMeterDice + 1 then
+    activePlayer = activePlayer + 1
+    if activePlayer <= #initiativeMeterDice then
+      for i, initiativeMeterPanel in ipairs(initiativeMeterPanels) do
+        if initiativeMeterPanels[activePlayer] ~= initiativeMeterPanel then
+          for i = 0, activePlayer, 1 do
+            if activePlayer > 1 then
+              UI.setAttribute(initiativeMeterPanels[activePlayer -1], "color", "grey")
+            end
+          end
+        end
+      end
+
+      for i, initiativeMeterPanel in ipairs(initiativeMeterPanels) do
+        if initiativeMeterPanels[activePlayer] ~= initiativeMeterPanel then
+          UI.setAttribute(endTurnButtons[i], "active", false)
+        elseif initiativeMeterPanels[activePlayer] == initiativeMeterPanel then
+          UI.setAttribute(endTurnButtons[i], "active", true)
+        end
+      end
+      UI.setAttribute(initiativeMeterPanels[activePlayer], "color", "pink")
+    end
+  end
+end
+
+setInitiativeTracker = 0
 function updateInitiativeMeter(initiativeMeterDice)
-  height = 0
+  setInitiativeTracker = setInitiativeTracker + 1
+  if setInitiativeTracker == 1 then
+    UI.setAttribute("InitiativeTracker", "active", true)
+  end
+  height = 50
   for i, initiativeMeterDie in ipairs(initiativeMeterDice) do
     height = height + 50
-    UI.setAttribute("test", "height", height)
+    UI.setAttribute("InitiativeTracker", "height", height)
 
     UI.setAttribute(initiativeMeterPanels[i], "active", true)
     UI.setAttribute(initiativeNameMeterPanels[i], "text", JSON.decode(initiativeMeterDie.getGMNotes()).name)
