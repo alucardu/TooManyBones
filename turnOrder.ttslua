@@ -5,12 +5,63 @@ function onLoad()
   setInitiativeDice()
   setInitiativeInitiativeMeterPanels()
   setInitiativeTypeMeterPanels()
-  initializeInitiativeTracker(initiativeMeterDice)
+  initializeInitiativeTracker()
+  setEndTurnButtons()
 end
-
 
 function initializeInitiativeTracker()
   setInitiativeTableLayout()
+  click = true
+  set = "asd"
+
+  UI.setXmlTable({
+    {
+      tag="TableLayout",
+      attributes={
+        id="InitiativeTracker",
+        active=false,
+        offsetXY="-25 -50",
+        childForceExpandWidth=false,
+        width=200,
+        rectAlignment="UpperRight",
+        columnWidths="50 150",
+      },
+      children={
+        initiativeTableLayout[1],
+        initiativeTableLayout[2],
+        initiativeTableLayout[3],
+        initiativeTableLayout[4],
+        initiativeTableLayout[5],
+        initiativeTableLayout[6],
+        initiativeTableLayout[7],
+        initiativeTableLayout[8],
+        {
+          tag="Row",
+          attributes={
+            id="StartCombat",
+            childForceExpandWidth=false,
+            dontUseTableRowBackground="true",
+            color="orange"
+          },
+          children={
+            {
+              tag="Button",
+              attributes={
+                dontUseTableCellBackground=true,
+                color="#fff0f000",
+                onClick = "0dc670/startCombat(set)",
+                text="Start Combat"
+              }
+            }
+          }
+        }
+      }
+    }
+  })
+end
+
+function setInitiativeTableLayout()
+  initiativeTableLayout = {{},{},{},{},{},{},{},{},}
   for i = 1, 8 do
     initiativeTableLayout[i] = {
       tag="Row",
@@ -28,13 +79,16 @@ function initializeInitiativeTracker()
           },
           children={
             {
-              tag="Text",
+              tag="Button",
               attributes={
-                fontSize=15,
-                color="white",
+                id="endTurnButton-" ..i,
+                active=false,
+                dontUseTableCellBackground=true,
+                color="#fff0f000",
+                onClick = "0dc670/endTurn()",
                 text="X"
-              },
-            },
+              }
+            }
           }
         },
         {
@@ -71,35 +125,6 @@ function initializeInitiativeTracker()
       }
     }
   end
-
-  UI.setXmlTable({
-    {
-      tag="TableLayout",
-      attributes={
-        id="InitiativeTracker",
-        active=false,
-        offsetXY="-25 -50",
-        childForceExpandWidth=false,
-        width=200,
-        rectAlignment="UpperRight",
-        columnWidths="50 150",
-      },
-      children={
-        initiativeTableLayout[1],
-        initiativeTableLayout[2],
-        initiativeTableLayout[3],
-        initiativeTableLayout[4],
-        initiativeTableLayout[5],
-        initiativeTableLayout[6],
-        initiativeTableLayout[7],
-        initiativeTableLayout[8],
-      }
-    }
-  })
-end
-
-function setInitiativeTableLayout()
-  initiativeTableLayout = {{},{},{},{},{},{},{},{},}
 end
 
 function setInitiativeMeterPanels()
@@ -126,13 +151,87 @@ function setInitiativeTypeMeterPanels()
   }
 end
 
+function setEndTurnButtons()
+  endTurnButtons = {
+    "endTurnButton-1","endTurnButton-2","endTurnButton-3","endTurnButton-4","endTurnButton-5","endTurnButton-6","endTurnButton-7","endTurnButton-8",
+  }
+end
+
+
+
+function startCombat(player, set)
+  setIninitiativeMeter = getObjectFromGUID('8d4497')
+  initiativeMeterDice = setIninitiativeMeter.getTable('initiativeMeterDice')
+  if set == 'set' then
+    UI.setAttribute(initiativeMeterPanels[1], "color", "pink")
+    UI.setAttribute(endTurnButtons[1], "active", true)
+    msg = "Everything is set. The first combat round starts with " .. JSON.decode(initiativeMeterDice[1].getGMNotes()).name
+    rgb = {r=0, g=1, b=0}
+    broadcastToAll(msg, rgb)
+    UI.setAttribute("InitiativeTracker", "height", height - 50)
+    UI.setAttribute('StartCombat', "active", false)
+  end
+end
+
+activePlayer = 1
+round = 1
+function endTurn()
+  if activePlayer == #initiativeMeterDice then
+    for i, initiativeMeterDie in ipairs(initiativeMeterDice) do
+      if JSON.decode(initiativeMeterDie.getGMNotes()).type == 'baddie' then
+        UI.setAttribute(initiativeMeterPanels[i], "color", "purple")
+      elseif JSON.decode(initiativeMeterDie.getGMNotes()).type == 'gearlock' then
+        UI.setAttribute(initiativeMeterPanels[i], "color", "green")
+      end
+    end
+    if round >= 5 then
+      msg = "Everyone takes on point of real damage"
+      rgb = {r=1, g=0, b=0}
+      broadcastToAll(msg, rgb)
+    end
+    round = round + 1
+    msg = "Start of round " .. round
+    rgb = {r=0, g=1, b=0}
+    broadcastToAll(msg, rgb)
+    activePlayer = 0
+    UI.setAttribute(initiativeMeterPanels[1], "color", "pink")
+    roundDie = getObjectFromGUID('95be0e')
+    roundDie.setValue(round)
+  end
+
+  initiativeMeterDice = setIninitiativeMeter.getTable('initiativeMeterDice')
+  if activePlayer <= #initiativeMeterDice + 1 then
+    activePlayer = activePlayer + 1
+    if activePlayer <= #initiativeMeterDice then
+      for i, initiativeMeterPanel in ipairs(initiativeMeterPanels) do
+        if initiativeMeterPanels[activePlayer] ~= initiativeMeterPanel then
+          for i = 0, activePlayer, 1 do
+            if activePlayer > 1 then
+              UI.setAttribute(initiativeMeterPanels[activePlayer -1], "color", "grey")
+            end
+          end
+        end
+      end
+
+      for i, initiativeMeterPanel in ipairs(initiativeMeterPanels) do
+        if initiativeMeterPanels[activePlayer] ~= initiativeMeterPanel then
+          UI.setAttribute(endTurnButtons[i], "active", false)
+        elseif initiativeMeterPanels[activePlayer] == initiativeMeterPanel then
+          UI.setAttribute(endTurnButtons[i], "active", true)
+        end
+      end
+      UI.setAttribute(initiativeMeterPanels[activePlayer], "color", "pink")
+    end
+  end
+end
+
 setInitiativeTracker = 0
 function updateInitiativeMeter(initiativeMeterDice)
   setInitiativeTracker = setInitiativeTracker + 1
   if setInitiativeTracker == 1 then
     UI.setAttribute("InitiativeTracker", "active", true)
   end
-  height = 0
+  height = 50
   for i, initiativeMeterDie in ipairs(initiativeMeterDice) do
     height = height + 50
     UI.setAttribute("InitiativeTracker", "height", height)
