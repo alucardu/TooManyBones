@@ -1,6 +1,4 @@
-battleMatPositions = {}
 function onLoad()
-  self.createButton(setBattleMatBtn)
   setBattleMatPositions()
   setLaneObjects()
 end
@@ -85,17 +83,6 @@ function setLaneObjects()
   }
 end
 
-setBattleMatBtn = {
-  click_function = 'initiatieBattleMat',
-  function_owner = self,
-  label = 'Initialize battle mat',
-  position = {2, 2, 2.5},
-  width = 2800,
-  height = 500,
-  font_size = 240,
-  index = 0
-}
-
 health_chip = [[{
   "Autoraise": true,
   "ColorDiffuse": {
@@ -164,19 +151,3 @@ spawnParams = {
   sound             = true,
   snap_to_grid      = true,
 }
-
-function findHitsInRadius(pos, ypos, size, reason)
-  pos.y = 1
-  pos.y = pos.y + ypos
-  local radius = (radius or 1)
-  local hitList = Physics.cast({
-      origin       = {x=pos.x, y=pos.y, z=pos.z},
-      direction    = {0,1,0},
-      type         = 3,
-      size         = {size,10,size},
-      max_distance = 0,
-      debug        = true,
-  })
-  pos.y = 1
-  return hitList
-end

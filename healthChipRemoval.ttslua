@@ -1,0 +1,119 @@
+function onScriptingButtonDown(index, color)
+  laneToken = getLaneToken(Player[color].getHoverObject().getPosition())
+  baddie = getBaddieToken(Player[color].getHoverObject().getPosition())
+  print(baddie)
+  healthStack = getHealthStack(Player[color].getHoverObject().getPosition())
+
+  if laneToken ~= nil then
+  end
+
+  if baddie ~= nill then
+    current_health = JSON.decode(baddie.getGMNotes()).health
+  end
+
+  if healthStack ~= nil then
+    baddie = removeHealthToken(healthStack, index, baddie)
+  end
+end
+
+function removeHealthToken(healthStack, index, baddie)
+  takeParams = {
+    smooth = false,
+    callback_function = function(obj) take_callback(obj) end,
+  }
+  for i = 1, index do
+    if healthStack.getQuantity() < 0 then
+      healthStack.destruct()
+    end
+    healthStack.takeObject(takeParams)
+  end
+  name = JSON.decode(baddie.getGMNotes()).name
+  baddiePoints = JSON.decode(baddie.getGMNotes()).baddiePoints
+  baddie.setGMNotes(JSON.encode({
+    health = current_health - index,
+    name = name,
+    baddiePoints = baddiePoints,
+    type = 'baddie'
+  }))
+  if JSON.decode(baddie.getGMNotes()).health > 0 then
+    msg = "Removed " .. index .." health from " .. JSON.decode(baddie.getGMNotes()).name .. " " .. JSON.decode(baddie.getGMNotes()).health .. " health remaining!"
+    rgb = {r=0, g=1, b=0}
+    broadcastToAll(msg, rgb)
+  end
+  baddie.setDescription("Health is " .. JSON.decode(baddie.getGMNotes()).health)
+  if JSON.decode(baddie.getGMNotes()).health <= 0 then
+    defeatBaddie(baddie, index)
+  end
+end
+
+function defeatBaddie(baddie, index)
+    if baddie.getJoints() ~= nill then
+      baddie.jointTo()
+    end
+    msg = "Removed " .. index .." health from " .. JSON.decode(baddie.getGMNotes()).name .. " and " .. JSON.decode(baddie.getGMNotes()).name .. " Has been defeated!"
+    rgb = {r=0, g=1, b=0}
+    broadcastToAll(msg, rgb)
+    lanePosition = JSON.decode(laneToken.getGMNotes()).originalPosition
+    laneToken.setPositionSmooth(lanePosition)
+    baddieInitiativeDie = getObjectFromGUID(JSON.decode(laneToken.getGMNotes()).baddieInitiativeDieGUID)
+    baddieInitiativeDiePosition = baddieInitiativeDie.getPosition()
+    baddieInitiativeDiePosition.x = baddieInitiativeDiePosition.x +5
+    baddieInitiativeDie.setPositionSmooth(baddieInitiativeDiePosition)
+    if JSON.decode(baddie.getGMNotes()).baddiePoints == 1 then
+      onePointGraveyard = getObjectFromGUID('687de8')
+      onePointGraveyard.putObject(baddie)
+    elseif JSON.decode(baddie.getGMNotes()).baddiePoints == 5 then
+      fivePointGraveyard = getObjectFromGUID('e2e0d3')
+      baddie.putObject(baddie)
+    elseif JSON.decode(baddie.getGMNotes()).baddiePoints == 20 then
+      twentyPointGraveyard = getObjectFromGUID('1a94cc')
+      baddie.putObject(baddie)
+    end
+end
+
+function getLaneToken(hoverObject)
+  hitList = findHitsInRadius(hoverObject, 1.2, 2, 'baddie')
+  for i, bad in ipairs(hitList) do
+    if bad.hit_object.getName() == "Lane" then
+      return bad.hit_object
+    end
+  end
+end
+
+function getBaddieToken(hoverObject)
+  hitList = findHitsInRadius(hoverObject, 1.2, 2, 'baddie')
+  for i, bad in ipairs(hitList) do
+    if bad.hit_object ~= nil then
+      if #bad.hit_object.getGMNotes() > 0 and JSON.decode(bad.hit_object.getGMNotes()).type == "baddie" then
+        return bad.hit_object
+      end
+    end
+  end
+end
+
+function getHealthStack(hoverObject)
+  hitList = findHitsInRadius(hoverObject, 1.2, 2, 'baddie')
+  for i, bad in ipairs(hitList) do
+    if bad.hit_object.getName() == "Health" then
+      return bad.hit_object
+    end
+  end
+end
+
+function take_callback(object_spawned)
+  object_spawned.destruct()
+end
+
+function findHitsInRadius(pos, ypos, size, reason)
+  local radius = (radius or 1)
+  local hitList = Physics.cast({
+      origin       = {x=pos.x, y=11, z=pos.z},
+      direction    = {0,1,0},
+      type         = 3,
+      size         = {size,20,size},
+      max_distance = 0,
+      debug        = false,
+  })
+  pos.y = 1
+  return hitList
+end
