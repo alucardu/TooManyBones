@@ -62,9 +62,11 @@ function addGearlockInitiativeDieToTable(gearlockInitiativeDie, numberOfGearlock
 end
 
 -- step 4 // add baddie initiativeDieValue to initiativeDice table
+baddieQueue = {}
 function addBaddieInitiativeDieToTable()
   for i, lane in ipairs(lane) do
-    baddie = findHitsInRadius(lane.getPosition(), 1.2, 2, 'initiative')
+    baddie = findHitsInRadius(lane.getPosition(), 1.2, 2, 'baddie')
+    table.insert(baddieQueue, baddie)
     if baddie ~= nill then
       baddieInitiativeDie[i].setValue(JSON.decode(baddie.getGMNotes()).initiative)
       baddieInitiativeDie[i].setGMNotes(JSON.encode({
@@ -76,6 +78,8 @@ function addBaddieInitiativeDieToTable()
     end
     if i == 4 then
       sortInitiativeMeter()
+      setBattleMat = getObjectFromGUID('b4586d')
+      setBattleMat.call('initiatieBattleMat', baddieQueue)
     end
   end
 end
@@ -173,8 +177,7 @@ function findHitsInRadius(pos, ypos, size, reason)
   })
   pos.y = 1
   for _, hit in ipairs(hitList) do
-    if reason == 'initiative' then
-      -- return JSON.decode(hit.hit_object.getGMNotes()).initiative
+    if reason == 'baddie' then
       return hit.hit_object
     elseif reason == 'guid' then
       return JSON.decode(hit.hit_object.getGMNotes()).guid
@@ -184,7 +187,6 @@ function findHitsInRadius(pos, ypos, size, reason)
       return hit.hit_object
     end
   end
-
 end
 
 function setInitiativePositions()
@@ -304,7 +306,7 @@ function setBaddies()
     guid = '3212e1',
     initiative = 5,
     health = 3,
-    attack = 'melee',
+    attack = 'ranged',
     name = 'Gobblin Bomber'
   }))
   baddie7 = x.getGMNotes()
