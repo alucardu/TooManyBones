@@ -1,0 +1,182 @@
+battleMatPositions = {}
+function onLoad()
+  self.createButton(setBattleMatBtn)
+  setBattleMatPositions()
+  setLaneObjects()
+end
+
+function setBattleMatPositions()
+  battleMatPositions = {
+    {
+      melee = '25da4f',
+      ranged = 'a608a8'
+    },
+    {
+      melee = '53fe5d',
+      ranged = '1190bb'
+    },
+     {
+      melee = '50af26',
+      ranged = 'a232a0'
+    },
+    {
+      melee = '77bb22',
+      ranged = '6e31a0'
+    }
+  }
+end
+
+function initiatieBattleMat(battleQueue)
+  healthbag = getObjectFromGUID('228196')
+  if battleQueue ~= nill then
+    for i, baddie in ipairs(battleQueue) do
+      if JSON.decode(baddie.getGMNotes()).attack == 'melee' then
+        for z = 1, JSON.decode(baddie.getGMNotes()).health do
+          spawnParams.position = getObjectFromGUID(battleMatPositions[i].melee).getPosition()
+          local x = spawnObjectJSON(spawnParams)
+          x.setPositionSmooth(getObjectFromGUID(battleMatPositions[i].melee).getPosition())
+
+          local moveChips = function() moveChips(i, baddie) end
+          moveWatch = function() return not x.isSmoothMoving() end
+          Wait.condition(moveChips, moveWatch)
+        end
+      elseif JSON.decode(baddie.getGMNotes()).attack == 'ranged' then
+        for z = 1, JSON.decode(baddie.getGMNotes()).health do
+          spawnParams.position = getObjectFromGUID(battleMatPositions[i].ranged).getPosition()
+          local x = spawnObjectJSON(spawnParams)
+          x.setPositionSmooth(getObjectFromGUID(battleMatPositions[i].ranged).getPosition())
+
+          local moveChips = function() moveChips(i, baddie) end
+          moveWatch = function() return not x.isSmoothMoving() end
+          Wait.condition(moveChips, moveWatch)
+        end
+      end
+
+    end
+  end
+end
+
+function moveChips(i, baddie)
+  if JSON.decode(baddie.getGMNotes()).attack == 'melee' then
+    pos = getObjectFromGUID(battleMatPositions[i].melee).getPosition()
+    pos.y = 1 * JSON.decode(baddie.getGMNotes()).health
+    lane[i].setPositionSmooth(pos)
+    baddie.setPositionSmooth(pos)
+    local joinBaddieAndBattleQueue = function() baddie.jointTo(lane[i], {["type"] = "Fixed",["collision"] = false}) end
+    moveWatch = function() return not baddie.isSmoothMoving() end
+    Wait.condition(joinBaddieAndBattleQueue, moveWatch)
+  elseif JSON.decode(baddie.getGMNotes()).attack == 'ranged' then
+    pos = getObjectFromGUID(battleMatPositions[i].ranged).getPosition()
+    pos.y = 1 * JSON.decode(baddie.getGMNotes()).health
+    lane[i].setPositionSmooth(pos)
+    baddie.setPositionSmooth(pos)
+    local joinBaddieAndBattleQueue = function() baddie.jointTo(lane[i], {["type"] = "Fixed",["collision"] = false}) end
+    moveWatch = function() return not baddie.isSmoothMoving() end
+    Wait.condition(joinBaddieAndBattleQueue, moveWatch)
+  end
+end
+
+function setLaneObjects()
+  lane = {
+    getObjectFromGUID('e37ccf'),
+    getObjectFromGUID('2a9f73'),
+    getObjectFromGUID('fd1416'),
+    getObjectFromGUID('cc47f5')
+  }
+end
+
+setBattleMatBtn = {
+  click_function = 'initiatieBattleMat',
+  function_owner = self,
+  label = 'Initialize battle mat',
+  position = {2, 2, 2.5},
+  width = 2800,
+  height = 500,
+  font_size = 240,
+  index = 0
+}
+
+health_chip = [[{
+  "Autoraise": true,
+  "ColorDiffuse": {
+    "b": 0,
+    "g": 0,
+    "r": 1
+  },
+  "CustomImage": {
+    "CustomTile": {
+      "Stackable": true,
+      "Stretch": true,
+      "Thickness": 0.2,
+      "Type": 2
+    },
+    "ImageScalar": 1,
+    "ImageSecondaryURL": "",
+    "ImageURL": "http://cloud-3.steamusercontent.com/ugc/834703362349729251/9864D3E9BD6059B69EF0DB6B0FE517D8FC497A89/",
+    "WidthScale": 0
+  },
+  "Description": "",
+  "GMNotes": "",
+  "Grid": true,
+  "GridProjection": false,
+  "GUID": "53b141",
+  "Hands": false,
+  "HideWhenFaceDown": false,
+  "IgnoreFoW": false,
+  "Locked": false,
+  "LuaScript": "",
+  "LuaScriptState": "",
+  "Name": "Custom_Tile",
+  "Nickname": "Health",
+  "PhysicsMaterial": {
+    "BounceCombine": 0,
+    "Bounciness": 0,
+    "DynamicFriction": 1,
+    "FrictionCombine": 0,
+    "StaticFriction": 1
+  },
+  "Rigidbody": {
+    "AngularDrag": 0.1,
+    "Drag": 7,
+    "Mass": 1,
+    "UseGravity": true
+  },
+  "Snap": true,
+  "Sticky": true,
+  "Tooltip": true,
+  "Transform": {
+    "posX": -11.9000006,
+    "posY": 0.95999974,
+    "posZ": 4.410002,
+    "rotX": 1.31341915E-06,
+    "rotY": 179.999924,
+    "rotZ": 1.04722958E-05,
+    "scaleX": 0.8532884,
+    "scaleY": 1,
+    "scaleZ": 0.8532884
+  },
+  "XmlUI": ""
+}]]
+
+spawnParams = {
+  json              = health_chip,
+  position          = {},
+  sound             = true,
+  snap_to_grid      = true,
+}
+
+function findHitsInRadius(pos, ypos, size, reason)
+  pos.y = 1
+  pos.y = pos.y + ypos
+  local radius = (radius or 1)
+  local hitList = Physics.cast({
+      origin       = {x=pos.x, y=pos.y, z=pos.z},
+      direction    = {0,1,0},
+      type         = 3,
+      size         = {size,10,size},
+      max_distance = 0,
+      debug        = true,
+  })
+  pos.y = 1
+  return hitList
+end
