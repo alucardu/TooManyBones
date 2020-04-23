@@ -10,21 +10,28 @@ Shuffle = {}
     Shuffle.index = 0
 
 function onLoad()
-    self.createButton(Shuffle)
+  self.createButton(Shuffle)
 end
 
 function shuffle()
-    local bagQuantity = self.getObjects()
-    local x = 0
-    for k, v in pairs(bagQuantity) do
-        x = x+1
-    end
-    self.shuffle()
-    self.shuffle()
-    self.shuffle()
-    local heightInc = 1
-    for i = 1, x do
-        self.takeObject({position = {-14.25, heightInc, -2.3}, rotation = {0, 180, 180}})
-        heightInc = heightInc + 0.3
-    end
+  position = self.getPosition()
+  position.x = position.x - 2.5
+  position.y = 1
+  local bagQuantity = self.getObjects()
+  local heightInc = 1
+  local x = 0
+  for k, v in pairs(bagQuantity) do
+      x = x+1
+  end
+  self.shuffle()
+  self.shuffle()
+  self.shuffle()
+  local heightInc = 1
+  for i = 1, x do
+    self.takeObject({
+      position = {position.x, heightInc, position.z},
+      rotation = {0, 180, 180}
+    })
+    heightInc = heightInc + 0.3
+  end
 end

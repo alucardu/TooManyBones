@@ -6,6 +6,7 @@ function onload()
   setBaddieInitiativeDice()
   setBaddies()
   setInitiativePositions()
+  setLaneObjectsPositions()
   self.createButton(setInitiativeBtn)
 end
 
@@ -212,6 +213,15 @@ function setLaneObjects()
   }
 end
 
+function setLaneObjectsPositions()
+  for i, laneChip in ipairs(lane) do
+    laneChip.setGMNotes(JSON.encode({
+      originalPosition = laneChip.getPosition(),
+      baddieInitiativeDieGUID = baddieInitiativeDie[i].getGUID()
+    }))
+  end
+end
+
 function setBaddieQueue()
   baddieQueuesPosition = {
     getObjectFromGUID('54c5d6').getPosition(),
@@ -307,8 +317,10 @@ function setBaddies()
     initiative = 5,
     health = 3,
     attack = 'ranged',
-    name = 'Gobblin Bomber'
+    name = 'Gobblin Bomber',
+    baddiePoints = 1,
   }))
+  x.setDescription("Health is " .. JSON.decode(x.getGMNotes()).health)
   baddie7 = x.getGMNotes()
   baddie7 = JSON.decode(baddie7)
 
@@ -319,7 +331,8 @@ function setBaddies()
     initiative = 3,
     health = 3,
     attack = 'ranged',
-    name = 'Orc Scout'
+    name = 'Orc Scout',
+    baddiePoints = 1,
   }))
   baddie8 = x.getGMNotes()
   baddie8 = JSON.decode(baddie8)
@@ -331,8 +344,11 @@ function setBaddies()
     initiative = 3,
     health = 3,
     attack = 'ranged',
-    name = 'Bog Pole'
+    name = 'Bog Pole',
+    baddiePoints = 1,
   }))
+
+  x.setDescription("Health is " .. JSON.decode(x.getGMNotes()).health)
   baddie9 = x.getGMNotes()
   baddie9 = JSON.decode(baddie9)
 
@@ -343,8 +359,10 @@ function setBaddies()
     initiative = 2,
     health = 5,
     attack = 'melee',
-    name = 'Clay Golem'
+    name = 'Clay Golem',
+    baddiePoints = 1,
   }))
+  x.setDescription("Health is " .. JSON.decode(x.getGMNotes()).health)
   baddie10 = x.getGMNotes()
   baddie10 = JSON.decode(baddie10)
 
@@ -355,8 +373,10 @@ function setBaddies()
     initiative = 4,
     health = 2,
     attack = 'ranged',
-    name = 'Goblin Sandbagger'
+    name = 'Goblin Sandbagger',
+    baddiePoints = 1,
   }))
+  x.setDescription("Health is " .. JSON.decode(x.getGMNotes()).health)
   baddie11 = x.getGMNotes()
   baddie11 = JSON.decode(baddie11)
 end
