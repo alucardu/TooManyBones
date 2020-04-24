@@ -1,7 +1,6 @@
 function onScriptingButtonDown(index, color)
   laneToken = getLaneToken(Player[color].getHoverObject().getPosition())
   baddie = getBaddieToken(Player[color].getHoverObject().getPosition())
-  print(baddie)
   healthStack = getHealthStack(Player[color].getHoverObject().getPosition())
 
   if laneToken ~= nil then

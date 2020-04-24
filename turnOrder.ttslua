@@ -4,7 +4,8 @@ function onLoad()
   setInitiativeNameMeterPanels()
   setInitiativeDice()
   setInitiativeInitiativeMeterPanels()
-  setInitiativeTypeMeterPanels()
+  setInitiativeBaddieTypeMeterPanels()
+  setInitiativeGearlockTypeMeterPanels()
   initializeInitiativeTracker()
   setEndTurnButtons()
 end
@@ -94,7 +95,7 @@ function setInitiativeTableLayout()
         {
           tag="Cell",
           attributes={
-            id="initiative-" .. i .. "-type",
+            id="setType-" .. i,
             dontUseTableCellBackground=true,
           },
           children={
@@ -145,9 +146,15 @@ function setInitiativeInitiativeMeterPanels()
   }
 end
 
-function setInitiativeTypeMeterPanels()
-  initiativeTypeMeterPanels = {
-    "initiative-1-type","initiative-2-type","initiative-3-type","initiative-4-type","initiative-5-type","initiative-6-type","initiative-7-type","initiative-8-type",
+function setInitiativeBaddieTypeMeterPanels()
+  initiativeBaddieTypeMeterPanels = {
+    "initiative-baddie-1","initiative-baddie-2","initiative-baddie-3","initiative-baddie-4","initiative-baddie-5","initiative-baddie-6","initiative-baddie-7","initiative-baddie-8",
+  }
+end
+
+function setInitiativeGearlockTypeMeterPanels()
+  initiativeGearlockTypeMeterPanels = {
+    "initiative-gearlock-1","initiative-gearlock-2","initiative-gearlock-3","initiative-gearlock-4","initiative-gearlock-5","initiative-gearlock-6","initiative-gearlock-7","initiative-gearlock-8",
   }
 end
 
@@ -157,70 +164,108 @@ function setEndTurnButtons()
   }
 end
 
-
-
 function startCombat(player, set)
   setIninitiativeMeter = getObjectFromGUID('8d4497')
   initiativeMeterDice = setIninitiativeMeter.getTable('initiativeMeterDice')
   if set == 'set' then
-    UI.setAttribute(initiativeMeterPanels[1], "color", "pink")
+    UI.setAttribute('initiative-baddie-1', "color", "pink")
+    UI.setAttribute('initiative-gearlock-1', "color", "pink")
     UI.setAttribute(endTurnButtons[1], "active", true)
     msg = "Everything is set. The first combat round starts with " .. JSON.decode(initiativeMeterDice[1].getGMNotes()).name
     rgb = {r=0, g=1, b=0}
     broadcastToAll(msg, rgb)
-    UI.setAttribute("InitiativeTracker", "height", height - 50)
+    height = height - 50
+    UI.setAttribute("InitiativeTracker", "height", height)
     UI.setAttribute('StartCombat', "active", false)
   end
 end
 
 activePlayer = 1
+activePanels = 0
 round = 1
 function endTurn()
-  if activePlayer == #initiativeMeterDice then
-    for i, initiativeMeterDie in ipairs(initiativeMeterDice) do
-      if JSON.decode(initiativeMeterDie.getGMNotes()).type == 'baddie' then
-        UI.setAttribute(initiativeMeterPanels[i], "color", "purple")
-      elseif JSON.decode(initiativeMeterDie.getGMNotes()).type == 'gearlock' then
-        UI.setAttribute(initiativeMeterPanels[i], "color", "green")
+  for i = 1, 8 do
+    if UI.getAttribute(initiativeMeterPanels[i], 'active') == 'True' then
+      activePanels = activePanels + 1
+    end
+  end
+  for i = activePlayer, #initiativeMeterDice do
+    if activePlayer >= #initiativeMeterDice then
+      nextRound()
+      return
+    elseif activePlayer < #initiativeMeterDice then
+      if UI.getAttribute(initiativeMeterPanels[i + 1], 'active') == 'True' then
+        UI.setAttribute('initiative-baddie-' .. i + 1, "color", "pink")
+        UI.setAttribute('initiative-gearlock-' .. i + 1, "color", "pink")
+        UI.setAttribute(endTurnButtons[i + 1], "active", true)
+        break
+      elseif UI.getAttribute(initiativeMeterPanels[i + 1], 'active') == 'False' then
+        activePlayer = activePlayer + 1
+        if activePlayer > #initiativeMeterDice then
+          nextRound()
+          return
+        end
       end
     end
-    if round >= 5 then
-      msg = "Everyone takes on point of real damage"
-      rgb = {r=1, g=0, b=0}
-      broadcastToAll(msg, rgb)
-    end
-    round = round + 1
-    msg = "Start of round " .. round
-    rgb = {r=0, g=1, b=0}
-    broadcastToAll(msg, rgb)
-    activePlayer = 0
-    UI.setAttribute(initiativeMeterPanels[1], "color", "pink")
-    roundDie = getObjectFromGUID('95be0e')
-    roundDie.setValue(round)
   end
 
-  initiativeMeterDice = setIninitiativeMeter.getTable('initiativeMeterDice')
-  if activePlayer <= #initiativeMeterDice + 1 then
-    activePlayer = activePlayer + 1
-    if activePlayer <= #initiativeMeterDice then
-      for i, initiativeMeterPanel in ipairs(initiativeMeterPanels) do
-        if initiativeMeterPanels[activePlayer] ~= initiativeMeterPanel then
-          for i = 0, activePlayer, 1 do
-            if activePlayer > 1 then
-              UI.setAttribute(initiativeMeterPanels[activePlayer -1], "color", "grey")
-            end
-          end
-        end
-      end
+  for i = 1, activePlayer do
+    UI.setAttribute('initiative-baddie-' .. i, "color", "grey")
+    UI.setAttribute('initiative-gearlock-' .. i, "color", "grey")
+    UI.setAttribute(endTurnButtons[i], "active", false)
+  end
+  activePlayer = activePlayer + 1
+  activePanels = 0
+end
 
-      for i, initiativeMeterPanel in ipairs(initiativeMeterPanels) do
-        if initiativeMeterPanels[activePlayer] ~= initiativeMeterPanel then
-          UI.setAttribute(endTurnButtons[i], "active", false)
-        elseif initiativeMeterPanels[activePlayer] == initiativeMeterPanel then
-          UI.setAttribute(endTurnButtons[i], "active", true)
-        end
+function nextRound()
+  activePlayer = 1
+  print('beginning of round')
+
+  if round >= 5 then
+    msg = "Everyone takes on point of real damage"
+    rgb = {r=1, g=0, b=0}
+    broadcastToAll(msg, rgb)
+  end
+  round = round + 1
+  msg = "Start of round " .. round
+  rgb = {r=0, g=1, b=0}
+  broadcastToAll(msg, rgb)
+  roundDie = getObjectFromGUID('95be0e')
+  roundDie.setValue(round)
+
+  for i = 1, #initiativeMeterDice do
+    UI.setAttribute('initiative-baddie-' .. i, "color", "purple")
+    UI.setAttribute('initiative-gearlock-' .. i, "color", "green")
+    UI.setAttribute('initiative-baddie-1', "color", "pink")
+    UI.setAttribute('initiative-gearlock-1', "color", "pink")
+    UI.setAttribute(endTurnButtons[1], "active", true)
+
+    if i > 1 then
+      local getX = function() UI.setAttribute(endTurnButtons[i], "active", false) end
+      Wait.frames(getX, 1)
+    end
+  end
+end
+
+function dieRemoved(intitiativeDie)
+  initiativeTrackerPanel = JSON.decode(intitiativeDie.getGMNotes()).initiativePanel
+  UI.setAttribute(initiativeMeterPanels[initiativeTrackerPanel], "active", false)
+  height = height - 50
+  UI.setAttribute("InitiativeTracker", "height", height)
+  if UI.getAttribute(endTurnButtons[initiativeTrackerPanel], "active") == "True" then
+    for i = initiativeTrackerPanel + 1, #initiativeMeterDice do
+      if UI.getAttribute(initiativeMeterPanels[i], 'active') == 'True' then
+        activePlayer = activePlayer + 1
+        UI.setAttribute('initiative-baddie-' .. i, "color", "pink")
+        UI.setAttribute('initiative-gearlock-' .. i, "color", "pink")
+        UI.setAttribute(endTurnButtons[i], "active", true)
+        break
       end
-      UI.setAttribute(initiativeMeterPanels[activePlayer], "color", "pink")
+    end
+    if initiativeTrackerPanel + 1 > #initiativeMeterDice then
+      nextRound()
+      return
     end
   end
 end
@@ -233,6 +278,22 @@ function updateInitiativeMeter(initiativeMeterDice)
   end
   height = 50
   for i, initiativeMeterDie in ipairs(initiativeMeterDice) do
+    tokenType = JSON.decode(initiativeMeterDie.getGMNotes()).type
+    initiativeMeterDie.setGMNotes(JSON.encode({
+      initiativePanel = i,
+      value = JSON.decode(initiativeMeterDie.getGMNotes()).value,
+      type = tokenType,
+      name = JSON.decode(initiativeMeterDie.getGMNotes()).name
+    }))
+    UI.setAttribute('setType-'.. i, 'id', 'initiative-' .. tokenType .. '-' .. i)
+    if tokenType == 'baddie' then
+      local getAttr = function() UI.setAttribute('initiative-baddie-' .. i, "color", "purple") end
+      Wait.frames(getAttr, 1)
+    elseif tokenType == 'gearlock' then
+      local getAttr = function() UI.setAttribute('initiative-gearlock-' .. i, "color", "green") end
+      Wait.frames(getAttr, 1)
+    end
+
     height = height + 50
     UI.setAttribute("InitiativeTracker", "height", height)
 
@@ -242,12 +303,6 @@ function updateInitiativeMeter(initiativeMeterDice)
 
     UI.setAttribute(initiativeNameMeterPanels[i], "fontSize", 12)
     UI.setAttribute(initiativeInitiativeMeterPanels[i], "fontSize", 12)
-
-    if JSON.decode(initiativeMeterDie.getGMNotes()).type == 'baddie' then
-      UI.setAttribute(initiativeMeterPanels[i], "color", "purple")
-    elseif JSON.decode(initiativeMeterDie.getGMNotes()).type == 'gearlock' then
-      UI.setAttribute(initiativeMeterPanels[i], "color", "green")
-    end
   end
   for i = 8, #initiativeMeterDice + 1, -1 do
     UI.setAttribute(initiativeMeterPanels[i], "active", false)
@@ -259,7 +314,7 @@ function onObjectLeaveScriptingZone(zone, obj)
   if zone.getGUID() == '8337ae' then
     for i, InitiativeDie in ipairs(InitiativeDice) do
       if obj.getGUID() == InitiativeDie then
-        setIninitiativeMeter.call('removeDieFromInitiativeMeter')
+        dieRemoved(obj)
       end
     end
   end
@@ -270,7 +325,11 @@ function onObjectEnterScriptingZone(zone, obj)
   if zone.getGUID() == '47ef9a' and enable == true then
     for i, InitiativeDie in ipairs(InitiativeDice) do
       if obj.getGUID() == InitiativeDie then
-        setIninitiativeMeter.call('addDieFromInitiativeMeter')
+        local ObjectResting
+
+        local moveChips = function() setIninitiativeMeter.call('addDieFromInitiativeMeter') end
+        moveWatch = function() return obj.resting end
+        Wait.condition(moveChips, moveWatch)
       end
     end
   end
@@ -291,4 +350,38 @@ function setInitiativeDice()
     '545238',
     '73e679'
   }
+end
+
+function setInitiativePositions()
+  initiativePositions = {
+    getObjectFromGUID('fdab05'),
+    getObjectFromGUID('7ab4bb'),
+    getObjectFromGUID('634099'),
+    getObjectFromGUID('7ad94b'),
+    getObjectFromGUID('01124a'),
+    getObjectFromGUID('6bda36'),
+    getObjectFromGUID('dffb26'),
+    getObjectFromGUID('e86414'),
+    getObjectFromGUID('1dcd7e')
+  }
+end
+
+function findHitsInRadius(pos, ypos, size, reason)
+  pos.y = 1
+  pos.y = pos.y + ypos
+  local radius = (radius or 1)
+  local hitList = Physics.cast({
+      origin       = {x=pos.x, y=pos.y, z=pos.z},
+      direction    = {0,1,0},
+      type         = 3,
+      size         = {size,size,size},
+      max_distance = 0,
+      debug        = false,
+  })
+  pos.y = 1
+  for _, hit in ipairs(hitList) do
+    if reason == 'die' then
+      return hit.hit_object
+    end
+  end
 end
