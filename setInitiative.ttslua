@@ -107,7 +107,6 @@ function createInitiativeMeter()
 end
 
 -- step 7 // get all the dice objects and pass them to the setIninitiativeTracker object to create the Initiative Tracker
-runAddDieFromInitiativeMeterOnce = 0
 function addDieFromInitiativeMeter()
   initiativeMeterDice = {}
   setInitiativePositions()
@@ -119,10 +118,7 @@ function addDieFromInitiativeMeter()
         table.insert(initiativeMeterDice, intitiativeDie)
       end
       if i == 9 then
-        if runAddDieFromInitiativeMeterOnce < 1 then
-          setIninitiativeTracker.call('updateInitiativeMeter', initiativeMeterDice)
-          runAddDieFromInitiativeMeterOnce = 1
-        end
+        setIninitiativeTracker.call('updateInitiativeMeter', initiativeMeterDice)
       end
     end
   end
