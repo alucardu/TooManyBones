@@ -287,11 +287,21 @@ function updateInitiativeMeter(initiativeMeterDice)
     }))
     UI.setAttribute('setType-'.. i, 'id', 'initiative-' .. tokenType .. '-' .. i)
     if tokenType == 'baddie' then
-      local getAttr = function() UI.setAttribute('initiative-baddie-' .. i, "color", "purple") end
-      Wait.frames(getAttr, 1)
+      if UI.getAttribute('initiative-baddie-' .. i, "id") == nil then
+        UI.setAttribute('initiative-gearlock-' .. i, "id", 'initiative-baddie-' .. i, "id")
+      end
     elseif tokenType == 'gearlock' then
-      local getAttr = function() UI.setAttribute('initiative-gearlock-' .. i, "color", "green") end
-      Wait.frames(getAttr, 1)
+      if UI.getAttribute('initiative-gearlock-' .. i, "id") == nil then
+        UI.setAttribute('initiative-baddie-' .. i, "id", 'initiative-gearlock-' .. i, "id")
+      end
+    end
+
+    if tokenType == 'baddie' then
+      local setAttr = function() UI.setAttribute('initiative-baddie-' .. i, "color", "purple") end
+      Wait.frames(setAttr, 1)
+    elseif tokenType == 'gearlock' then
+      local setAttr = function() UI.setAttribute(initiativeGearlockTypeMeterPanels[i], "color", "green") end
+      Wait.frames(setAttr, 1)
     end
 
     height = height + 50
@@ -325,8 +335,6 @@ function onObjectEnterScriptingZone(zone, obj)
   if zone.getGUID() == '47ef9a' and enable == true then
     for i, InitiativeDie in ipairs(InitiativeDice) do
       if obj.getGUID() == InitiativeDie then
-        local ObjectResting
-
         local moveChips = function() setIninitiativeMeter.call('addDieFromInitiativeMeter') end
         moveWatch = function() return obj.resting end
         Wait.condition(moveChips, moveWatch)
