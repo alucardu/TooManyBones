@@ -2059,42 +2059,49 @@ function setupPlayers()
 	local playerFourReferenceA = getObjectFromGUID(playerFourReferenceA[1])
 	local playerFourReferenceB = getObjectFromGUID(playerFourReferenceB[1])
 	if playerOneSelected == "Boomer" then
+    setBoomerChip(playerOneChip)
 	elseif playerOneSelected == "Ghillie" then
 		playerOneBoard.setState(2)
-		playerOneChip.setState(2)
 		playerOneBag.setState(2)
 		playerOneReferenceA.setState(2)
 		playerOneReferenceB.setState(2)
+    playerChip = playerOneChip.setState(2)
+    setGhillieChip(playerChip)
 	elseif playerOneSelected == "Nugget" then
 		playerOneBoard.setState(3)
-		playerOneChip.setState(3)
 		playerOneBag.setState(3)
 		playerOneReferenceA.setState(3)
 		playerOneReferenceB.setState(3)
+    playerChip = playerOneChip.setState(3)
+    setNuggetChip(playerChip)
 	elseif playerOneSelected == "Patches" then
 		playerOneBoard.setState(4)
-		playerOneChip.setState(4)
 		playerOneBag.setState(4)
 		playerOneReferenceA.setState(4)
 		playerOneReferenceB.setState(4)
+    playerChip = playerOneChip.setState(4)
+    setPatchesChip(playerChip)
 	elseif playerOneSelected == "Picket" then
 		playerOneBoard.setState(5)
-		playerOneChip.setState(5)
 		playerOneBag.setState(5)
 		playerOneReferenceA.setState(5)
 		playerOneReferenceB.setState(5)
+    playerChip = playerOneChip.setState(5)
+    setPicketChip(playerChip)
 	elseif playerOneSelected == "Tantrum" then
 		playerOneBoard.setState(6)
-		playerOneChip.setState(6)
 		playerOneBag.setState(6)
 		playerOneReferenceA.setState(6)
 		playerOneReferenceB.setState(6)
+    playerChip = playerOneChip.setState(6)
+    setTantrumChip(playerChip)
 	elseif playerOneSelected == "Tink" then
 		playerOneBoard.setState(7)
-		playerOneChip.setState(7)
 		playerOneBag.setState(7)
 		playerOneReferenceA.setState(7)
 		playerOneReferenceB.setState(7)
+    playerChip = playerOneChip.setState(7)
+    setTinkChip(playerChip)
 	else
 		playerOneBoard.destruct()
 		playerOneChip.destruct()
@@ -2102,43 +2109,50 @@ function setupPlayers()
 		playerOneReferenceA.destruct()
 		playerOneReferenceB.destruct()
 	end
+
 	if playerTwoSelected == "Boomer" then
-		playerTwoBoard.setState(1)
-		playerTwoChip.setState(1)
-		playerTwoBag.setState(1)
-		playerTwoReferenceA.setState(1)
-		playerTwoReferenceB.setState(1)
+    playerTwoBoard.setState(1)
+    playerTwoBag.setState(1)
+    playerTwoReferenceA.setState(1)
+    playerTwoReferenceB.setState(1)
+    playerChip = playerTwoChip.setState(1)
 	elseif playerTwoSelected == "Ghillie" then
+    setGhillieChip(playerTwoChip)
 	elseif playerTwoSelected == "Nugget" then
 		playerTwoBoard.setState(3)
-		playerTwoChip.setState(3)
 		playerTwoBag.setState(3)
 		playerTwoReferenceA.setState(3)
 		playerTwoReferenceB.setState(3)
+    playerChip = playerTwoChip.setState(3)
+    setNuggetChip(playerChip)
 	elseif playerTwoSelected == "Patches" then
 		playerTwoBoard.setState(4)
-		playerTwoChip.setState(4)
 		playerTwoBag.setState(4)
 		playerTwoReferenceA.setState(4)
 		playerTwoReferenceB.setState(4)
+    playerChip = playerTwoChip.setState(4)
+    setPatchesChip(playerChip)
 	elseif playerTwoSelected == "Picket" then
 		playerTwoBoard.setState(5)
-		playerTwoChip.setState(5)
 		playerTwoBag.setState(5)
 		playerTwoReferenceA.setState(5)
 		playerTwoReferenceB.setState(5)
+    playerChip = playerTwoChip.setState(5)
+    setPicketChip(playerChip)
 	elseif playerTwoSelected == "Tantrum" then
 		playerTwoBoard.setState(6)
-		playerTwoChip.setState(6)
 		playerTwoBag.setState(6)
 		playerTwoReferenceA.setState(6)
 		playerTwoReferenceB.setState(6)
+    playerChip = playerTwoChip.setState(6)
+    setTantrumChip(playerChip)
 	elseif playerTwoSelected == "Tink" then
 		playerTwoBoard.setState(7)
-		playerTwoChip.setState(7)
 		playerTwoBag.setState(7)
 		playerTwoReferenceA.setState(7)
 		playerTwoReferenceB.setState(7)
+    playerChip = playerTwoChip.setState(7)
+    setTinkChip(playerChip)
 	else
 		playerTwoBoard.destruct()
 		playerTwoChip.destruct()
@@ -2146,43 +2160,51 @@ function setupPlayers()
 		playerTwoReferenceA.destruct()
 		playerTwoReferenceB.destruct()
 	end
+
 	if playerThreeSelected == "Boomer" then
 		playerThreeBoard.setState(1)
-		playerThreeChip.setState(1)
 		playerThreeBag.setState(1)
 		playerThreeReferenceA.setState(1)
 		playerThreeReferenceB.setState(1)
+    playerChip = playerThreeChip.setState(1)
+    setBoomerChip(playerChip)
 	elseif playerThreeSelected == "Ghillie" then
 		playerThreeBoard.setState(2)
-		playerThreeChip.setState(2)
 		playerThreeBag.setState(2)
 		playerThreeReferenceA.setState(2)
 		playerThreeReferenceB.setState(2)
+    playerChip = playerThreeChip.setState(2)
+    setGhillieChip(playerChip)
 	elseif playerThreeSelected == "Nugget" then
+    setNuggetChip(playerThreeChip)
 	elseif playerThreeSelected == "Patches" then
 		playerThreeBoard.setState(4)
-		playerThreeChip.setState(4)
 		playerThreeBag.setState(4)
 		playerThreeReferenceA.setState(4)
 		playerThreeReferenceB.setState(4)
+    playerChip = playerThreeChip.setState(4)
+    setPatchesChip(playerChip)
 	elseif playerThreeSelected == "Picket" then
 		playerThreeBoard.setState(5)
-		playerThreeChip.setState(5)
 		playerThreeBag.setState(5)
 		playerThreeReferenceA.setState(5)
 		playerThreeReferenceB.setState(5)
+    playerChip = playerThreeChip.setState(5)
+    setPicketChip(playerChip)
 	elseif playerThreeSelected == "Tantrum" then
 		playerThreeBoard.setState(6)
-		playerThreeChip.setState(6)
 		playerThreeBag.setState(6)
 		playerThreeReferenceA.setState(6)
 		playerThreeReferenceB.setState(6)
+    playerChip = playerThreeChip.setState(6)
+    setTantrumChip(playerChip)
 	elseif playerThreeSelected == "Tink" then
 		playerThreeBoard.setState(7)
-		playerThreeChip.setState(7)
 		playerThreeBag.setState(7)
 		playerThreeReferenceA.setState(7)
 		playerThreeReferenceB.setState(7)
+    playerChip = playerThreeChip.setState(7)
+    setTinkChip(playerChip)
 	else
 		playerThreeBoard.destruct()
 		playerThreeChip.destruct()
@@ -2190,43 +2212,51 @@ function setupPlayers()
 		playerThreeReferenceA.destruct()
 		playerThreeReferenceB.destruct()
 	end
+
 	if playerFourSelected == "Boomer" then
 		playerFourBoard.setState(1)
-		playerFourChip.setState(1)
 		playerFourBag.setState(1)
 		playerFourReferenceA.setState(1)
 		playerFourReferenceB.setState(1)
+    playerChip = playerFourChip.setState(1)
+    setBoomerChip(playerChip)
 	elseif playerFourSelected == "Ghillie" then
 		playerFourBoard.setState(2)
-		playerFourChip.setState(2)
 		playerFourBag.setState(2)
 		playerFourReferenceA.setState(2)
 		playerFourReferenceB.setState(2)
+    playerChip = playerFourChip.setState(2)
+    setGhillieChip(playerChip)
 	elseif playerFourSelected == "Nugget" then
 		playerFourBoard.setState(3)
-		playerFourChip.setState(3)
 		playerFourBag.setState(3)
 		playerFourReferenceA.setState(3)
 		playerFourReferenceB.setState(3)
+    setNuggetChip(playerChip)
+    playerChip = playerFourChip.setState(3)
 	elseif playerFourSelected == "Patches" then
+    setPatchesChip(playerFourChip)
 	elseif playerFourSelected == "Picket" then
 		playerFourBoard.setState(5)
-		playerFourChip.setState(5)
 		playerFourBag.setState(5)
 		playerFourReferenceA.setState(5)
 		playerFourReferenceB.setState(5)
+    playerChip = playerFourChip.setState(5)
+    setPicketChip(playerChip)
 	elseif playerFourSelected == "Tantrum" then
 		playerFourBoard.setState(6)
-		playerFourChip.setState(6)
 		playerFourBag.setState(6)
 		playerFourReferenceA.setState(6)
 		playerFourReferenceB.setState(6)
+    playerChip = playerFourChip.setState(6)
+    setTantrumChip(playerChip)
 	elseif playerFourSelected == "Tink" then
 		playerFourBoard.setState(7)
-		playerFourChip.setState(7)
 		playerFourBag.setState(7)
 		playerFourReferenceA.setState(7)
 		playerFourReferenceB.setState(7)
+    playerChip = playerFourChip.setState(7)
+    setTinkChip(playerChip)
 	else
 		playerFourBoard.destruct()
 		playerFourChip.destruct()
@@ -2234,6 +2264,76 @@ function setupPlayers()
 		playerFourReferenceA.destruct()
 		playerFourReferenceB.destruct()
 	end
+end
+
+function setBoomerChip(playerChip)
+  playerChip.setGMNotes(JSON.encode({
+    type = 'gearlock',
+    name = 'Boomer',
+    position = playerChip.getPosition(),
+    gearlockInitiativeDie = '85c726'
+  }))
+  playerChip.setName('Boomer')
+end
+
+function setGhillieChip(playerChip)
+  playerChip.setGMNotes(JSON.encode({
+    type = 'gearlock',
+    name = 'Ghillie',
+    position = playerChip.getPosition(),
+    gearlockInitiativeDie = 'ef8dcc'
+  }))
+  playerChip.setName('Ghillie')
+end
+
+function setNuggetChip(playerChip)
+  playerChip.setGMNotes(JSON.encode({
+    type = 'gearlock',
+    name = 'Nugget',
+    position = playerChip.getPosition(),
+    gearlockInitiativeDie = 'f4f615'
+  }))
+  playerChip.setName('Nugget')
+end
+
+function setPatchesChip(playerChip)
+  playerChip.setGMNotes(JSON.encode({
+    type = 'gearlock',
+    name = 'Patches',
+    position = playerChip.getPosition(),
+    gearlockInitiativeDie = '96b1fa'
+  }))
+  playerChip.setName('Patches')
+end
+
+function setPicketChip(playerChip)
+  playerChip.setGMNotes(JSON.encode({
+    type = 'gearlock',
+    name = 'Picket',
+    position = playerChip.getPosition(),
+    gearlockInitiativeDie = 'eef847'
+  }))
+  playerChip.setName('Picket')
+end
+
+function setTantrumChip(playerChip)
+  playerChip.setGMNotes(JSON.encode({
+    type = 'gearlock',
+    name = 'Tantrum',
+    position = playerChip.getPosition(),
+    gearlockInitiativeDie = '545238'
+  }))
+  playerChip.setName('Tantrum')
+end
+
+function setTinkChip(playerChip)
+  playerChip.setGMNotes(JSON.encode({
+    type = 'gearlock',
+    name = 'Tink',
+    position = playerChip.getPosition(),
+    gearlockInitiativeDie = '73e679'
+  }))
+  playerChip.setName('Tink')
 end
 
 function dealDice()

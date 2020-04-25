@@ -1,21 +1,86 @@
 function onScriptingButtonDown(index, color)
-  laneToken = getLaneToken(Player[color].getHoverObject().getPosition())
-  baddie = getBaddieToken(Player[color].getHoverObject().getPosition())
-  healthStack = getHealthStack(Player[color].getHoverObject().getPosition())
+  if Player[color].getHoverObject() ~= nil  and Player[color].getHoverObject().getName() ~= "Battlemat" then
+    laneToken = getLaneToken(Player[color].getHoverObject().getPosition())
+    baddie = getBaddieToken(Player[color].getHoverObject().getPosition())
+    gearlock = getGearlockToken(Player[color].getHoverObject().getPosition())
+    healthStack = getHealthStack(Player[color].getHoverObject().getPosition())
+  end
+
+  if laneToken == nil and gearlock == nil and baddie == nil then
+    takeParams = {
+      position = Player[color].getPointerPosition(),
+      smooth = false,
+    }
+    healthBag = getObjectFromGUID('228196')
+    for i = 1, index do
+      healthBag.takeObject(takeParams)
+    end
+    msg = "Spawned " .. index .. " health tokens."
+    rgb = {r=0, g=1, b=0}
+    broadcastToAll(msg, rgb)
+  end
 
   if laneToken ~= nil then
   end
 
-  if baddie ~= nill then
+  if gearlock ~= nil then
+  end
+
+  if baddie ~= nil then
     current_health = JSON.decode(baddie.getGMNotes()).health
   end
 
   if healthStack ~= nil then
-    baddie = removeHealthToken(healthStack, index, baddie)
+    if gearlock ~= nil then
+      baddie = removeHealthTokenFromGearlock(healthStack, index, gearlock)
+    elseif baddie ~= nil then
+      baddie = removeHealthTokenFromBaddie(healthStack, index, baddie)
+    end
   end
+
+  laneToken = nil
+  baddie = nil
+  gearlock = nil
+  healthStack = nil
 end
 
-function removeHealthToken(healthStack, index, baddie)
+
+
+function spawnHealthToken()
+  print(Player[color].getPointerPosition())
+end
+
+function removeHealthTokenFromGearlock(healthStack, index, gearlock)
+  takeParams = {
+    smooth = false,
+    callback_function = function(obj) take_callback(obj) end,
+  }
+  for i = 1, index do
+    print(healthStack.getQuantity())
+    if healthStack.getQuantity() < 0 then
+      healthStack.destruct()
+      msg = JSON.decode(gearlock.getGMNotes()).name .. " has been knocked out!"
+      rgb = {r=1, g=0, b=0}
+      broadcastToAll(msg, rgb)
+      gearlock.setPositionSmooth(JSON.decode(gearlock.getGMNotes()).position)
+
+      GearlockInitiativeDie = getObjectFromGUID(JSON.decode(gearlock.getGMNotes()).gearlockInitiativeDie)
+      GearlockInitiativeDiePosition = GearlockInitiativeDie.getPosition()
+      GearlockInitiativeDiePosition.x = GearlockInitiativeDiePosition.x +5
+      GearlockInitiativeDie.setPositionSmooth(GearlockInitiativeDiePosition)
+
+    end
+    healthStack.takeObject(takeParams)
+  end
+  if healthStack.getQuantity() > 0 then
+    msg = "Removed " .. index .." health from " .. JSON.decode(gearlock.getGMNotes()).name .. " " .. healthStack.getQuantity() .. " health remaining!"
+    rgb = {r=0, g=1, b=0}
+    broadcastToAll(msg, rgb)
+  end
+  gearlock.setDescription("Health is " .. healthStack.getQuantity())
+end
+
+function removeHealthTokenFromBaddie(healthStack, index, baddie)
   takeParams = {
     smooth = false,
     callback_function = function(obj) take_callback(obj) end,
@@ -84,6 +149,17 @@ function getBaddieToken(hoverObject)
   for i, bad in ipairs(hitList) do
     if bad.hit_object ~= nil then
       if #bad.hit_object.getGMNotes() > 0 and JSON.decode(bad.hit_object.getGMNotes()).type == "baddie" then
+        return bad.hit_object
+      end
+    end
+  end
+end
+
+function getGearlockToken(hoverObject)
+  hitList = findHitsInRadius(hoverObject, 1.2, 2, 'gearlock')
+  for i, bad in ipairs(hitList) do
+    if bad.hit_object ~= nil then
+      if #bad.hit_object.getGMNotes() > 0 and JSON.decode(bad.hit_object.getGMNotes()).type == "gearlock" then
         return bad.hit_object
       end
     end
