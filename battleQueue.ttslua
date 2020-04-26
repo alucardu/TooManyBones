@@ -205,7 +205,7 @@ function findHitsInRadius(pos, ypos, size)
       type         = 3,
       size         = {size,size,size},
       max_distance = 0,
-      debug        = true,
+      debug        = false,
   })
   pos.y = 1
   for _, hit in ipairs(hitList) do
