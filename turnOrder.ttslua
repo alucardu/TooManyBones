@@ -282,6 +282,7 @@ function updateInitiativeMeter(initiativeMeterDice)
     tokenType = JSON.decode(initiativeMeterDie.getGMNotes()).type
     initiativeMeterDie.setGMNotes(JSON.encode({
       initiativePanel = i,
+      originalPosition = Vector(JSON.decode(initiativeMeterDie.getGMNotes()).originalPosition),
       value = JSON.decode(initiativeMeterDie.getGMNotes()).value,
       type = tokenType,
       name = JSON.decode(initiativeMeterDie.getGMNotes()).name

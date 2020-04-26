@@ -128,9 +128,7 @@ function defeatBaddie(baddie, index)
     lanePosition = JSON.decode(laneToken.getGMNotes()).originalPosition
     laneToken.setPositionSmooth(lanePosition)
     baddieInitiativeDie = getObjectFromGUID(JSON.decode(laneToken.getGMNotes()).baddieInitiativeDieGUID)
-    baddieInitiativeDiePosition = baddieInitiativeDie.getPosition()
-    baddieInitiativeDiePosition.x = baddieInitiativeDiePosition.x +5
-    baddieInitiativeDie.setPositionSmooth(baddieInitiativeDiePosition)
+    baddieInitiativeDie.setPositionSmooth(Vector(JSON.decode(baddieInitiativeDie.getGMNotes()).originalPosition))
     if JSON.decode(baddie.getGMNotes()).baddiePoints == 1 then
       onePointGraveyard = getObjectFromGUID('687de8')
       onePointGraveyard.putObject(baddie)

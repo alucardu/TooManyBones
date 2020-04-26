@@ -1,9 +1,9 @@
 function onload()
+  setBaddieInitiativeDice()
   setGearlockInitiativeDiceValues()
   setGearlockInitiativeDice()
   setLaneObjects()
   setBaddieQueue()
-  setBaddieInitiativeDice()
   setBaddies()
   setInitiativePositions()
   setLaneObjectsPositions()
@@ -69,13 +69,14 @@ function addBaddieInitiativeDieToTable()
     baddie = findHitsInRadius(lane.getPosition(), 1.2, 2, 'baddie')
     table.insert(baddieQueue, baddie)
     if baddie ~= nill then
-      baddieInitiativeDie[i].setValue(JSON.decode(baddie.getGMNotes()).initiative)
-      baddieInitiativeDie[i].setGMNotes(JSON.encode({
+      baddieInitiativeDice[i].setValue(JSON.decode(baddie.getGMNotes()).initiative)
+      baddieInitiativeDice[i].setGMNotes(JSON.encode({
+        originalPosition = Vector(JSON.decode(baddieInitiativeDice[i].getGMNotes()).originalPosition),
         value = JSON.decode(baddie.getGMNotes()).initiative,
         type = JSON.decode(baddie.getGMNotes()).type,
         name = JSON.decode(baddie.getGMNotes()).name
       }))
-      table.insert(initiativeDice, baddieInitiativeDie[i])
+      table.insert(initiativeDice, baddieInitiativeDice[i])
     end
     if i == 4 then
       sortInitiativeMeter()
@@ -114,7 +115,7 @@ function addDieFromInitiativeMeter()
   for i, initiativePosition in ipairs(initiativePositions) do
     if i > 1 then
       intitiativeDie = findHitsInRadius(initiativePosition.getPosition(), 1, 1, 'die')
-      if intitiativeDie ~= nill then
+      if intitiativeDie ~= nil then
         table.insert(initiativeMeterDice, intitiativeDie)
       end
       if i == 9 then
@@ -200,7 +201,7 @@ function setLaneObjectsPositions()
   for i, laneChip in ipairs(lane) do
     laneChip.setGMNotes(JSON.encode({
       originalPosition = laneChip.getPosition(),
-      baddieInitiativeDieGUID = baddieInitiativeDie[i].getGUID()
+      baddieInitiativeDieGUID = baddieInitiativeDice[i].getGUID()
     }))
   end
 end
@@ -215,12 +216,22 @@ function setBaddieQueue()
 end
 
 function setBaddieInitiativeDice()
-  baddieInitiativeDie = {
+  baddieInitiativeDice = {
     getObjectFromGUID('7c1582'),
     getObjectFromGUID('4d2834'),
     getObjectFromGUID('3aaaf7'),
     getObjectFromGUID('28d12b'),
   }
+  setBaddieInitiativeDicePosition()
+end
+
+function setBaddieInitiativeDicePosition()
+  for i, baddieInitiativeDie in ipairs(baddieInitiativeDice) do
+    pos = baddieInitiativeDie.getPosition()
+    baddieInitiativeDice[i].setGMNotes(JSON.encode({
+      originalPosition = pos,
+    }))
+  end
 end
 
 function setBaddies()
@@ -267,7 +278,6 @@ function setBaddies()
   }))
   baddie4 = x.getGMNotes()
   baddie4 = JSON.decode(baddie4)
-
 
   x = getObjectFromGUID('3212e1')
   x.setGMNotes(JSON.encode({
@@ -371,36 +381,43 @@ end
 function setGearlockInitiativeDice()
   gearlockInitiativeDice = {
     JSON.encode({
+      originalPosition = 0,
       guid = '96b1fa',
       name = 'Patches',
       gearlockDie = PatchesInitiativeDie,
       type = 'gearlock'}),
     JSON.encode({
+      originalPosition = 0,
       guid = 'f4f615',
       name = 'Nugget',
       gearlockDie = NuggetInitiativeDie,
       type = 'gearlock'}),
     JSON.encode({
+      originalPosition = 0,
       guid = 'ef8dcc',
       name = 'Ghillie',
       gearlockDie = GhillieInitiativeDie,
       type = 'gearlock'}),
     JSON.encode({
+      originalPosition = 0,
       guid = '85c726',
       name = 'Boomer',
       gearlockDie = BoomerInitiativeDie,
       type = 'gearlock'}),
     JSON.encode({
+      originalPosition = 0,
       guid = 'eef847',
       name = 'Picket',
       gearlockDie = PicketInitiativeDie,
       type = 'gearlock'}),
     JSON.encode({
+      originalPosition = 0,
       guid = '545238',
       name = 'Tantrum',
       gearlockDie = TantrumInitiativeDie,
       type = 'gearlock'}),
     JSON.encode({
+      originalPosition = 0,
       guid = '73e679',
       name = 'Tink',
       gearlockDie = TinkInitiativeDie,
