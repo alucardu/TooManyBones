@@ -59,23 +59,34 @@ function moveToBattleMat(emptyLaneToken, baddie, baddieQueue, emptyLaneToken)
 end
 
 function moveChips(emptyLaneToken, baddie, queue, full)
-  print(full)
 
   if full == true then
     if JSON.decode(baddie.getGMNotes()).attack == 'melee' then
-      print('x', queue)
+
+      for i = 1, JSON.decode(baddie.getGMNotes()).health do
+        spawnParams.position = getObjectFromGUID(battleMatPositions[queue].ranged).getPosition()
+        local x = spawnObjectJSON(spawnParams)
+        x.setPositionSmooth(getObjectFromGUID(battleMatPositions[queue].ranged).getPosition())
+      end
 
       pos = getObjectFromGUID(battleMatPositions[queue].ranged).getPosition()
       pos.y = 1 * JSON.decode(baddie.getGMNotes()).health
-      print(pos)
       emptyLaneToken.setPositionSmooth(pos)
       baddie.setPositionSmooth(pos)
 
-      local joinBaddieAndBattleQueue = function() baddie.returnjointTo(emptyLaneToken, {["type"] = "Fixed",["collision"] = false}) end
+      local joinBaddieAndBattleQueue = function() baddie.jointTo(emptyLaneToken, {["type"] = "Fixed",["collision"] = false}) end
       moveWatch = function() return not baddie.isSmoothMoving() end
       Wait.condition(joinBaddieAndBattleQueue, moveWatch)
 
     elseif JSON.decode(baddie.getGMNotes()).attack == 'ranged' then
+
+
+      for i = 1, JSON.decode(baddie.getGMNotes()).health do
+        spawnParams.position = getObjectFromGUID(battleMatPositions[queue].melee).getPosition()
+        local x = spawnObjectJSON(spawnParams)
+        x.setPositionSmooth(getObjectFromGUID(battleMatPositions[queue].melee).getPosition())
+      end
+
       pos = getObjectFromGUID(battleMatPositions[queue].melee).getPosition()
       pos.y = 1 * JSON.decode(baddie.getGMNotes()).health
       emptyLaneToken.setPositionSmooth(pos)
@@ -89,6 +100,12 @@ function moveChips(emptyLaneToken, baddie, queue, full)
   end
 
   if JSON.decode(baddie.getGMNotes()).attack == 'melee' then
+    for i = 1, JSON.decode(baddie.getGMNotes()).health do
+      spawnParams.position = getObjectFromGUID(battleMatPositions[queue].melee).getPosition()
+      local x = spawnObjectJSON(spawnParams)
+      x.setPositionSmooth(getObjectFromGUID(battleMatPositions[queue].melee).getPosition())
+    end
+
     pos = getObjectFromGUID(battleMatPositions[queue].melee).getPosition()
     pos.y = 1 * JSON.decode(baddie.getGMNotes()).health
     emptyLaneToken.setPositionSmooth(pos)
@@ -99,10 +116,17 @@ function moveChips(emptyLaneToken, baddie, queue, full)
     Wait.condition(joinBaddieAndBattleQueue, moveWatch)
 
   elseif JSON.decode(baddie.getGMNotes()).attack == 'ranged' then
+    for i = 1, JSON.decode(baddie.getGMNotes()).health do
+      spawnParams.position = getObjectFromGUID(battleMatPositions[queue].ranged).getPosition()
+      local x = spawnObjectJSON(spawnParams)
+      x.setPositionSmooth(getObjectFromGUID(battleMatPositions[queue].ranged).getPosition())
+    end
+
     pos = getObjectFromGUID(battleMatPositions[queue].ranged).getPosition()
     pos.y = 1 * JSON.decode(baddie.getGMNotes()).health
     emptyLaneToken.setPositionSmooth(pos)
     baddie.setPositionSmooth(pos)
+
 
     local joinBaddieAndBattleQueue = function() baddie.jointTo(emptyLaneToken, {["type"] = "Fixed",["collision"] = false}) end
     moveWatch = function() return not baddie.isSmoothMoving() end
@@ -118,50 +142,23 @@ function moveToken(emptyLaneToken, baddie)
     if attackType == 'melee' then
 
       if (findHitsInRadius(getObjectFromGUID(battleMatPositions[queue].melee).getPosition(), 1.2, 2) == nil) then
-        for z = 1, JSON.decode(baddie.getGMNotes()).health do
-          spawnParams.position = getObjectFromGUID(battleMatPositions[queue].melee).getPosition()
-          local x = spawnObjectJSON(spawnParams)
-          x.setPositionSmooth(getObjectFromGUID(battleMatPositions[queue].melee).getPosition())
-
-          local moveChips = function() moveChips(emptyLaneToken, baddie, queue, full) end
-          moveWatch = function() return not x.isSmoothMoving() end
-          Wait.condition(moveChips, moveWatch)
-        end
+        moveChips(emptyLaneToken, baddie, queue, full)
         return
       end
 
       elseif attackType == 'ranged' then
         if (findHitsInRadius(getObjectFromGUID(battleMatPositions[queue].ranged).getPosition(), 1.2, 2) == nil) then
-          for z = 1, JSON.decode(baddie.getGMNotes()).health do
-            spawnParams.position = getObjectFromGUID(battleMatPositions[queue].ranged).getPosition()
-            local x = spawnObjectJSON(spawnParams)
-            x.setPositionSmooth(getObjectFromGUID(battleMatPositions[queue].ranged).getPosition())
-
-            local moveChips = function() moveChips(emptyLaneToken, baddie, queue, full) end
-            moveWatch = function() return not x.isSmoothMoving() end
-            Wait.condition(moveChips, moveWatch)
-            return
-          end
+          moveChips(emptyLaneToken, baddie, queue, full)
+          return
         end
       end
-
 
     if attackType == 'melee' then
       isEmpty = (findHitsInRadius(getObjectFromGUID(battleMatPositions[i].melee).getPosition(), 1.2, 2) == nil)
       if isEmpty == true then
-
         if (findHitsInRadius(getObjectFromGUID(battleMatPositions[i].melee).getPosition(), 1.2, 2) == nil) then
-          for z = 1, JSON.decode(baddie.getGMNotes()).health do
-            spawnParams.position = getObjectFromGUID(battleMatPositions[i].melee).getPosition()
-            local x = spawnObjectJSON(spawnParams)
-            x.setPositionSmooth(getObjectFromGUID(battleMatPositions[i].melee).getPosition())
-
-            local moveChips = function() moveChips(emptyLaneToken, baddie, i, full) end
-            moveWatch = function() return not x.isSmoothMoving() end
-            Wait.condition(moveChips, moveWatch)
-          end
+          moveChips(emptyLaneToken, baddie, i, full)
         end
-
         return
       end
       if i == 4 then
@@ -169,16 +166,8 @@ function moveToken(emptyLaneToken, baddie)
         for i, battleMatPosition in ipairs(battleMatPositions) do
           isEmpty = (findHitsInRadius(getObjectFromGUID(battleMatPositions[i].ranged).getPosition(), 1.2, 2) == nil)
           if isEmpty == true then
-
-            for z = 1, JSON.decode(baddie.getGMNotes()).health do
-              spawnParams.position = getObjectFromGUID(battleMatPositions[i].ranged).getPosition()
-              local x = spawnObjectJSON(spawnParams)
-              x.setPositionSmooth(getObjectFromGUID(battleMatPositions[i].ranged).getPosition())
-
-              local moveChips = function() moveChips(emptyLaneToken, baddie, i, full) end
-              moveWatch = function() return not x.isSmoothMoving() end
-              Wait.condition(moveChips, moveWatch)
-            end
+            moveChips(emptyLaneToken, baddie, i, full)
+            full = false
             return
           end
         end
@@ -187,16 +176,16 @@ function moveToken(emptyLaneToken, baddie)
     elseif attackType == 'ranged' then
       isEmpty = (findHitsInRadius(getObjectFromGUID(battleMatPositions[i].ranged).getPosition(), 1.2, 2) == nil)
       if isEmpty == true then
-        emptyLaneToken.setPositionSmooth(getObjectFromGUID(battleMatPositions[i].ranged).getPosition())
-        baddie.setPositionSmooth(getObjectFromGUID(battleMatPositions[i].ranged).getPosition())
+        moveChips(emptyLaneToken, baddie, i, full)
         return
       end
       if i == 4 then
+        full = true
         for i, battleMatPosition in ipairs(battleMatPositions) do
           isEmpty = (findHitsInRadius(getObjectFromGUID(battleMatPositions[i].melee).getPosition(), 1.2, 2) == nil)
           if isEmpty == true then
-            emptyLaneToken.setPositionSmooth(getObjectFromGUID(battleMatPositions[i].melee).getPosition())
-            baddie.setPositionSmooth(getObjectFromGUID(battleMatPositions[i].melee).getPosition())
+            moveChips(emptyLaneToken, baddie, i, full)
+            full = false
             return
           end
         end
