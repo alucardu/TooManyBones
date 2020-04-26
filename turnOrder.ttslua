@@ -217,8 +217,9 @@ function endTurn()
   activePlayer = activePlayer + 1
   activePanels = 0
 end
-
 function nextRound()
+  battleQueue = getObjectFromGUID('f45442')
+  battleQueue.call('checkForEmptyLanes')
   activePlayer = 1
   print('beginning of round')
 

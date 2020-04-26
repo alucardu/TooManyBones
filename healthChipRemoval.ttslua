@@ -27,7 +27,8 @@ function onScriptingButtonDown(index, color)
   end
 
   if baddie ~= nil then
-    current_health = JSON.decode(baddie.getGMNotes()).health
+    -- current_health = JSON.decode(baddie.getGMNotes()).health
+    updatedHealth = JSON.decode(baddie.getGMNotes()).updatedHealth
   end
 
   if healthStack ~= nil then
@@ -44,8 +45,6 @@ function onScriptingButtonDown(index, color)
   healthStack = nil
 end
 
-
-
 function spawnHealthToken()
   print(Player[color].getPointerPosition())
 end
@@ -56,7 +55,6 @@ function removeHealthTokenFromGearlock(healthStack, index, gearlock)
     callback_function = function(obj) take_callback(obj) end,
   }
   for i = 1, index do
-    print(healthStack.getQuantity())
     if healthStack.getQuantity() < 0 then
       healthStack.destruct()
       msg = JSON.decode(gearlock.getGMNotes()).name .. " has been knocked out!"
@@ -91,27 +89,37 @@ function removeHealthTokenFromBaddie(healthStack, index, baddie)
     end
     healthStack.takeObject(takeParams)
   end
+
+  guid = JSON.decode(baddie.getGMNotes()).guid
+  initiative = JSON.decode(baddie.getGMNotes()).initiative
+  health = JSON.decode(baddie.getGMNotes()).health
+  attack = JSON.decode(baddie.getGMNotes()).attack
   name = JSON.decode(baddie.getGMNotes()).name
   baddiePoints = JSON.decode(baddie.getGMNotes()).baddiePoints
+
   baddie.setGMNotes(JSON.encode({
-    health = current_health - index,
+    guid = guid,
+    attack = attack,
+    initiative = initiative,
+    health = health,
+    updatedHealth = updatedHealth - index,
     name = name,
     baddiePoints = baddiePoints,
-    type = 'baddie'
+    type = JSON.decode(baddie.getGMNotes()).type
   }))
   if JSON.decode(baddie.getGMNotes()).health > 0 then
-    msg = "Removed " .. index .." health from " .. JSON.decode(baddie.getGMNotes()).name .. " " .. JSON.decode(baddie.getGMNotes()).health .. " health remaining!"
+    msg = "Removed " .. index .." health from " .. JSON.decode(baddie.getGMNotes()).name .. " " .. JSON.decode(baddie.getGMNotes()).updatedHealth .. " health remaining!"
     rgb = {r=0, g=1, b=0}
     broadcastToAll(msg, rgb)
   end
-  baddie.setDescription("Health is " .. JSON.decode(baddie.getGMNotes()).health)
-  if JSON.decode(baddie.getGMNotes()).health <= 0 then
+  baddie.setDescription("Health is " .. JSON.decode(baddie.getGMNotes()).updatedHealth)
+  if JSON.decode(baddie.getGMNotes()).updatedHealth <= 0 then
     defeatBaddie(baddie, index)
   end
 end
 
 function defeatBaddie(baddie, index)
-    if baddie.getJoints() ~= nill then
+    if baddie.getJoints() ~= nil then
       baddie.jointTo()
     end
     msg = "Removed " .. index .." health from " .. JSON.decode(baddie.getGMNotes()).name .. " and " .. JSON.decode(baddie.getGMNotes()).name .. " Has been defeated!"
