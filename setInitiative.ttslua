@@ -69,6 +69,7 @@ function addBaddieInitiativeDieToTable()
     baddie = findHitsInRadius(lane.getPosition(), 1.2, 2, 'baddie')
     table.insert(baddieQueue, baddie)
     if baddie ~= nill then
+      print(JSON.decode(baddie.getGMNotes()).initiative, JSON.decode(baddie.getGMNotes()).type, JSON.decode(baddie.getGMNotes()).name)
       baddieInitiativeDice[i].setValue(JSON.decode(baddie.getGMNotes()).initiative)
       baddieInitiativeDice[i].setGMNotes(JSON.encode({
         originalPosition = Vector(JSON.decode(baddieInitiativeDice[i].getGMNotes()).originalPosition),
@@ -356,7 +357,7 @@ function setBaddies()
     updatedHealth = 5,
     attack = 'melee',
     name = 'Clay Golem',
-    baddiePoints = 1,
+    baddiePoints = 20,
   }))
   x.setDescription("Health is " .. JSON.decode(x.getGMNotes()).health)
   baddie10 = x.getGMNotes()

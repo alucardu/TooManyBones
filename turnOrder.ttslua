@@ -222,7 +222,9 @@ end
 function nextRound()
   checkEmptyInitiativeMeterSpots()
   battleQueue = getObjectFromGUID('f45442')
-  battleQueue.call('checkForEmptyLanes')
+
+  Wait.time(function() battleQueue.call('checkForEmptyLanes') end, 4)
+
   activePlayer = 1
   msg = "Beginning of round " .. round
   rgb = {r=0, g=1, b=0}
@@ -268,7 +270,6 @@ function checkEmptyInitiativeMeterSpots()
         moveWatch = function() return not nextEmptySpot[2].isSmoothMoving() end
         Wait.condition(function() checkEmptyInitiativeMeterSpots() end, moveWatch)
       end
-
       break
     end
   end

@@ -1,4 +1,5 @@
 function onLoad()
+  setInitiativePositions()
   setBaddieInitiativeDice()
   setLaneObjects()
   setBaddieQueue()
@@ -58,8 +59,47 @@ function moveToBattleMat(emptyLaneToken, baddie, baddieQueue, emptyLaneToken)
   end
 end
 
-function moveChips(emptyLaneToken, baddie, queue, full)
+function checkEmptyInitiativeMeterSpots(baddieInitiativeDie, baddie)
+  if JSON.decode(baddie.getGMNotes()).baddiePoints > 5 then
+    freeSpot = {}
+    for i = 2, 9 do
+      initiativeDie = findHitsInRadiusInitiativeDice(initiativePositions[i].getPosition(), 0.8, 1.5, 'die')
+      freeSpot = i
+      if initiativeDie ~= nil then
+        pos = initiativePositions[i+1].getPosition()
+        pos.y = pos.y + 1
+        initiativeDie.setPositionSmooth(pos)
+      end
+      if i == 9 then
+        pos = initiativePositions[2].getPosition()
+        pos.y = pos.y + 1
+        baddieInitiativeDie.setPositionSmooth(pos)
+      end
+    end
 
+  elseif JSON.decode(baddie.getGMNotes()).baddiePoints <=  5 then
+    for i = 1, 9 do
+      isEmpty = (findHitsInRadiusInitiativeDice(initiativePositions[i].getPosition(), 0.8, 1.5, 'die') == nil)
+      if isEmpty == true then
+        pos = initiativePositions[i].getPosition()
+        pos.y = pos.y + 1
+        baddieInitiativeDie.setPositionSmooth(pos)
+        break
+      end
+    end
+  end
+
+end
+
+function moveChips(emptyLaneToken, baddie, queue, full)
+  baddieInitiativeDie = getObjectFromGUID(JSON.decode(emptyLaneToken.getGMNotes()).baddieInitiativeDieGUID)
+  baddieInitiativeDie.setGMNotes(JSON.encode({
+    originalPosition = Vector(JSON.decode(baddieInitiativeDie.getGMNotes()).originalPosition),
+    value = JSON.decode(baddie.getGMNotes()).initiative,
+    type = JSON.decode(baddie.getGMNotes()).type,
+    name = JSON.decode(baddie.getGMNotes()).name
+  }))
+  checkEmptyInitiativeMeterSpots(baddieInitiativeDie, baddie)
   if full == true then
     if JSON.decode(baddie.getGMNotes()).attack == 'melee' then
 
@@ -195,6 +235,26 @@ function moveToken(emptyLaneToken, baddie)
 
 end
 
+function findHitsInRadiusInitiativeDice(pos, ypos, size, reason)
+  pos.y = 0.6
+  pos.y = pos.y + ypos
+  local radius = (radius or 1)
+  local hitList = Physics.cast({
+      origin       = {x=pos.x, y=pos.y, z=pos.z},
+      direction    = {0,1,0},
+      type         = 3,
+      size         = {0.5,0.5,0.5},
+      max_distance = 0,
+      debug        = false,
+  })
+  pos.y = 1
+  for _, hit in ipairs(hitList) do
+    if reason == 'die' then
+      return hit.hit_object
+    end
+  end
+end
+
 function findHitsInRadius(pos, ypos, size)
   pos.y = 1
   pos.y = pos.y + ypos
@@ -283,8 +343,6 @@ setBtn = {
   index = 0
 }
 
-
-
 health_chip = [[{
   "Autoraise": true,
   "ColorDiffuse": {
@@ -353,3 +411,17 @@ spawnParams = {
   sound             = true,
   snap_to_grid      = true,
 }
+
+function setInitiativePositions()
+  initiativePositions = {
+    getObjectFromGUID('fdab05'),
+    getObjectFromGUID('7ab4bb'),
+    getObjectFromGUID('634099'),
+    getObjectFromGUID('7ad94b'),
+    getObjectFromGUID('01124a'),
+    getObjectFromGUID('6bda36'),
+    getObjectFromGUID('dffb26'),
+    getObjectFromGUID('e86414'),
+    getObjectFromGUID('1dcd7e')
+  }
+end

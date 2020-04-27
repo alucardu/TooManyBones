@@ -114,6 +114,24 @@ function removeHealthTokenFromBaddie(healthStack, index, baddie)
   end
   baddie.setDescription("Health is " .. JSON.decode(baddie.getGMNotes()).updatedHealth)
   if JSON.decode(baddie.getGMNotes()).updatedHealth <= 0 then
+    baddie.setDescription("Health is " .. JSON.decode(baddie.getGMNotes()).health)
+    guid = JSON.decode(baddie.getGMNotes()).guid
+    attack = JSON.decode(baddie.getGMNotes()).attack
+    initiative = JSON.decode(baddie.getGMNotes()).initiative
+    health = JSON.decode(baddie.getGMNotes()).health
+    name = JSON.decode(baddie.getGMNotes()).name
+    baddiePoints = JSON.decode(baddie.getGMNotes()).baddiePoints
+
+    baddie.setGMNotes(JSON.encode({
+      guid = guid,
+      attack = attack,
+      initiative = initiative,
+      health = health,
+      updatedHealth = health,
+      name = name,
+      baddiePoints = baddiePoints,
+      type = JSON.decode(baddie.getGMNotes()).type
+    }))
     defeatBaddie(baddie, index)
   end
 end
@@ -134,11 +152,13 @@ function defeatBaddie(baddie, index)
       onePointGraveyard.putObject(baddie)
     elseif JSON.decode(baddie.getGMNotes()).baddiePoints == 5 then
       fivePointGraveyard = getObjectFromGUID('e2e0d3')
-      baddie.putObject(baddie)
+      fivePointGraveyard.putObject(baddie)
     elseif JSON.decode(baddie.getGMNotes()).baddiePoints == 20 then
       twentyPointGraveyard = getObjectFromGUID('1a94cc')
-      baddie.putObject(baddie)
+      twentyPointGraveyard.putObject(baddie)
     end
+
+
 end
 
 function getLaneToken(hoverObject)
