@@ -1,5 +1,6 @@
 enable = false
 function onLoad()
+  setInitiativePositions()
   setInitiativeMeterPanels()
   setInitiativeNameMeterPanels()
   setInitiativeDice()
@@ -217,11 +218,15 @@ function endTurn()
   activePlayer = activePlayer + 1
   activePanels = 0
 end
+
 function nextRound()
+  checkEmptyInitiativeMeterSpots()
   battleQueue = getObjectFromGUID('f45442')
   battleQueue.call('checkForEmptyLanes')
   activePlayer = 1
-  print('beginning of round')
+  msg = "Beginning of round " .. round
+  rgb = {r=0, g=1, b=0}
+  broadcastToAll(msg, rgb)
 
   if round >= 5 then
     msg = "Everyone takes on point of real damage"
@@ -245,6 +250,36 @@ function nextRound()
     if i > 1 then
       local getX = function() UI.setAttribute(endTurnButtons[i], "active", false) end
       Wait.frames(getX, 1)
+    end
+  end
+end
+
+function checkEmptyInitiativeMeterSpots()
+  for i = 1, 9 do
+    isEmpty = (findHitsInRadius(initiativePositions[i].getPosition(), 0.8, 1.5, 'die') == nil)
+    if isEmpty == true then
+      emptySpot = i
+      nextEmptySpot = nextFilledInitiativeMeterSpot(emptySpot)
+      if nextEmptySpot ~= nil then
+        pos = initiativePositions[i].getPosition(emptySpot)
+        pos.y = pos.y + 1
+        nextEmptySpot[2].setPositionSmooth(pos)
+
+        moveWatch = function() return not nextEmptySpot[2].isSmoothMoving() end
+        Wait.condition(function() checkEmptyInitiativeMeterSpots() end, moveWatch)
+      end
+
+      break
+    end
+  end
+end
+
+function nextFilledInitiativeMeterSpot(emptySpot)
+  for i = emptySpot, 9 do
+    initiativeDie = findHitsInRadius(initiativePositions[i].getPosition(), 0.8, 1.5, 'die')
+    isEmpty = (initiativeDie == nil)
+    if isEmpty ~= true then
+      return {i, initiativeDie}
     end
   end
 end
@@ -376,15 +411,16 @@ function setInitiativePositions()
   }
 end
 
+
 function findHitsInRadius(pos, ypos, size, reason)
-  pos.y = 1
+  pos.y = 0.6
   pos.y = pos.y + ypos
   local radius = (radius or 1)
   local hitList = Physics.cast({
       origin       = {x=pos.x, y=pos.y, z=pos.z},
       direction    = {0,1,0},
       type         = 3,
-      size         = {size,size,size},
+      size         = {0.5,0.5,0.5},
       max_distance = 0,
       debug        = false,
   })
