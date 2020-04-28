@@ -1,0 +1,427 @@
+function onLoad()
+  setInitiativePositions()
+  setBaddieInitiativeDice()
+  setLaneObjects()
+  setBaddieQueue()
+  setBattleMatPositions()
+  self.createButton(setBtn)
+end
+
+full = false
+
+function checkForEmptyLanes()
+  emptyLaneTokens = {}
+  loopCheckForEmptyLanes = 0
+  for i, laneToken in ipairs(lane) do
+    isEmpty = (findHitsInRadius(laneToken.getPosition(), 1.2, 2)  == nil)
+    loopCheckForEmptyLanes = loopCheckForEmptyLanes +1
+    if isEmpty == true then
+      table.insert(emptyLaneTokens, laneToken)
+    end
+    if (loopCheckForEmptyLanes == 4) then
+      checkForBaddies(emptyLaneTokens)
+    end
+  end
+end
+
+function checkForBaddies(emptyLaneTokens)
+  baddieQueue = {}
+  for i, baddieQueuesPosition in ipairs(baddieQueuesPositions) do
+    baddie = findHitsInRadius(baddieQueuesPosition, 1.2, 2)
+    isEmpty = (baddie == nil)
+    loopCheckForEmptyLanes = loopCheckForEmptyLanes +1
+    if isEmpty == false then
+      table.insert(baddieQueue, baddie)
+    end
+  end
+
+  for i, emptyLaneToken in ipairs(emptyLaneTokens) do
+    if baddieQueue[i] ~= nil then
+      baddieQueue[i].setPositionSmooth(emptyLaneToken.getPosition())
+      local moveToBattleMats = function() moveToBattleMat(emptyLaneToken, baddieQueue[i], baddieQueue) end
+      moveWatch = function() return not baddieQueue[i].isSmoothMoving() end
+      Wait.condition(moveToBattleMats, moveWatch)
+    end
+  end
+end
+
+runOnce = 0
+time = -1
+function moveToBattleMat(emptyLaneToken, baddie, baddieQueue, emptyLaneToken)
+  runOnce = runOnce + 1
+  if runOnce == #baddieQueue then
+    for i, baddie in ipairs(baddieQueue) do
+      time = time + 1
+      Wait.time(function() moveToken(emptyLaneTokens[i], baddie) end, time)
+    end
+    time = -1
+    runOnce = 0
+  end
+end
+
+function checkEmptyInitiativeMeterSpots(baddieInitiativeDie, baddie)
+  if JSON.decode(baddie.getGMNotes()).baddiePoints > 5 then
+    freeSpot = {}
+    for i = 2, 9 do
+      initiativeDie = findHitsInRadiusInitiativeDice(initiativePositions[i].getPosition(), 0.8, 1.5, 'die')
+      freeSpot = i
+      if initiativeDie ~= nil then
+        pos = initiativePositions[i+1].getPosition()
+        pos.y = pos.y + 1
+        initiativeDie.setPositionSmooth(pos)
+      end
+      if i == 9 then
+        pos = initiativePositions[2].getPosition()
+        pos.y = pos.y + 1
+        baddieInitiativeDie.setPositionSmooth(pos)
+      end
+    end
+
+  elseif JSON.decode(baddie.getGMNotes()).baddiePoints <=  5 then
+    for i = 1, 9 do
+      isEmpty = (findHitsInRadiusInitiativeDice(initiativePositions[i].getPosition(), 0.8, 1.5, 'die') == nil)
+      if isEmpty == true then
+        pos = initiativePositions[i].getPosition()
+        pos.y = pos.y + 1
+        baddieInitiativeDie.setPositionSmooth(pos)
+        break
+      end
+    end
+  end
+
+end
+
+function moveChips(emptyLaneToken, baddie, queue, full)
+  baddieInitiativeDie = getObjectFromGUID(JSON.decode(emptyLaneToken.getGMNotes()).baddieInitiativeDieGUID)
+  baddieInitiativeDie.setGMNotes(JSON.encode({
+    originalPosition = Vector(JSON.decode(baddieInitiativeDie.getGMNotes()).originalPosition),
+    value = JSON.decode(baddie.getGMNotes()).initiative,
+    type = JSON.decode(baddie.getGMNotes()).type,
+    name = JSON.decode(baddie.getGMNotes()).name
+  }))
+  checkEmptyInitiativeMeterSpots(baddieInitiativeDie, baddie)
+  if full == true then
+    if JSON.decode(baddie.getGMNotes()).attack == 'melee' then
+
+      for i = 1, JSON.decode(baddie.getGMNotes()).health do
+        spawnParams.position = getObjectFromGUID(battleMatPositions[queue].ranged).getPosition()
+        local x = spawnObjectJSON(spawnParams)
+        x.setPositionSmooth(getObjectFromGUID(battleMatPositions[queue].ranged).getPosition())
+      end
+
+      pos = getObjectFromGUID(battleMatPositions[queue].ranged).getPosition()
+      pos.y = 1 * JSON.decode(baddie.getGMNotes()).health
+      emptyLaneToken.setPositionSmooth(pos)
+      baddie.setPositionSmooth(pos)
+
+      local joinBaddieAndBattleQueue = function() baddie.jointTo(emptyLaneToken, {["type"] = "Fixed",["collision"] = false}) end
+      moveWatch = function() return not baddie.isSmoothMoving() end
+      Wait.condition(joinBaddieAndBattleQueue, moveWatch)
+
+    elseif JSON.decode(baddie.getGMNotes()).attack == 'ranged' then
+
+
+      for i = 1, JSON.decode(baddie.getGMNotes()).health do
+        spawnParams.position = getObjectFromGUID(battleMatPositions[queue].melee).getPosition()
+        local x = spawnObjectJSON(spawnParams)
+        x.setPositionSmooth(getObjectFromGUID(battleMatPositions[queue].melee).getPosition())
+      end
+
+      pos = getObjectFromGUID(battleMatPositions[queue].melee).getPosition()
+      pos.y = 1 * JSON.decode(baddie.getGMNotes()).health
+      emptyLaneToken.setPositionSmooth(pos)
+      baddie.setPositionSmooth(pos)
+
+      local joinBaddieAndBattleQueue = function() baddie.jointTo(emptyLaneToken, {["type"] = "Fixed",["collision"] = false}) end
+      moveWatch = function() return not baddie.isSmoothMoving() end
+      Wait.condition(joinBaddieAndBattleQueue, moveWatch)
+    end
+    return
+  end
+
+  if JSON.decode(baddie.getGMNotes()).attack == 'melee' then
+    for i = 1, JSON.decode(baddie.getGMNotes()).health do
+      spawnParams.position = getObjectFromGUID(battleMatPositions[queue].melee).getPosition()
+      local x = spawnObjectJSON(spawnParams)
+      x.setPositionSmooth(getObjectFromGUID(battleMatPositions[queue].melee).getPosition())
+    end
+
+    pos = getObjectFromGUID(battleMatPositions[queue].melee).getPosition()
+    pos.y = 1 * JSON.decode(baddie.getGMNotes()).health
+    emptyLaneToken.setPositionSmooth(pos)
+    baddie.setPositionSmooth(pos)
+
+    local joinBaddieAndBattleQueue = function() baddie.jointTo(emptyLaneToken, {["type"] = "Fixed",["collision"] = false}) end
+    moveWatch = function() return not baddie.isSmoothMoving() end
+    Wait.condition(joinBaddieAndBattleQueue, moveWatch)
+
+  elseif JSON.decode(baddie.getGMNotes()).attack == 'ranged' then
+    for i = 1, JSON.decode(baddie.getGMNotes()).health do
+      spawnParams.position = getObjectFromGUID(battleMatPositions[queue].ranged).getPosition()
+      local x = spawnObjectJSON(spawnParams)
+      x.setPositionSmooth(getObjectFromGUID(battleMatPositions[queue].ranged).getPosition())
+    end
+
+    pos = getObjectFromGUID(battleMatPositions[queue].ranged).getPosition()
+    pos.y = 1 * JSON.decode(baddie.getGMNotes()).health
+    emptyLaneToken.setPositionSmooth(pos)
+    baddie.setPositionSmooth(pos)
+
+
+    local joinBaddieAndBattleQueue = function() baddie.jointTo(emptyLaneToken, {["type"] = "Fixed",["collision"] = false}) end
+    moveWatch = function() return not baddie.isSmoothMoving() end
+    Wait.condition(joinBaddieAndBattleQueue, moveWatch)
+  end
+end
+
+function moveToken(emptyLaneToken, baddie)
+  attackType = JSON.decode(baddie.getGMNotes()).attack
+  for i, battleMatPosition in ipairs(battleMatPositions) do
+    queue = JSON.decode(emptyLaneToken.getGMNotes()).queue
+
+    if attackType == 'melee' then
+
+      if (findHitsInRadius(getObjectFromGUID(battleMatPositions[queue].melee).getPosition(), 1.2, 2) == nil) then
+        moveChips(emptyLaneToken, baddie, queue, full)
+        return
+      end
+
+      elseif attackType == 'ranged' then
+        if (findHitsInRadius(getObjectFromGUID(battleMatPositions[queue].ranged).getPosition(), 1.2, 2) == nil) then
+          moveChips(emptyLaneToken, baddie, queue, full)
+          return
+        end
+      end
+
+    if attackType == 'melee' then
+      isEmpty = (findHitsInRadius(getObjectFromGUID(battleMatPositions[i].melee).getPosition(), 1.2, 2) == nil)
+      if isEmpty == true then
+        if (findHitsInRadius(getObjectFromGUID(battleMatPositions[i].melee).getPosition(), 1.2, 2) == nil) then
+          moveChips(emptyLaneToken, baddie, i, full)
+        end
+        return
+      end
+      if i == 4 then
+        full = true
+        for i, battleMatPosition in ipairs(battleMatPositions) do
+          isEmpty = (findHitsInRadius(getObjectFromGUID(battleMatPositions[i].ranged).getPosition(), 1.2, 2) == nil)
+          if isEmpty == true then
+            moveChips(emptyLaneToken, baddie, i, full)
+            full = false
+            return
+          end
+        end
+
+      end
+    elseif attackType == 'ranged' then
+      isEmpty = (findHitsInRadius(getObjectFromGUID(battleMatPositions[i].ranged).getPosition(), 1.2, 2) == nil)
+      if isEmpty == true then
+        moveChips(emptyLaneToken, baddie, i, full)
+        return
+      end
+      if i == 4 then
+        full = true
+        for i, battleMatPosition in ipairs(battleMatPositions) do
+          isEmpty = (findHitsInRadius(getObjectFromGUID(battleMatPositions[i].melee).getPosition(), 1.2, 2) == nil)
+          if isEmpty == true then
+            moveChips(emptyLaneToken, baddie, i, full)
+            full = false
+            return
+          end
+        end
+      end
+    end
+  end
+
+end
+
+function findHitsInRadiusInitiativeDice(pos, ypos, size, reason)
+  pos.y = 0.6
+  pos.y = pos.y + ypos
+  local radius = (radius or 1)
+  local hitList = Physics.cast({
+      origin       = {x=pos.x, y=pos.y, z=pos.z},
+      direction    = {0,1,0},
+      type         = 3,
+      size         = {0.5,0.5,0.5},
+      max_distance = 0,
+      debug        = false,
+  })
+  pos.y = 1
+  for _, hit in ipairs(hitList) do
+    if reason == 'die' then
+      return hit.hit_object
+    end
+  end
+end
+
+function findHitsInRadius(pos, ypos, size)
+  pos.y = 1
+  pos.y = pos.y + ypos
+  local radius = (radius or 1)
+  local hitList = Physics.cast({
+      origin       = {x=pos.x, y=pos.y, z=pos.z},
+      direction    = {0,1,0},
+      type         = 3,
+      size         = {size,size,size},
+      max_distance = 0,
+      debug        = false,
+  })
+  pos.y = 1
+  for _, hit in ipairs(hitList) do
+    return hit.hit_object
+  end
+end
+
+function setLaneObjects()
+  lane = {
+    getObjectFromGUID('e37ccf'),
+    getObjectFromGUID('2a9f73'),
+    getObjectFromGUID('fd1416'),
+    getObjectFromGUID('cc47f5')
+  }
+  setLaneTokenInformation()
+end
+
+function setLaneTokenInformation()
+  for i, laneToken in ipairs(lane) do
+    laneToken.setGMNotes(JSON.encode({
+      originalPosition = laneToken.getPosition(),
+      baddieInitiativeDieGUID = baddieInitiativeDie[i].getGUID(),
+      queue = i
+    }))
+  end
+end
+
+function setBaddieInitiativeDice()
+  baddieInitiativeDie = {
+    getObjectFromGUID('7c1582'),
+    getObjectFromGUID('4d2834'),
+    getObjectFromGUID('3aaaf7'),
+    getObjectFromGUID('28d12b'),
+  }
+end
+
+function setBaddieQueue()
+  baddieQueuesPositions = {
+    getObjectFromGUID('54c5d6').getPosition(),
+    getObjectFromGUID('2bd8ff').getPosition(),
+    getObjectFromGUID('3590ab').getPosition(),
+    getObjectFromGUID('2af659').getPosition(),
+  }
+end
+
+function setBattleMatPositions()
+  battleMatPositions = {
+    {
+      melee = '25da4f',
+      ranged = 'a608a8'
+    },
+    {
+      melee = '53fe5d',
+      ranged = '1190bb'
+    },
+     {
+      melee = '50af26',
+      ranged = 'a232a0'
+    },
+    {
+      melee = '77bb22',
+      ranged = '6e31a0'
+    }
+  }
+end
+
+setBtn = {
+  click_function = 'checkForEmptyLanes',
+  function_owner = self,
+  label = 'do stuff',
+  position = {2, 2, 2.5},
+  width = 2800,
+  height = 500,
+  font_size = 240,
+  index = 0
+}
+
+health_chip = [[{
+  "Autoraise": true,
+  "ColorDiffuse": {
+    "b": 0,
+    "g": 0,
+    "r": 1
+  },
+  "CustomImage": {
+    "CustomTile": {
+      "Stackable": true,
+      "Stretch": true,
+      "Thickness": 0.2,
+      "Type": 2
+    },
+    "ImageScalar": 1,
+    "ImageSecondaryURL": "",
+    "ImageURL": "http://cloud-3.steamusercontent.com/ugc/834703362349729251/9864D3E9BD6059B69EF0DB6B0FE517D8FC497A89/",
+    "WidthScale": 0
+  },
+  "Description": "",
+  "GMNotes": "",
+  "Grid": true,
+  "GridProjection": false,
+  "GUID": "53b141",
+  "Hands": false,
+  "HideWhenFaceDown": false,
+  "IgnoreFoW": false,
+  "Locked": false,
+  "LuaScript": "",
+  "LuaScriptState": "",
+  "Name": "Custom_Tile",
+  "Nickname": "Health",
+  "PhysicsMaterial": {
+    "BounceCombine": 0,
+    "Bounciness": 0,
+    "DynamicFriction": 1,
+    "FrictionCombine": 0,
+    "StaticFriction": 1
+  },
+  "Rigidbody": {
+    "AngularDrag": 0.1,
+    "Drag": 7,
+    "Mass": 1,
+    "UseGravity": true
+  },
+  "Snap": true,
+  "Sticky": true,
+  "Tooltip": true,
+  "Transform": {
+    "posX": -11.9000006,
+    "posY": 0.95999974,
+    "posZ": 4.410002,
+    "rotX": 1.31341915E-06,
+    "rotY": 179.999924,
+    "rotZ": 1.04722958E-05,
+    "scaleX": 0.8532884,
+    "scaleY": 1,
+    "scaleZ": 0.8532884
+  },
+  "XmlUI": ""
+}]]
+
+spawnParams = {
+  json              = health_chip,
+  position          = {},
+  sound             = true,
+  snap_to_grid      = true,
+}
+
+function setInitiativePositions()
+  initiativePositions = {
+    getObjectFromGUID('fdab05'),
+    getObjectFromGUID('7ab4bb'),
+    getObjectFromGUID('634099'),
+    getObjectFromGUID('7ad94b'),
+    getObjectFromGUID('01124a'),
+    getObjectFromGUID('6bda36'),
+    getObjectFromGUID('dffb26'),
+    getObjectFromGUID('e86414'),
+    getObjectFromGUID('1dcd7e')
+  }
+end

@@ -1,4 +1,5 @@
 function onLoad()
+  setBaddieInitiativeDice()
   setBattleMatPositions()
   setLaneObjects()
 end
@@ -29,6 +30,7 @@ function initiatieBattleMat(battleQueue)
   if battleQueue ~= nill then
     for i, baddie in ipairs(battleQueue) do
       if JSON.decode(baddie.getGMNotes()).attack == 'melee' then
+
         for z = 1, JSON.decode(baddie.getGMNotes()).health do
           spawnParams.position = getObjectFromGUID(battleMatPositions[i].melee).getPosition()
           local x = spawnObjectJSON(spawnParams)
@@ -81,7 +83,35 @@ function setLaneObjects()
     getObjectFromGUID('fd1416'),
     getObjectFromGUID('cc47f5')
   }
+  setLaneTokenInformation()
 end
+
+function setLaneTokenInformation()
+  for i, laneToken in ipairs(lane) do
+    laneToken.setGMNotes(JSON.encode({
+      originalPosition = laneToken.getPosition(),
+      baddieInitiativeDieGUID = baddieInitiativeDie[i].getGUID(),
+      queue = i
+    }))
+  end
+end
+
+function setBaddieInitiativeDice()
+  baddieInitiativeDie = {
+    getObjectFromGUID('7c1582'),
+    getObjectFromGUID('4d2834'),
+    getObjectFromGUID('3aaaf7'),
+    getObjectFromGUID('28d12b'),
+  }
+end
+
+-- function setLaneTokenInformation()
+--   for i, laneToken in ipairs(lane) do
+--     laneToken.setGMNotes(JSON.encode({
+--       queue = i
+--     }))
+--   end
+-- end
 
 health_chip = [[{
   "Autoraise": true,
