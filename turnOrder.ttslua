@@ -182,9 +182,11 @@ function startCombat(player, set)
 end
 
 activePlayer = 1
+nextActivationPanel = 1
 activePanels = 0
 round = 1
 function endTurn()
+  initiativeMeterDice = setIninitiativeMeter.getTable('initiativeMeterDice')
   for i = 1, 8 do
     if UI.getAttribute(initiativeMeterPanels[i], 'active') == 'True' then
       activePanels = activePanels + 1
@@ -195,37 +197,71 @@ function endTurn()
       nextRound()
       return
     elseif activePlayer < #initiativeMeterDice then
-      if UI.getAttribute(initiativeMeterPanels[i + 1], 'active') == 'True' then
-        UI.setAttribute('initiative-baddie-' .. i + 1, "color", "pink")
-        UI.setAttribute('initiative-gearlock-' .. i + 1, "color", "pink")
-        UI.setAttribute(endTurnButtons[i + 1], "active", true)
-        break
-      elseif UI.getAttribute(initiativeMeterPanels[i + 1], 'active') == 'False' then
+      if UI.getAttribute(initiativeMeterPanels[nextActivationPanel + 1], 'active') == 'True' then
+        UI.setAttribute('initiative-baddie-' .. nextActivationPanel, "color", "grey")
+        UI.setAttribute('initiative-gearlock-' .. nextActivationPanel, "color", "grey")
+        UI.setAttribute(endTurnButtons[nextActivationPanel], "active", false)
+        UI.setAttribute('initiative-baddie-' .. nextActivationPanel + 1, "color", "pink")
+        UI.setAttribute('initiative-gearlock-' .. nextActivationPanel + 1, "color", "pink")
+        UI.setAttribute(endTurnButtons[nextActivationPanel  + 1], "active", true)
         activePlayer = activePlayer + 1
-        if activePlayer > #initiativeMeterDice then
-          nextRound()
-          return
+        nextActivationPanel = nextActivationPanel + 1
+        break
+
+      elseif UI.getAttribute(initiativeMeterPanels[i + 1], 'active') == 'False' then
+
+        for i, initiativeMeterPanel in ipairs(initiativeMeterPanels) do
+          if i > nextActivationPanel then
+            nextActivation = UI.getAttribute(initiativeMeterPanel, 'active')
+            if nextActivation == 'True' then
+              for i = 1, activePlayer do
+                UI.setAttribute('initiative-baddie-' .. nextActivationPanel , "color", "grey")
+                UI.setAttribute('initiative-gearlock-' .. nextActivationPanel , "color", "grey")
+                UI.setAttribute(endTurnButtons[nextActivationPanel], "active", false)
+              end
+              UI.setAttribute('initiative-baddie-' .. nextActivationPanel + 1, "color", "pink")
+              UI.setAttribute('initiative-gearlock-' .. nextActivationPanel + 1, "color", "pink")
+              UI.setAttribute(endTurnButtons[nextActivationPanel + 1], "active", true)
+              activePlayer = activePlayer + 1
+              nextActivationPanel = nextActivationPanel + 1
+              activePanels = 0
+              return
+            elseif nextActivation == 'False' then
+              UI.setAttribute('initiative-baddie-' .. nextActivationPanel, "color", "grey")
+              UI.setAttribute('initiative-gearlock-' .. nextActivationPanel, "color", "grey")
+              UI.setAttribute(endTurnButtons[nextActivationPanel], "active", false)
+              nextActivationPanel = nextActivationPanel + 1
+              if activePlayer > #initiativeMeterDice then
+                nextRound()
+                return
+              end
+            end
+          end
         end
+
       end
     end
   end
 
-  for i = 1, activePlayer do
-    UI.setAttribute('initiative-baddie-' .. i, "color", "grey")
-    UI.setAttribute('initiative-gearlock-' .. i, "color", "grey")
-    UI.setAttribute(endTurnButtons[i], "active", false)
-  end
-  activePlayer = activePlayer + 1
+  -- for i = 1, activePlayer do
+  --   UI.setAttribute('initiative-baddie-' .. i, "color", "grey")
+  --   UI.setAttribute('initiative-gearlock-' .. i, "color", "grey")
+  --   UI.setAttribute(endTurnButtons[i], "active", false)
+  -- end
+  -- activePlayer = activePlayer + 1
   activePanels = 0
 end
 
 function nextRound()
   checkEmptyInitiativeMeterSpots()
   battleQueue = getObjectFromGUID('f45442')
+  --Wait for checkEmptyInitiativeMeterSpots to be finished
 
-  Wait.time(function() battleQueue.call('checkForEmptyLanes') end, 4)
+  moveWatch = function() return lastInitiativeDie.isSmoothMoving() end
+  Wait.condition(function() battleQueue.call('checkForEmptyLanes') end, moveWatch)
 
   activePlayer = 1
+  nextActivationPanel = 1
   msg = "Beginning of round " .. round
   rgb = {r=0, g=1, b=0}
   broadcastToAll(msg, rgb)
@@ -242,7 +278,7 @@ function nextRound()
   roundDie = getObjectFromGUID('95be0e')
   roundDie.setValue(round)
 
-  for i = 1, #initiativeMeterDice do
+  for i = 1, 8 do
     UI.setAttribute('initiative-baddie-' .. i, "color", "purple")
     UI.setAttribute('initiative-gearlock-' .. i, "color", "green")
     UI.setAttribute('initiative-baddie-1', "color", "pink")
@@ -254,9 +290,21 @@ function nextRound()
       Wait.frames(getX, 1)
     end
   end
+
+  if activePlayer == 1 then
+    UI.setAttribute('initiative-baddie-1', "color", "pink")
+    UI.setAttribute('initiative-gearlock-1' .. 1, "color", "pink")
+    UI.setAttribute(endTurnButtons[1], "active", true)
+    local setAttr = function() UI.setAttribute(initiativeGearlockTypeMeterPanels[1], "color", "pink") end
+    Wait.frames(setAttr, 1)
+    local setAttr = function() UI.setAttribute(initiativeBaddieTypeMeterPanels[1], "color", "pink") end
+    Wait.frames(setAttr, 1)
+  end
 end
 
 function checkEmptyInitiativeMeterSpots()
+  initiativeMeterDice = setIninitiativeMeter.getTable('initiativeMeterDice')
+  lastInitiativeDie = initiativeMeterDice[#initiativeMeterDice]
   for i = 1, 9 do
     isEmpty = (findHitsInRadius(initiativePositions[i].getPosition(), 0.8, 1.5, 'die') == nil)
     if isEmpty == true then
@@ -286,6 +334,9 @@ function nextFilledInitiativeMeterSpot(emptySpot)
 end
 
 function dieRemoved(intitiativeDie)
+  if JSON.decode(intitiativeDie.getGMNotes()).initiativePanel < activePlayer then
+    activePlayer = activePlayer -1
+  end
   initiativeTrackerPanel = JSON.decode(intitiativeDie.getGMNotes()).initiativePanel
   UI.setAttribute(initiativeMeterPanels[initiativeTrackerPanel], "active", false)
   height = height - 50
@@ -342,6 +393,16 @@ function updateInitiativeMeter(initiativeMeterDice)
       Wait.frames(setAttr, 1)
     end
 
+    if activePlayer == 1 then
+      if tokenType == 'baddie' then
+        local setAttr = function() UI.setAttribute('initiative-baddie-1', "color", "pink") end
+        Wait.frames(setAttr, 1)
+      elseif tokenType == 'gearlock' then
+        local setAttr = function() UI.setAttribute(initiativeGearlockTypeMeterPanels[1], "color", "pink") end
+        Wait.frames(setAttr, 1)
+      end
+    end
+
     height = height + 50
     UI.setAttribute("InitiativeTracker", "height", height)
 
@@ -355,6 +416,14 @@ function updateInitiativeMeter(initiativeMeterDice)
   for i = 8, #initiativeMeterDice + 1, -1 do
     UI.setAttribute(initiativeMeterPanels[i], "active", false)
   end
+
+  if tokenType == 'baddie' then
+    local setAttr = function() UI.setAttribute('initiative-baddie-1', "color", "pink") end
+    Wait.frames(setAttr, 1)
+  elseif tokenType == 'gearlock' then
+    local setAttr = function() UI.setAttribute('initiative-gearlock-1', "color", "pink") end
+    Wait.frames(setAttr, 1)
+  end
 end
 
 function onObjectLeaveScriptingZone(zone, obj)
@@ -363,6 +432,7 @@ function onObjectLeaveScriptingZone(zone, obj)
     for i, InitiativeDie in ipairs(InitiativeDice) do
       if obj.getGUID() == InitiativeDie then
         dieRemoved(obj)
+        setIninitiativeMeter.call('removeDieFromInitiativeMeterDice', obj)
       end
     end
   end
