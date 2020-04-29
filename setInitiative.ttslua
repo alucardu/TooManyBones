@@ -13,6 +13,7 @@ end
 -- step 1 // set baddie initiativeDieValue
 local runSetGearlockInitiativeDieValue = 0
 function setBaddieInitiativeDieValue()
+  self.removeButton(0)
   for i, baddieQueuePos in ipairs(baddieQueuesPosition) do
     local baddie = getObjectFromGUID(findHitsInRadius(baddieQueuePos, 1.2, 2, 'guid'))
     if baddie ~= nill then
@@ -263,126 +264,88 @@ function setBaddieInitiativeDicePosition()
   end
 end
 
+function setBaddie(type, guid, initiative, health, attack, name, baddiePoints)
+  x = getObjectFromGUID(guid)
+  x.setGMNotes(JSON.encode({
+    type = type,
+    guid = guid,
+    initiative = initiative,
+    health = health,
+    updatedHealth = health,
+    attack = attack,
+    name = name,
+    baddiePoints = baddiePoints
+  }))
+  x.setDescription("Health is " .. JSON.decode(x.getGMNotes()).health)
+end
+
 function setBaddies()
-  x = getObjectFromGUID('4e5b7b')
-  x.setGMNotes(JSON.encode({
-    guid = '4e5b7b',
-    initiative = 2,
-    health = 3,
-    attack = 'melee',
-    name = 'Troll Romper'
-  }))
+  -- 1 point baddies
+  setBaddie('baddie', '3212e1', 5, 3, 'ranged', 'Goblin Bomber', 1)
+  setBaddie('baddie', '29ef21', 3, 3, 'ranged', 'Bog Pole', 1)
+  setBaddie('baddie', '28a6bf', 2, 5, 'melee', 'Clay Golem', 1)
+  setBaddie('baddie', '0e1b36', 4, 2, 'ranged', 'Goblin Sandbagger', 1)
+  setBaddie('baddie', '97f75a', 5, 2, 'ranged', 'Dragon Welp', 1)
+  setBaddie('baddie', '929081', 4, 3, 'melee', 'Kobold Greenthumb', 1)
+  setBaddie('baddie', '1021b1', 5, 3, 'ranged', 'Goblin Bomber', 1)
+  setBaddie('baddie', '23def6', 5, 3, 'ranged', 'Goblin Bomber', 1)
+  setBaddie('baddie', '75faa0', 6, 2, 'ranged', 'Kobold Tracker', 1)
+  setBaddie('baddie', '2feaab', 6, 3, 'ranged', 'Dragon Hatchling', 1)
+  setBaddie('baddie', 'a6056c', 2, 5, 'melee', 'Clay Golem', 1)
+  setBaddie('baddie', 'f762cf', 3, 4, 'melee', 'Bog Frog', 1)
+  setBaddie('baddie', 'a773c3', 3, 3, 'melee', 'Orc Peon', 1)
+  setBaddie('baddie', '4e5b7b', 2, 3, 'melee', 'Troll Romper', 1)
+  setBaddie('baddie', 'a855a5', 1, 3, 'melee', 'Troll Brute', 1)
+  setBaddie('baddie', 'a9d3ab', 2, 3, 'melee', 'Troll Romber', 1)
+  setBaddie('baddie', 'fd2605', 1, 3, 'melee', 'Troll Brute', 1)
+  setBaddie('baddie', '47e211', 5, 3, 'ranged', 'Goblin Bomber', 1)
+  setBaddie('baddie', 'dba088', 5, 3, 'ranged', 'Goblin Bomber', 1)
+  setBaddie('baddie', '574f6c', 6, 2, 'ranged', 'Kobold Tracker', 1)
+  setBaddie('baddie', '077871', 5, 3, 'ranged', 'Goblin Bomber', 1)
+  setBaddie('baddie', 'f90257', 5, 3, 'ranged', 'Goblin Bomber', 1)
+  setBaddie('baddie', '55ce71', 4, 3, 'ranged', 'Koblin Rioter', 1)
+  setBaddie('baddie', '520a64', 3, 4, 'melee', 'Bog Frog', 1)
+  setBaddie('baddie', '0c73f2', 3, 3, 'melee', 'Orc Peon', 1)
+  setBaddie('baddie', 'f84b03', 4, 3, 'ranged', 'Orc Scout', 1)
+  setBaddie('baddie', 'a1e1c5', 2, 4, 'melee', 'Orc Grunt', 1)
+  setBaddie('baddie', 'c3b485', 4, 3, 'ranged', 'Orc Scout', 1)
+  setBaddie('baddie', 'fe4785', 3, 4, 'melee', 'Troll Young`Un', 1)
+  setBaddie('baddie', '8dc052', 3, 3, 'melee', 'Dire Wolf Pup', 1)
+  setBaddie('baddie', '2b4f4b', 5, 2, 'melee', 'Griffing Yearling', 1)
+  setBaddie('baddie', '6a7581', 5, 2, 'melee', 'Griffing Yearling', 1)
+  setBaddie('baddie', 'db36bd', 3, 3, 'melee', 'Dire Wolf Pup', 1)
+  setBaddie('baddie', 'f063a9', 5, 3, 'ranged', 'Goblin Bomber', 1)
 
-  x = getObjectFromGUID('a855a5')
-  x.setGMNotes(JSON.encode({
-    guid = 'a855a5',
-    initiative = 1,
-    health = 3,
-    attack = 'melee',
-    name = 'Troll Brute'
-  }))
+  -- 5 point baddies
+  setBaddie('baddie', '6092b8', 3, 7, 'ranged', 'Stone Golem', 5)
+  setBaddie('baddie', '61846e', 4, 6, 'ranged', 'Bog Lurk', 5)
+  setBaddie('baddie', 'd0d177', 4, 5, 'melee', 'Goblin Sapper', 5)
+  setBaddie('baddie', '6bef44', 4, 6, 'melee', 'Troll Sage', 5)
+  setBaddie('baddie', '8c776f', 5, 5, 'melee', 'Griffin Howler', 5)
+  setBaddie('baddie', '076793', 3, 5, 'melee', 'Kobold Elite', 5)
+  setBaddie('baddie', 'edc02e', 3, 5, 'melee', 'Org Rage', 5)
+  setBaddie('baddie', '326db5', 2, 5, 'melee', 'Troll Enforcer', 5)
+  setBaddie('baddie', 'ee56a8', 4, 6, 'melee', 'Dire Wolf', 5)
+  setBaddie('baddie', '75330e', 6, 7, 'ranged', 'Dragon Delinquent', 5)
+  setBaddie('baddie', '745aa3', 6, 6, 'ranged', 'Golbom Alarmist', 5)
+  setBaddie('baddie', 'e3bb16', 3, 6, 'ranged', 'Manticore', 5)
+  setBaddie('baddie', '42f9e5', 3, 6, 'melee', 'kobold Fanatic', 5)
+  setBaddie('baddie', '0b6120', 3, 5, 'melee', 'Org Rage', 5)
+  setBaddie('baddie', '55e7df', 4, 6, 'melee', 'Org Warmongerer', 5)
+  setBaddie('baddie', '96ea63', 4, 5, 'melee', 'Goblin Sapper', 5)
+  setBaddie('baddie', '576e6d', 6, 6, 'ranged', 'Goblin Alarmist', 5)
+  setBaddie('baddie', 'bbb122', 5, 5, 'melee', 'Griffin Howler', 5)
+  setBaddie('baddie', '07b436', 4, 6, 'melee', 'Owlbear', 5)
+  setBaddie('baddie', '97946c', 2, 5, 'melee', 'Troll Enforcer', 5)
 
-  x = getObjectFromGUID('fe4785')
-  x.setGMNotes(JSON.encode({
-    guid = 'fe4785',
-    initiative = 3,
-    health = 4,
-    attack = 'melee',
-    name = 'Troll YoungUn'
-  }))
-
-  x = getObjectFromGUID('f84b03')
-  x.setGMNotes(JSON.encode({
-    guid = 'f84b03',
-    initiative = 4,
-    health = 3,
-    attack = 'ranged',
-    name = 'Orc Scout'
-  }))
-
-  x = getObjectFromGUID('3212e1')
-  x.setGMNotes(JSON.encode({
-    type = 'baddie',
-    guid = '3212e1',
-    initiative = 5,
-    health = 3,
-    attack = 'ranged',
-    name = 'Orc Scout'
-  }))
-
-  x = getObjectFromGUID('23def6')
-  x.setGMNotes(JSON.encode({
-    type = 'baddie',
-    guid = '23def6',
-    initiative = 5,
-    health = 3,
-    attack = 'ranged',
-    name = 'Orc Scout'
-  }))
-
-  x = getObjectFromGUID('3212e1')
-  x.setGMNotes(JSON.encode({
-    type = 'baddie',
-    guid = '3212e1',
-    initiative = 5,
-    health = 3,
-    updatedHealth = 3,
-    attack = 'ranged',
-    name = 'Gobblin Bomber',
-    baddiePoints = 1,
-  }))
-  x.setDescription("Health is " .. JSON.decode(x.getGMNotes()).health)
-
-  x = getObjectFromGUID('a855a5')
-  x.setGMNotes(JSON.encode({
-    type = 'baddie',
-    guid = 'a855a5',
-    initiative = 3,
-    health = 3,
-    attack = 'ranged',
-    name = 'Orc Scout',
-    baddiePoints = 1,
-  }))
-
-  x = getObjectFromGUID('29ef21')
-  x.setGMNotes(JSON.encode({
-    type = 'baddie',
-    guid = '29ef21',
-    initiative = 3,
-    health = 3,
-    updatedHealth = 3,
-    attack = 'ranged',
-    name = 'Bog Pole',
-    baddiePoints = 1,
-  }))
-
-  x.setDescription("Health is " .. JSON.decode(x.getGMNotes()).health)
-
-  x = getObjectFromGUID('28a6bf')
-  x.setGMNotes(JSON.encode({
-    type = 'baddie',
-    guid = '28a6bf',
-    initiative = 2,
-    health = 5,
-    updatedHealth = 5,
-    attack = 'melee',
-    name = 'Clay Golem',
-    baddiePoints = 20,
-  }))
-  x.setDescription("Health is " .. JSON.decode(x.getGMNotes()).health)
-
-  x = getObjectFromGUID('0e1b36')
-  x.setGMNotes(JSON.encode({
-    type = 'baddie',
-    guid = '0e1b36',
-    initiative = 4,
-    health = 2,
-    updatedHealth = 2,
-    attack = 'ranged',
-    name = 'Goblin Sandbagger',
-    baddiePoints = 1,
-  }))
-  x.setDescription("Health is " .. JSON.decode(x.getGMNotes()).health)
+  -- 20 point baddies
+  setBaddie('baddie', '89735d', 6, 9, 'ranged', 'Bog Wyrm', 20)
+  setBaddie('baddie', '3bb87e', 5, 8, 'ranged', 'Dragon Elder', 20)
+  setBaddie('baddie', '8ac70b', 6, 8, 'melee', 'Ferocious Owlbear', 20)
+  setBaddie('baddie', '5895e1', 5, 7, 'melee', 'Dire Wolf Alpha', 20)
+  setBaddie('baddie', '0e81a1', 5, 8, 'melee', 'Honor Griffin', 20)
+  setBaddie('baddie', 'f5a3b3', 5, 9, 'melee', 'Golden Golem', 20)
+  setBaddie('baddie', '767291', 4, 8, 'ranged', 'Bone Dragon', 20)
 end
 
 function setGearlockInitiativeDice()
@@ -444,13 +407,12 @@ function setGearlockInitiativeDiceValues()
 end
 
 initiativeDice = {}
-self.setPosition({10, -1, 1.7})
 setInitiativeBtn = {
   click_function = 'setBaddieInitiativeDieValue',
   function_owner = self,
-  label = 'Initialize initiative meter',
+  label = 'Initialize combat',
   position = {2, 2, 2.5},
-  width = 2800,
+  width = 2000,
   height = 500,
   font_size = 240,
   index = 0

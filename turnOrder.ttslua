@@ -245,12 +245,26 @@ function endTurn()
   activePanels = 0
 end
 
+dieNumber = 1
+function checkInitiativeDiceMoving()
+  battleQueue = getObjectFromGUID('f45442')
+  setIninitiativeMeter = getObjectFromGUID('8d4497')
+  initiativeMeterDice = setIninitiativeMeter.getTable('initiativeMeterDice')
+  if dieNumber == #initiativeMeterDice then
+    battleQueue.call('checkForEmptyLanes')
+    dieNumber = 1
+    return
+  end
+  if initiativeMeterDice[dieNumber] ~= nil then
+    dieNumber = dieNumber + 1
+    moveWatch = function() return not initiativeMeterDice[dieNumber].isSmoothMoving() end
+    Wait.condition(function() checkInitiativeDiceMoving() end, moveWatch)
+  end
+end
+
 function nextRound()
   checkEmptyInitiativeMeterSpots()
-  battleQueue = getObjectFromGUID('f45442')
-
-  moveWatch = function() return not lastInitiativeDie.isSmoothMoving() end
-  Wait.condition(function() battleQueue.call('checkForEmptyLanes') end, moveWatch)
+  checkInitiativeDiceMoving()
 
   activePlayer = 1
   nextActivationPanel = 1
@@ -295,8 +309,7 @@ function nextRound()
 end
 
 function checkEmptyInitiativeMeterSpots()
-  initiativeMeterDice = setIninitiativeMeter.getTable('initiativeMeterDice')
-  lastInitiativeDie = initiativeMeterDice[#initiativeMeterDice]
+
   for i = 1, 9 do
     isEmpty = (findHitsInRadius(initiativePositions[i].getPosition(), 0.8, 1.5, 'die') == nil)
     if isEmpty == true then
