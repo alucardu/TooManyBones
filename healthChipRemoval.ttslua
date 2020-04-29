@@ -54,8 +54,9 @@ function removeHealthTokenFromGearlock(healthStack, index, gearlock)
     smooth = false,
     callback_function = function(obj) take_callback(obj) end,
   }
+  print(healthStack)
   for i = 1, index do
-    if healthStack.getQuantity() < 0 then
+    if healthStack.getQuantity() <= 0 then
       healthStack.destruct()
       msg = JSON.decode(gearlock.getGMNotes()).name .. " has been knocked out!"
       rgb = {r=1, g=0, b=0}
@@ -66,7 +67,7 @@ function removeHealthTokenFromGearlock(healthStack, index, gearlock)
       GearlockInitiativeDiePosition = GearlockInitiativeDie.getPosition()
       GearlockInitiativeDiePosition.x = GearlockInitiativeDiePosition.x +5
       GearlockInitiativeDie.setPositionSmooth(GearlockInitiativeDiePosition)
-
+      return
     end
     healthStack.takeObject(takeParams)
   end
