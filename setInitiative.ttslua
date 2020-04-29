@@ -272,8 +272,6 @@ function setBaddies()
     attack = 'melee',
     name = 'Troll Romper'
   }))
-  baddie1 = x.getGMNotes()
-  baddie1 = JSON.decode(baddie1)
 
   x = getObjectFromGUID('a855a5')
   x.setGMNotes(JSON.encode({
@@ -283,8 +281,6 @@ function setBaddies()
     attack = 'melee',
     name = 'Troll Brute'
   }))
-  baddie2 = x.getGMNotes()
-  baddie2 = JSON.decode(baddie2)
 
   x = getObjectFromGUID('fe4785')
   x.setGMNotes(JSON.encode({
@@ -294,8 +290,6 @@ function setBaddies()
     attack = 'melee',
     name = 'Troll YoungUn'
   }))
-  baddie3 = x.getGMNotes()
-  baddie3 = JSON.decode(baddie3)
 
   x = getObjectFromGUID('f84b03')
   x.setGMNotes(JSON.encode({
@@ -305,8 +299,6 @@ function setBaddies()
     attack = 'ranged',
     name = 'Orc Scout'
   }))
-  baddie4 = x.getGMNotes()
-  baddie4 = JSON.decode(baddie4)
 
   x = getObjectFromGUID('3212e1')
   x.setGMNotes(JSON.encode({
@@ -317,8 +309,6 @@ function setBaddies()
     attack = 'ranged',
     name = 'Orc Scout'
   }))
-  baddie5 = x.getGMNotes()
-  baddie5 = JSON.decode(baddie5)
 
   x = getObjectFromGUID('23def6')
   x.setGMNotes(JSON.encode({
@@ -329,8 +319,6 @@ function setBaddies()
     attack = 'ranged',
     name = 'Orc Scout'
   }))
-  baddie6 = x.getGMNotes()
-  baddie6 = JSON.decode(baddie6)
 
   x = getObjectFromGUID('3212e1')
   x.setGMNotes(JSON.encode({
@@ -344,8 +332,6 @@ function setBaddies()
     baddiePoints = 1,
   }))
   x.setDescription("Health is " .. JSON.decode(x.getGMNotes()).health)
-  baddie7 = x.getGMNotes()
-  baddie7 = JSON.decode(baddie7)
 
   x = getObjectFromGUID('a855a5')
   x.setGMNotes(JSON.encode({
@@ -357,8 +343,6 @@ function setBaddies()
     name = 'Orc Scout',
     baddiePoints = 1,
   }))
-  baddie8 = x.getGMNotes()
-  baddie8 = JSON.decode(baddie8)
 
   x = getObjectFromGUID('29ef21')
   x.setGMNotes(JSON.encode({
@@ -373,8 +357,6 @@ function setBaddies()
   }))
 
   x.setDescription("Health is " .. JSON.decode(x.getGMNotes()).health)
-  baddie9 = x.getGMNotes()
-  baddie9 = JSON.decode(baddie9)
 
   x = getObjectFromGUID('28a6bf')
   x.setGMNotes(JSON.encode({
@@ -388,8 +370,6 @@ function setBaddies()
     baddiePoints = 20,
   }))
   x.setDescription("Health is " .. JSON.decode(x.getGMNotes()).health)
-  baddie10 = x.getGMNotes()
-  baddie10 = JSON.decode(baddie10)
 
   x = getObjectFromGUID('0e1b36')
   x.setGMNotes(JSON.encode({
@@ -403,8 +383,6 @@ function setBaddies()
     baddiePoints = 1,
   }))
   x.setDescription("Health is " .. JSON.decode(x.getGMNotes()).health)
-  baddie11 = x.getGMNotes()
-  baddie11 = JSON.decode(baddie11)
 end
 
 function setGearlockInitiativeDice()

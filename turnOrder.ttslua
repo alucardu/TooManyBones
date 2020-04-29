@@ -242,22 +242,14 @@ function endTurn()
       end
     end
   end
-
-  -- for i = 1, activePlayer do
-  --   UI.setAttribute('initiative-baddie-' .. i, "color", "grey")
-  --   UI.setAttribute('initiative-gearlock-' .. i, "color", "grey")
-  --   UI.setAttribute(endTurnButtons[i], "active", false)
-  -- end
-  -- activePlayer = activePlayer + 1
   activePanels = 0
 end
 
 function nextRound()
   checkEmptyInitiativeMeterSpots()
   battleQueue = getObjectFromGUID('f45442')
-  --Wait for checkEmptyInitiativeMeterSpots to be finished
 
-  moveWatch = function() return lastInitiativeDie.isSmoothMoving() end
+  moveWatch = function() return not lastInitiativeDie.isSmoothMoving() end
   Wait.condition(function() battleQueue.call('checkForEmptyLanes') end, moveWatch)
 
   activePlayer = 1
