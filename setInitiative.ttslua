@@ -407,13 +407,12 @@ function setGearlockInitiativeDiceValues()
 end
 
 initiativeDice = {}
-self.setPosition({10, -1, 1.7})
 setInitiativeBtn = {
   click_function = 'setBaddieInitiativeDieValue',
   function_owner = self,
-  label = 'Initialize initiative meter',
+  label = 'Initialize combat',
   position = {2, 2, 2.5},
-  width = 2800,
+  width = 2000,
   height = 500,
   font_size = 240,
   index = 0
