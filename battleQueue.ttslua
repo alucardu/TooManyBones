@@ -4,7 +4,6 @@ function onLoad()
   setLaneObjects()
   setBaddieQueue()
   setBattleMatPositions()
-  self.createButton(setBtn)
 end
 
 full = false
@@ -331,17 +330,6 @@ function setBattleMatPositions()
     }
   }
 end
-
-setBtn = {
-  click_function = 'checkForEmptyLanes',
-  function_owner = self,
-  label = 'do stuff',
-  position = {2, 2, 2.5},
-  width = 2800,
-  height = 500,
-  font_size = 240,
-  index = 0
-}
 
 health_chip = [[{
   "Autoraise": true,
