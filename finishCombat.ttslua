@@ -1,0 +1,121 @@
+function finishedCombat()
+  setPointStacks()
+  checkBattleMat()
+  resetInitiativeTracker()
+end
+
+function setPointStacks()
+  onePointStack = getObjectFromGUID('d5edea')
+  fivePointStack = getObjectFromGUID('f75579')
+  twentyPointStack = getObjectFromGUID('12b695')
+end
+
+function resetInitiativeTracker()
+  setIninitiativeTracker = getObjectFromGUID('0dc670')
+  setIninitiativeTracker.call('initializeInitiativeTracker')
+  setIninitiativeTracker.setVar('activePlayer', 1)
+  setIninitiativeTracker.setVar('nextActivationPanel', 1)
+  setIninitiativeTracker.setVar('activePanels', 0)
+  setIninitiativeTracker.setVar('round', 1)
+  roundDie = getObjectFromGUID('95be0e')
+  roundDie.setValue(1)
+end
+
+function checkBattleMat()
+  battleMat = getObjectFromGUID('a11a9a')
+  battleMatObjects = battleMat.getObjects()
+  posY = 0
+  if #battleMatObjects > 0 then
+    for i, battleMatObject in ipairs(battleMatObjects) do
+      if battleMatObject ~= nil then
+        baddie = battleMatObject
+        if JSON.decode(baddie.getGMNotes()) ~= nil then
+          if JSON.decode(baddie.getGMNotes()).type == 'baddie' and battleMatObject.getName() ~= 'Baddie Initiative Die'then
+            if baddie.getJoints() ~= nil then
+              baddie.jointTo()
+              baddie.flip()
+              posY = posY + 0.45
+              if JSON.decode(baddie.getGMNotes()).baddiePoints == 1 then
+                findHitsInRadius(onePointStack.getPosition(), 0.8, 1.5, 'die')
+                pos = onePointStack.getPosition()
+                pos.y = pos.y + posY
+                baddie.setPositionSmooth(pos)
+              elseif JSON.decode(baddie.getGMNotes()).baddiePoints == 5 then
+                findHitsInRadius(fivePointStack.getPosition(), 0.8, 1.5, 'die')
+                pos = fivePointStack.getPosition()
+                pos.y = pos.y + posY
+                baddie.setPositionSmooth(pos)
+              elseif JSON.decode(baddie.getGMNotes()).baddiePoints == 20 then
+                findHitsInRadius(twentyPointStack.getPosition(), 0.8, 1.5, 'die')
+                pos = twentyPointStack.getPosition()
+                pos.y = pos.y + posY
+                baddie.setPositionSmooth(pos)
+              end
+            end
+          end
+        end
+
+        if battleMatObject.getName() == 'Lane' then
+          laneToken = battleMatObject
+          laneTokenPosition = JSON.decode(laneToken.getGMNotes()).originalPosition
+          laneToken.setPositionSmooth(laneTokenPosition)
+        end
+
+        if battleMatObject.getName() == 'Health' then
+          healthToken = battleMatObject
+          healthToken.destruct()
+        end
+
+        if battleMatObject.getName() == 'Baddie Initiative Die' then
+          baddieInitiativeDie = battleMatObject
+          baddieInitiativeDie.setValue(1)
+          baddieInitiativeDie.setPositionSmooth(Vector(JSON.decode(baddieInitiativeDie.getGMNotes()).originalPosition))
+        end
+
+        if gearlockNames[battleMatObject.getName()] then
+          battleMatObject.getName()
+          gearlockToken = battleMatObject
+          gearlockToken.setPositionSmooth(Vector(JSON.decode(gearlockToken.getGMNotes()).originalPosition))
+        end
+
+        if gearlockInitiativeDice[battleMatObject.getName()] then
+          gearlockInitiativeDie = battleMatObject
+          gearlockInitiativeDie.setPositionSmooth(JSON.decode(gearlockInitiativeDie.getGMNotes()).originalPosition)
+        end
+
+      end
+    end
+  end
+end
+
+function findHitsInRadius(pos, ypos, size, reason)
+  local radius = (radius or 1)
+  local hitList = Physics.cast({
+    origin       = {x=pos.x, y=11, z=pos.z},
+    direction    = {0,1,0},
+    type         = 3,
+    size         = {size,20,size},
+    max_distance = 0,
+    debug        = false,
+  })
+  pos.y = 1
+  for i, hit in ipairs(hitList) do
+    pos = hit.hit_object.getPosition()
+    pos.y = pos.y + 2
+    hit.hit_object.setPositionSmooth(pos)
+  end
+end
+
+gearlockNames = {
+  Boomer = true, Ghillie = true, Nugget = true, Patches = true, Picket = true, Tantrum = true, Tink = true,
+}
+
+gearlockInitiativeDice = {
+  BoomerInitiativeDie = true,
+  GhillieInitiativeDie = true,
+  NuggetInitiativeDie = true,
+  PatchesInitiativeDie = true,
+  PicketInitiativeDie = true,
+  TantrumInitiativeDie = true,
+  TinkInitiativeDie = true
+}

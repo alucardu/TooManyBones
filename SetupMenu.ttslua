@@ -1,3 +1,21 @@
+Global.setSnapPoints({
+  {
+    position = {-10.0,0.77,-2.01},
+    rotation = {0,0,0},
+    rotation_snap = false
+  },
+  {
+    position = {-10.00,0.77,-6},
+    rotation = {0,0,0},
+    rotation_snap = false
+  },
+  {
+    position = {-10,0.77,-10},
+    rotation = {0,0,0},
+    rotation_snap = false
+  },
+})
+
 shuffleOneBag = {"a9c070"}
 shuffleFiveBag = {"6d9668"}
 shuffleTwentyBag = {"a4a36d"}
@@ -2270,7 +2288,7 @@ function setBoomerChip(playerChip)
   playerChip.setGMNotes(JSON.encode({
     type = 'gearlock',
     name = 'Boomer',
-    position = playerChip.getPosition(),
+    originalPosition = playerChip.getPosition(),
     gearlockInitiativeDie = '85c726'
   }))
   playerChip.setName('Boomer')
@@ -2280,7 +2298,7 @@ function setGhillieChip(playerChip)
   playerChip.setGMNotes(JSON.encode({
     type = 'gearlock',
     name = 'Ghillie',
-    position = playerChip.getPosition(),
+    originalPosition = playerChip.getPosition(),
     gearlockInitiativeDie = 'ef8dcc'
   }))
   playerChip.setName('Ghillie')
@@ -2290,7 +2308,7 @@ function setNuggetChip(playerChip)
   playerChip.setGMNotes(JSON.encode({
     type = 'gearlock',
     name = 'Nugget',
-    position = playerChip.getPosition(),
+    originalPosition = playerChip.getPosition(),
     gearlockInitiativeDie = 'f4f615'
   }))
   playerChip.setName('Nugget')
@@ -2300,7 +2318,7 @@ function setPatchesChip(playerChip)
   playerChip.setGMNotes(JSON.encode({
     type = 'gearlock',
     name = 'Patches',
-    position = playerChip.getPosition(),
+    originalPosition = playerChip.getPosition(),
     gearlockInitiativeDie = '96b1fa'
   }))
   playerChip.setName('Patches')
@@ -2310,7 +2328,7 @@ function setPicketChip(playerChip)
   playerChip.setGMNotes(JSON.encode({
     type = 'gearlock',
     name = 'Picket',
-    position = playerChip.getPosition(),
+    originalPosition = playerChip.getPosition(),
     gearlockInitiativeDie = 'eef847'
   }))
   playerChip.setName('Picket')
@@ -2320,7 +2338,7 @@ function setTantrumChip(playerChip)
   playerChip.setGMNotes(JSON.encode({
     type = 'gearlock',
     name = 'Tantrum',
-    position = playerChip.getPosition(),
+    originalPosition = playerChip.getPosition(),
     gearlockInitiativeDie = '545238'
   }))
   playerChip.setName('Tantrum')
@@ -2330,7 +2348,7 @@ function setTinkChip(playerChip)
   playerChip.setGMNotes(JSON.encode({
     type = 'gearlock',
     name = 'Tink',
-    position = playerChip.getPosition(),
+    originalPosition = playerChip.getPosition(),
     gearlockInitiativeDie = '73e679'
   }))
   playerChip.setName('Tink')
@@ -2372,7 +2390,11 @@ function dealDice()
 			end
 			xOff = xOff - 3
 			zOff = -14.96
-			diceBag.takeObject({position = {xOff, 1.9, zOff}})
+			diceBag.takeObject({
+        position = {xOff, 1.9, zOff},
+        callback_function = function(obj) obj.setName('BoomerInitiativeDie') end
+      })
+
 			diceBag.destruct()
 		elseif playerOneSelected == "Ghillie" then
 			local diceBag = getObjectFromGUID(playerOneDiceBags[2])
@@ -2406,7 +2428,10 @@ function dealDice()
 			end
 			xOff = xOff - 3
 			zOff = -14.96
-			diceBag.takeObject({position = {xOff, 1.9, zOff}})
+      diceBag.takeObject({
+        position = {xOff, 1.9, zOff},
+        callback_function = function(obj) obj.setName('GhillieInitiativeDie') end
+      })
 			diceBag.destruct()
 		elseif playerOneSelected == "Nugget" then
 			local diceBag = getObjectFromGUID(playerOneDiceBags[3])
@@ -2440,7 +2465,10 @@ function dealDice()
 			end
 			xOff = xOff - 3
 			zOff = -14.96
-			diceBag.takeObject({position = {xOff, 1.9, zOff}})
+      diceBag.takeObject({
+        position = {xOff, 1.9, zOff},
+        callback_function = function(obj) obj.setName('NuggetInitiativeDie') end
+      })
 			diceBag.destruct()
 		elseif playerOneSelected == "Patches" then
 			local diceBag = getObjectFromGUID(playerOneDiceBags[4])
@@ -2474,7 +2502,10 @@ function dealDice()
 			end
 			xOff = xOff - 3
 			zOff = -14.96
-			diceBag.takeObject({position = {xOff, 1.9, zOff}})
+      diceBag.takeObject({
+        position = {xOff, 1.9, zOff},
+        callback_function = function(obj) obj.setName('PatchesInitiativeDie') end
+      })
 			diceBag.destruct()
 		elseif playerOneSelected == "Picket" then
 			local diceBag = getObjectFromGUID(playerOneDiceBags[5])
@@ -2508,7 +2539,10 @@ function dealDice()
 			end
 			xOff = xOff - 3
 			zOff = -14.96
-			diceBag.takeObject({position = {xOff, 1.9, zOff}})
+      diceBag.takeObject({
+        position = {xOff, 1.9, zOff},
+        callback_function = function(obj) obj.setName('PicketInitiativeDieInitiativeDie') end
+      })
 			diceBag.destruct()
 		elseif playerOneSelected == "Tantrum" then
 			local diceBag = getObjectFromGUID(playerOneDiceBags[6])
@@ -2542,7 +2576,10 @@ function dealDice()
 			end
 			xOff = xOff - 3
 			zOff = -14.96
-			diceBag.takeObject({position = {xOff, 1.9, zOff}})
+      diceBag.takeObject({
+        position = {xOff, 1.9, zOff},
+        callback_function = function(obj) obj.setName('TantrumInitiativeDie') end
+      })
 			diceBag.destruct()
 		elseif playerOneSelected == "Tink" then
 			local diceBag = getObjectFromGUID(playerOneDiceBags[7])
@@ -2576,7 +2613,10 @@ function dealDice()
 			end
 			xOff = xOff - 3
 			zOff = -14.96
-			diceBag.takeObject({position = {xOff, 1.9, zOff}})
+      diceBag.takeObject({
+        position = {xOff, 1.9, zOff},
+        callback_function = function(obj) obj.setName('TinkInitiativeDie') end
+      })
 			diceBag.destruct()
 		else
 		end
@@ -2617,7 +2657,10 @@ function dealDice()
 			end
 			zOff = -14.96
       xOff = -21.7
-			diceBag.takeObject({position = {xOff, 1.9, zOff}})
+      diceBag.takeObject({
+        position = {xOff, 1.9, zOff},
+        callback_function = function(obj) obj.setName('BoomerInitiativeDie') end
+      })
 			diceBag.destruct()
 		elseif playerTwoSelected == "Ghillie" then
 			local diceBag = getObjectFromGUID(playerTwoDiceBags[2])
@@ -2651,7 +2694,10 @@ function dealDice()
 			end
 			zOff = -14.96
       xOff = -21.7
-			diceBag.takeObject({position = {xOff, 1.9, zOff}})
+      diceBag.takeObject({
+        position = {xOff, 1.9, zOff},
+        callback_function = function(obj) obj.setName('GhillieInitiativeDie') end
+      })
 			diceBag.destruct()
 		elseif playerTwoSelected == "Nugget" then
 			local diceBag = getObjectFromGUID(playerTwoDiceBags[3])
@@ -2685,7 +2731,10 @@ function dealDice()
 			end
 			zOff = -14.96
       xOff = -21.7
-			diceBag.takeObject({position = {xOff, 1.9, zOff}})
+      diceBag.takeObject({
+        position = {xOff, 1.9, zOff},
+        callback_function = function(obj) obj.setName('NuggetInitiativeDie') end
+      })
 			diceBag.destruct()
 		elseif playerTwoSelected == "Patches" then
 			local diceBag = getObjectFromGUID(playerTwoDiceBags[4])
@@ -2719,7 +2768,10 @@ function dealDice()
 			end
 			zOff = -14.96
       xOff = -21.7
-			diceBag.takeObject({position = {xOff, 1.9, zOff}})
+      diceBag.takeObject({
+        position = {xOff, 1.9, zOff},
+        callback_function = function(obj) obj.setName('PatchesInitiativeDie') end
+      })
 			diceBag.destruct()
 		elseif playerTwoSelected == "Picket" then
 			local diceBag = getObjectFromGUID(playerTwoDiceBags[5])
@@ -2753,7 +2805,10 @@ function dealDice()
 			end
 			zOff = -14.96
       xOff = -21.7
-			diceBag.takeObject({position = {xOff, 1.9, zOff}})
+      diceBag.takeObject({
+        position = {xOff, 1.9, zOff},
+        callback_function = function(obj) obj.setName('PicketInitiativeDieInitiativeDie') end
+      })
 			diceBag.destruct()
 		elseif playerTwoSelected == "Tantrum" then
 			local diceBag = getObjectFromGUID(playerTwoDiceBags[6])
@@ -2787,7 +2842,10 @@ function dealDice()
 			end
 			zOff = -14.96
       xOff = -21.7
-			diceBag.takeObject({position = {xOff, 1.9, zOff}})
+      diceBag.takeObject({
+        position = {xOff, 1.9, zOff},
+        callback_function = function(obj) obj.setName('TantrumInitiativeDie') end
+      })
 			diceBag.destruct()
 		elseif playerTwoSelected == "Tink" then
 			local diceBag = getObjectFromGUID(playerTwoDiceBags[7])
@@ -2821,7 +2879,10 @@ function dealDice()
 			end
 			zOff = -14.96
       xOff = -21.7
-			diceBag.takeObject({position = {xOff, 1.9, zOff}})
+      diceBag.takeObject({
+        position = {xOff, 1.9, zOff},
+        callback_function = function(obj) obj.setName('TinkInitiativeDie') end
+      })
 			diceBag.destruct()
 		else
 		end
@@ -2862,7 +2923,10 @@ function dealDice()
 			end
 			xOff = xOff - 3
 			zOff = -14.96
-			diceBag.takeObject({position = {xOff, 1.9, zOff}})
+      diceBag.takeObject({
+        position = {xOff, 1.9, zOff},
+        callback_function = function(obj) obj.setName('BoomerInitiativeDie') end
+      })
 			diceBag.destruct()
 		elseif playerThreeSelected == "Ghillie" then
 			local diceBag = getObjectFromGUID(playerThreeDiceBags[2])
@@ -2896,7 +2960,10 @@ function dealDice()
 			end
 			xOff = xOff - 3
 			zOff = -14.96
-			diceBag.takeObject({position = {xOff, 1.9, zOff}})
+      diceBag.takeObject({
+        position = {xOff, 1.9, zOff},
+        callback_function = function(obj) obj.setName('GhillieInitiativeDie') end
+      })
 			diceBag.destruct()
 		elseif playerThreeSelected == "Nugget" then
 			local diceBag = getObjectFromGUID(playerThreeDiceBags[3])
@@ -2930,7 +2997,10 @@ function dealDice()
 			end
 			xOff = xOff - 3
 			zOff = -14.96
-			diceBag.takeObject({position = {xOff, 1.9, zOff}})
+      diceBag.takeObject({
+        position = {xOff, 1.9, zOff},
+        callback_function = function(obj) obj.setName('NuggetInitiativeDie') end
+      })
 			diceBag.destruct()
 		elseif playerThreeSelected == "Patches" then
 			local diceBag = getObjectFromGUID(playerThreeDiceBags[4])
@@ -2964,7 +3034,10 @@ function dealDice()
 			end
 			xOff = xOff - 3
 			zOff = -14.96
-			diceBag.takeObject({position = {xOff, 1.9, zOff}})
+      diceBag.takeObject({
+        position = {xOff, 1.9, zOff},
+        callback_function = function(obj) obj.setName('PatchesInitiativeDie') end
+      })
 			diceBag.destruct()
 		elseif playerThreeSelected == "Picket" then
 			local diceBag = getObjectFromGUID(playerThreeDiceBags[5])
@@ -2998,7 +3071,10 @@ function dealDice()
 			end
 			xOff = xOff - 3
 			zOff = -14.96
-			diceBag.takeObject({position = {xOff, 1.9, zOff}})
+      diceBag.takeObject({
+        position = {xOff, 1.9, zOff},
+        callback_function = function(obj) obj.setName('PicketInitiativeDieInitiativeDie') end
+      })
 			diceBag.destruct()
 		elseif playerThreeSelected == "Tantrum" then
 			local diceBag = getObjectFromGUID(playerThreeDiceBags[6])
@@ -3032,7 +3108,10 @@ function dealDice()
 			end
 			xOff = xOff - 3
 			zOff = -14.96
-			diceBag.takeObject({position = {xOff, 1.9, zOff}})
+      diceBag.takeObject({
+        position = {xOff, 1.9, zOff},
+        callback_function = function(obj) obj.setName('TantrumInitiativeDie') end
+      })
 			diceBag.destruct()
 		elseif playerThreeSelected == "Tink" then
 			local diceBag = getObjectFromGUID(playerThreeDiceBags[7])
@@ -3066,7 +3145,10 @@ function dealDice()
 			end
 			xOff = xOff - 3
 			zOff = -14.96
-			diceBag.takeObject({position = {xOff, 1.9, zOff}})
+      diceBag.takeObject({
+        position = {xOff, 1.9, zOff},
+        callback_function = function(obj) obj.setName('TinkInitiativeDie') end
+      })
 			diceBag.destruct()
 		else
 		end
@@ -3107,7 +3189,10 @@ function dealDice()
 			end
 			zOff = -14.96
       xOff = 29.35
-			diceBag.takeObject({position = {xOff, 1.9, zOff}})
+      diceBag.takeObject({
+        position = {xOff, 1.9, zOff},
+        callback_function = function(obj) obj.setName('BoomerInitiativeDie') end
+      })
 			diceBag.destruct()
 		elseif playerFourSelected == "Ghillie" then
 			local diceBag = getObjectFromGUID(playerFourDiceBags[2])
@@ -3141,7 +3226,10 @@ function dealDice()
 			end
 			zOff = -14.96
       xOff = 29.35
-			diceBag.takeObject({position = {xOff, 1.9, zOff}})
+      diceBag.takeObject({
+        position = {xOff, 1.9, zOff},
+        callback_function = function(obj) obj.setName('GhillieInitiativeDie') end
+      })
 			diceBag.destruct()
 		elseif playerFourSelected == "Nugget" then
 			local diceBag = getObjectFromGUID(playerFourDiceBags[3])
@@ -3175,7 +3263,10 @@ function dealDice()
 			end
 			zOff = -14.96
       xOff = 29.35
-			diceBag.takeObject({position = {xOff, 1.9, zOff}})
+      diceBag.takeObject({
+        position = {xOff, 1.9, zOff},
+        callback_function = function(obj) obj.setName('NuggetInitiativeDie') end
+      })
 			diceBag.destruct()
 		elseif playerFourSelected == "Patches" then
 			local diceBag = getObjectFromGUID(playerFourDiceBags[4])
@@ -3209,7 +3300,10 @@ function dealDice()
 			end
 			zOff = -14.96
       xOff = 29.35
-			diceBag.takeObject({position = {xOff, 1.9, zOff}})
+      diceBag.takeObject({
+        position = {xOff, 1.9, zOff},
+        callback_function = function(obj) obj.setName('PatchesInitiativeDie') end
+      })
 			diceBag.destruct()
 		elseif playerFourSelected == "Picket" then
 			local diceBag = getObjectFromGUID(playerFourDiceBags[5])
@@ -3243,7 +3337,10 @@ function dealDice()
 			end
 			zOff = -14.96
       xOff = 29.35
-			diceBag.takeObject({position = {xOff, 1.9, zOff}})
+      diceBag.takeObject({
+        position = {xOff, 1.9, zOff},
+        callback_function = function(obj) obj.setName('PicketInitiativeDieInitiativeDie') end
+      })
 			diceBag.destruct()
 		elseif playerFourSelected == "Tantrum" then
 			local diceBag = getObjectFromGUID(playerFourDiceBags[6])
@@ -3277,7 +3374,10 @@ function dealDice()
 			end
 			zOff = -14.96
       xOff = 29.35
-			diceBag.takeObject({position = {xOff, 1.9, zOff}})
+      diceBag.takeObject({
+        position = {xOff, 1.9, zOff},
+        callback_function = function(obj) obj.setName('TantrumInitiativeDie') end
+      })
 			diceBag.destruct()
 		elseif playerFourSelected == "Tink" then
 			local diceBag = getObjectFromGUID(playerFourDiceBags[7])
@@ -3311,7 +3411,10 @@ function dealDice()
 			end
 			zOff = -14.96
       xOff = 29.35
-			diceBag.takeObject({position = {xOff, 1.9, zOff}})
+      diceBag.takeObject({
+        position = {xOff, 1.9, zOff},
+        callback_function = function(obj) obj.setName('TinkInitiativeDie') end
+      })
 			diceBag.destruct()
 		else
 		end
