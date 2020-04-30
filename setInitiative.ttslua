@@ -430,7 +430,8 @@ function setAlliesGmNotes()
     ally.setGMNotes(JSON.encode({
       originalPosition = Vector(ally.getPosition()),
       type = 'ally',
-      name = allieNames[ally.getGUID()]
+      name = allieNames[ally.getGUID()],
+      initiativeDie = allesInitiativeDice[ally.getGUID()]
     }))
   end
 end
@@ -443,6 +444,15 @@ allieNames = {
   ['3fc165'] = 'Talon Companion',
   ['f5ae23'] = 'Growls Companion',
   ['d3c291'] = 'Lil Yeti Companion',
+}
+
+allesInitiativeDice = {
+  ['5c955a'] = 'a4b93c',
+  ['883f9d'] = 'c8bb38',
+  ['c3a89c'] = '1216bb',
+  ['3fc165'] = 'e3e544',
+  ['f5ae23'] = '503b13',
+  ['d3c291'] = '0c3d69',
 }
 
 function setGearlockInitiativeDiceValues()
