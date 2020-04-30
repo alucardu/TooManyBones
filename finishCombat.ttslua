@@ -1,4 +1,6 @@
 function finishedCombat()
+  setReturnDiceZones()
+  setSelectedPlayers()
   setPointStacks()
   checkBattleMat()
   resetInitiativeTracker()
@@ -56,8 +58,17 @@ function checkBattleMat()
           end
 
           if JSON.decode(battleMatObject.getGMNotes()).type == 'ally' then
-            ally = battleMatObject
-            ally.setPositionSmooth(JSON.decode(battleMatObject.getGMNotes()).originalPosition)
+
+            for i, playerSelected in ipairs(selectedPlayers) do
+              if playerSelected == JSON.decode(battleMatObject.getGMNotes()).owner then
+                ally = battleMatObject
+                pos = returnDiceZones[i].getPosition()
+                ally.setPositionSmooth(pos)
+                pos.x = pos.x - 1.5
+                allyDie = getObjectFromGUID(JSON.decode(battleMatObject.getGMNotes()).initiativeDie)
+                allyDie.setPositionSmooth(pos)
+              end
+            end
           end
 
         end
@@ -93,6 +104,24 @@ function checkBattleMat()
       end
     end
   end
+end
+
+function setSelectedPlayers()
+  selectedPlayers = {
+    playerOneSelected,
+    playerTwoSelected,
+    playerThreeSelected,
+    playerFourSelected
+  }
+end
+
+function setReturnDiceZones()
+  returnDiceZones = {
+    getObjectFromGUID('94620f'),
+    getObjectFromGUID('2e35e8'),
+    getObjectFromGUID('fab9a6'),
+    getObjectFromGUID('f036bb')
+  }
 end
 
 function findHitsInRadius(pos, ypos, size, reason)

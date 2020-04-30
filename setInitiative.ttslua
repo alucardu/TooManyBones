@@ -431,7 +431,8 @@ function setAlliesGmNotes()
       originalPosition = Vector(ally.getPosition()),
       type = 'ally',
       name = allieNames[ally.getGUID()],
-      initiativeDie = allesInitiativeDice[ally.getGUID()]
+      initiativeDie = allesInitiativeDice[ally.getGUID()],
+      owner = allyOwner[ally.getGUID()],
     }))
   end
 end
@@ -453,6 +454,15 @@ allesInitiativeDice = {
   ['3fc165'] = 'e3e544',
   ['f5ae23'] = '503b13',
   ['d3c291'] = '0c3d69',
+}
+
+allyOwner = {
+  ['5c955a'] = 'Tink',
+  ['883f9d'] = 'Tink',
+  ['c3a89c'] = 'Tink',
+  ['3fc165'] = 'Ghillie',
+  ['f5ae23'] = 'Ghillie',
+  ['d3c291'] = 'Ghillie',
 }
 
 function setGearlockInitiativeDiceValues()
