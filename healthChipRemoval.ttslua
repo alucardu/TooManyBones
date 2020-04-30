@@ -1,5 +1,6 @@
 function onScriptingButtonDown(index, color)
-
+  setSelectedPlayers()
+  setReturnDiceZones()
   laneToken = nil
   baddie = nil
   gearlock = nil
@@ -105,7 +106,17 @@ function removeHealthTokenFromAlly(healthStack, index, ally)
     msg = "Removed " .. index .." health from " .. JSON.decode(ally.getGMNotes()).name .. " and " .. JSON.decode(ally.getGMNotes()).name .. " Has been defeated!"
     rgb = {r=0, g=1, b=0}
     broadcastToAll(msg, rgb)
-    ally.setPositionSmooth(JSON.decode(ally.getGMNotes()).originalPosition)
+    for i, playerSelected in ipairs(selectedPlayers) do
+      print(playerSelected, JSON.decode(ally.getGMNotes()).owner)
+      if playerSelected == JSON.decode(ally.getGMNotes()).owner then
+        ally = ally
+        pos = returnDiceZones[i].getPosition()
+        ally.setPositionSmooth(pos)
+        pos.x = pos.x - 1.5
+        allyDie = getObjectFromGUID(JSON.decode(ally.getGMNotes()).initiativeDie)
+        allyDie.setPositionSmooth(pos)
+      end
+    end
   end
   ally.setDescription("Health is " .. (healthStack.getQuantity()))
 end
@@ -258,4 +269,23 @@ function findHitsInRadius(pos, ypos, size, reason)
   })
   pos.y = 1
   return hitList
+end
+
+function setSelectedPlayers()
+  selectedPlayers = {
+    playerOneSelected,
+    playerTwoSelected,
+    playerThreeSelected,
+    playerFourSelected
+  }
+  print(#selectedPlayers)
+end
+
+function setReturnDiceZones()
+  returnDiceZones = {
+    getObjectFromGUID('94620f'),
+    getObjectFromGUID('2e35e8'),
+    getObjectFromGUID('fab9a6'),
+    getObjectFromGUID('f036bb')
+  }
 end
