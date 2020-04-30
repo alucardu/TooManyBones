@@ -28,9 +28,10 @@ function checkBattleMat()
   if #battleMatObjects > 0 then
     for i, battleMatObject in ipairs(battleMatObjects) do
       if battleMatObject ~= nil then
-        baddie = battleMatObject
-        if JSON.decode(baddie.getGMNotes()) ~= nil then
-          if JSON.decode(baddie.getGMNotes()).type == 'baddie' and battleMatObject.getName() ~= 'Baddie Initiative Die'then
+
+        if JSON.decode(battleMatObject.getGMNotes()) ~= nil then
+          if JSON.decode(battleMatObject.getGMNotes()).type == 'baddie' and battleMatObject.getName() ~= 'Baddie Initiative Die'then
+            baddie = battleMatObject
             if baddie.getJoints() ~= nil then
               baddie.jointTo()
               baddie.flip()
@@ -53,6 +54,12 @@ function checkBattleMat()
               end
             end
           end
+
+          if JSON.decode(battleMatObject.getGMNotes()).type == 'ally' then
+            ally = battleMatObject
+            ally.setPositionSmooth(JSON.decode(battleMatObject.getGMNotes()).originalPosition)
+          end
+
         end
 
         if battleMatObject.getName() == 'Lane' then
