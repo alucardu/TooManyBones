@@ -14,6 +14,7 @@ end
 local runSetGearlockInitiativeDieValue = 0
 function setBaddieInitiativeDieValue()
   self.removeButton(0)
+  self.createButton(setFinishCombatBtn)
   for i, baddieQueuePos in ipairs(baddieQueuesPosition) do
     local baddie = getObjectFromGUID(findHitsInRadius(baddieQueuePos, 1.2, 2, 'guid'))
     if baddie ~= nill then
@@ -32,6 +33,9 @@ end
 function setGearlockInitiativeDieValue()
   if runSetGearlockInitiativeDieValue <= 0 then
     for i, gearlockInitiativeDie in ipairs(availableGearlockInititiativeDice) do
+      gearlockInitiativeDie.setGMNotes(JSON.encode({
+        originalPosition = gearlockInitiativeDie.getPosition()
+      }))
       gearlockInitiativeDie.roll()
       local addGearlockInitiativeDieToTable = function() addGearlockInitiativeDieToTable(gearlockInitiativeDie, #availableGearlockInititiativeDice) end
       rollWatch = function() return gearlockInitiativeDie.resting end
@@ -50,11 +54,11 @@ function addGearlockInitiativeDieToTable(gearlockInitiativeDie, numberOfGearlock
     if gearlockInitiativeDieGuid == gearlockInitiativeDie.getGUID() then
       gearlockInitiativeDie.setValue(gearlockInitiativeDie.getValue())
       gearlockInitiativeDie.setGMNotes(JSON.encode({
+        originalPosition = Vector(JSON.decode(gearlockInitiativeDie.getGMNotes()).originalPosition),
         value = JSON.decode(availableGearlockInititiativeDie).gearlockDie[gearlockInitiativeDie.getValue()],
         type = JSON.decode(availableGearlockInititiativeDie).type,
         name = JSON.decode(availableGearlockInititiativeDie).name
       }))
-      print(JSON.decode(availableGearlockInititiativeDie).name .. ' has rolled ' .. gearlockInitiativeDie.getValue() .. ' and initiative has been set to ' .. JSON.decode(availableGearlockInititiativeDie).gearlockDie[gearlockInitiativeDie.getValue()])
       table.insert(initiativeDice, gearlockInitiativeDie)
     end
   end
@@ -70,7 +74,6 @@ function addBaddieInitiativeDieToTable()
     baddie = findHitsInRadius(lane.getPosition(), 1.2, 2, 'baddie')
     table.insert(baddieQueue, baddie)
     if baddie ~= nill then
-      print(JSON.decode(baddie.getGMNotes()).initiative, JSON.decode(baddie.getGMNotes()).type, JSON.decode(baddie.getGMNotes()).name)
       baddieInitiativeDice[i].setValue(JSON.decode(baddie.getGMNotes()).initiative)
       baddieInitiativeDice[i].setGMNotes(JSON.encode({
         originalPosition = Vector(JSON.decode(baddieInitiativeDice[i].getGMNotes()).originalPosition),
@@ -121,6 +124,10 @@ function addDieFromInitiativeMeter()
         table.insert(initiativeMeterDice, intitiativeDie)
       end
       if i == 9 then
+        runAddBaddieInitiativeDieToTable = 0
+        initiativeDice = {}
+        baddieQueue = {}
+        setIninitiativeTracker.setVar('setInitiativeTracker', 0)
         setIninitiativeTracker.call('updateInitiativeMeter', initiativeMeterDice)
       end
     end
@@ -279,6 +286,13 @@ function setBaddie(type, guid, initiative, health, attack, name, baddiePoints)
   x.setDescription("Health is " .. JSON.decode(x.getGMNotes()).health)
 end
 
+function finishCombat()
+  self.removeButton(0)
+  self.createButton(setInitiativeBtn)
+  finishCombatFn = getObjectFromGUID('f70e4e')
+  finishCombatFn.call("finishedCombat")
+end
+
 function setBaddies()
   -- 1 point baddies
   setBaddie('baddie', '3212e1', 5, 3, 'ranged', 'Goblin Bomber', 1)
@@ -411,6 +425,17 @@ setInitiativeBtn = {
   click_function = 'setBaddieInitiativeDieValue',
   function_owner = self,
   label = 'Initialize combat',
+  position = {2, 2, 2.5},
+  width = 2000,
+  height = 500,
+  font_size = 240,
+  index = 0
+}
+
+setFinishCombatBtn = {
+  click_function = 'finishCombat',
+  function_owner = self,
+  label = 'Finish combat',
   position = {2, 2, 2.5},
   width = 2000,
   height = 500,

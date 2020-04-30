@@ -46,7 +46,7 @@ end
 
 runOnce = 0
 time = -1
-function moveToBattleMat(emptyLaneToken, baddie, baddieQueue, emptyLaneToken)
+function moveToBattleMat(emptyLaneToken, baddie, baddieQueue, emptyLaneTokens)
   runOnce = runOnce + 1
   if runOnce == #baddieQueue then
     for i, baddie in ipairs(baddieQueue) do
