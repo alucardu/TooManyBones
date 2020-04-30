@@ -2030,6 +2030,19 @@ function gameStart()
   setInitiativeObject.setVar('playerTwoSelected', playerTwoSelected)
   setInitiativeObject.setVar('playerThreeSelected', playerThreeSelected)
   setInitiativeObject.setVar('playerFourSelected', playerFourSelected)
+
+  finishCombatFn = getObjectFromGUID('f70e4e')
+  finishCombatFn.setVar('playerOneSelected', playerOneSelected)
+  finishCombatFn.setVar('playerTwoSelected', playerTwoSelected)
+  finishCombatFn.setVar('playerThreeSelected', playerThreeSelected)
+  finishCombatFn.setVar('playerFourSelected', playerFourSelected)
+
+  healthChipRemovalFn = getObjectFromGUID('b3e969')
+  healthChipRemovalFn.setVar('playerOneSelected', playerOneSelected)
+  healthChipRemovalFn.setVar('playerTwoSelected', playerTwoSelected)
+  healthChipRemovalFn.setVar('playerThreeSelected', playerThreeSelected)
+  healthChipRemovalFn.setVar('playerFourSelected', playerFourSelected)
+
     if tyrantSelected == nil then
         broadcastToAll ( "Cannot Start, No Tyrant Selected", {1, 0.5, 0.5} )
     elseif (playerOneSelected == nil) and (playerTwoSelected == nil) and (playerThreeSelected == nil) and (playerFourSelected == nil) then

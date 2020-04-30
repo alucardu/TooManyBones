@@ -1,4 +1,5 @@
 function onload()
+  setAllies()
   setBaddieInitiativeDice()
   setGearlockInitiativeDiceValues()
   setGearlockInitiativeDice()
@@ -409,6 +410,60 @@ function setGearlockInitiativeDice()
     })
   }
 end
+
+function setAllies()
+  allies = {
+    getObjectFromGUID('305ba5'),
+    getObjectFromGUID('5c955a'),
+    getObjectFromGUID('883f9d'),
+    getObjectFromGUID('c3a89c'),
+    getObjectFromGUID('3fc165'),
+    getObjectFromGUID('f5ae23'),
+    getObjectFromGUID('d3c291')
+  }
+  setAlliesGmNotes()
+end
+
+
+function setAlliesGmNotes()
+  for i, ally in ipairs(allies) do
+    ally.setGMNotes(JSON.encode({
+      originalPosition = Vector(ally.getPosition()),
+      type = 'ally',
+      name = allieNames[ally.getGUID()],
+      initiativeDie = allesInitiativeDice[ally.getGUID()],
+      owner = allyOwner[ally.getGUID()],
+    }))
+  end
+end
+
+allieNames = {
+  ['305ba5'] = 'Nightshade',
+  ['5c955a'] = 'Grumble Spiderbot 1.0',
+  ['883f9d'] = 'Gatling Spiderbot 2.0',
+  ['c3a89c'] = 'Jericho Spiderbot 3.0',
+  ['3fc165'] = 'Talon Companion',
+  ['f5ae23'] = 'Growls Companion',
+  ['d3c291'] = 'Lil Yeti Companion',
+}
+
+allesInitiativeDice = {
+  ['5c955a'] = 'a4b93c',
+  ['883f9d'] = 'c8bb38',
+  ['c3a89c'] = '1216bb',
+  ['3fc165'] = 'e3e544',
+  ['f5ae23'] = '503b13',
+  ['d3c291'] = '0c3d69',
+}
+
+allyOwner = {
+  ['5c955a'] = 'Tink',
+  ['883f9d'] = 'Tink',
+  ['c3a89c'] = 'Tink',
+  ['3fc165'] = 'Ghillie',
+  ['f5ae23'] = 'Ghillie',
+  ['d3c291'] = 'Ghillie',
+}
 
 function setGearlockInitiativeDiceValues()
   BoomerInitiativeDie = {2,3,4,4,5,6}

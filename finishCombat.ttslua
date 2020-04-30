@@ -1,4 +1,6 @@
 function finishedCombat()
+  setReturnDiceZones()
+  setSelectedPlayers()
   setPointStacks()
   checkBattleMat()
   resetInitiativeTracker()
@@ -28,9 +30,10 @@ function checkBattleMat()
   if #battleMatObjects > 0 then
     for i, battleMatObject in ipairs(battleMatObjects) do
       if battleMatObject ~= nil then
-        baddie = battleMatObject
-        if JSON.decode(baddie.getGMNotes()) ~= nil then
-          if JSON.decode(baddie.getGMNotes()).type == 'baddie' and battleMatObject.getName() ~= 'Baddie Initiative Die'then
+
+        if JSON.decode(battleMatObject.getGMNotes()) ~= nil then
+          if JSON.decode(battleMatObject.getGMNotes()).type == 'baddie' and battleMatObject.getName() ~= 'Baddie Initiative Die'then
+            baddie = battleMatObject
             if baddie.getJoints() ~= nil then
               baddie.jointTo()
               baddie.flip()
@@ -53,6 +56,21 @@ function checkBattleMat()
               end
             end
           end
+
+          if JSON.decode(battleMatObject.getGMNotes()).type == 'ally' then
+
+            for i, playerSelected in ipairs(selectedPlayers) do
+              if playerSelected == JSON.decode(battleMatObject.getGMNotes()).owner then
+                ally = battleMatObject
+                pos = returnDiceZones[i].getPosition()
+                ally.setPositionSmooth(pos)
+                pos.x = pos.x - 1.5
+                allyDie = getObjectFromGUID(JSON.decode(battleMatObject.getGMNotes()).initiativeDie)
+                allyDie.setPositionSmooth(pos)
+              end
+            end
+          end
+
         end
 
         if battleMatObject.getName() == 'Lane' then
@@ -86,6 +104,24 @@ function checkBattleMat()
       end
     end
   end
+end
+
+function setSelectedPlayers()
+  selectedPlayers = {
+    playerOneSelected,
+    playerTwoSelected,
+    playerThreeSelected,
+    playerFourSelected
+  }
+end
+
+function setReturnDiceZones()
+  returnDiceZones = {
+    getObjectFromGUID('94620f'),
+    getObjectFromGUID('2e35e8'),
+    getObjectFromGUID('fab9a6'),
+    getObjectFromGUID('f036bb')
+  }
 end
 
 function findHitsInRadius(pos, ypos, size, reason)
