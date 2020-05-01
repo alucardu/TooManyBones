@@ -5,8 +5,12 @@ end
 
 function setDexterityCounterColors()
   setSelectedPlayers()
-  for i, selectedPlayer in ipairs(selectedPlayers) do
-    dexterityCounters[i].setColorTint(gearlockNamesCounters[selectedPlayer])
+  for i, dexterityCounter in ipairs(dexterityCounters) do
+    if selectedPlayers[i] ~= nil then
+      dexterityCounters[i].setColorTint(gearlockNamesCounters[selectedPlayers[i]])
+    elseif selectedPlayers[i] == nil then
+      dexterityCounters[i].destruct()
+    end
   end
 end
 
