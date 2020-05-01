@@ -1,3 +1,24 @@
+function onLoad()
+  setGearlockNamesCounters()
+  setDexterityCounters()
+end
+
+function setDexterityCounterColors()
+  setSelectedPlayers()
+  for i, selectedPlayer in ipairs(selectedPlayers) do
+    dexterityCounters[i].setColorTint(gearlockNamesCounters[selectedPlayer])
+  end
+end
+
+function setDexterityCounters()
+  dexterityCounters = {
+    getObjectFromGUID('15fbf8'),
+    getObjectFromGUID('0f920f'),
+    getObjectFromGUID('a21a84'),
+    getObjectFromGUID('b4a0ff'),
+  }
+end
+
 function finishedCombat()
   setReturnDiceZones()
   setSelectedPlayers()
@@ -121,6 +142,18 @@ function setReturnDiceZones()
     getObjectFromGUID('2e35e8'),
     getObjectFromGUID('fab9a6'),
     getObjectFromGUID('f036bb')
+  }
+end
+
+function setGearlockNamesCounters()
+  gearlockNamesCounters = {
+    Boomer = 'Yellow',
+    Ghillie = 'Green',
+    Nugget = 'Purple',
+    Patches = 'Red',
+    Picket = 'Blue',
+    Tantrum = 'Grey',
+    Tink = 'Orange',
   }
 end
 
