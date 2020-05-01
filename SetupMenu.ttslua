@@ -2043,6 +2043,8 @@ function gameStart()
   healthChipRemovalFn.setVar('playerThreeSelected', playerThreeSelected)
   healthChipRemovalFn.setVar('playerFourSelected', playerFourSelected)
 
+  finishCombatFn.call('setDexterityCounterColors')
+
     if tyrantSelected == nil then
         broadcastToAll ( "Cannot Start, No Tyrant Selected", {1, 0.5, 0.5} )
     elseif (playerOneSelected == nil) and (playerTwoSelected == nil) and (playerThreeSelected == nil) and (playerFourSelected == nil) then

@@ -9,6 +9,7 @@ function onLoad()
   setInitiativeGearlockTypeMeterPanels()
   initializeInitiativeTracker()
   setEndTurnButtons()
+  setDexterityCounters()
 end
 
 function initializeInitiativeTracker()
@@ -181,11 +182,18 @@ function startCombat(player, set)
   end
 end
 
+function resetDexterityCounter()
+  for i, dexterityCounter in ipairs(dexterityCounters) do
+    dexterityCounter.setValue(0)
+  end
+end
+
 activePlayer = 1
 nextActivationPanel = 1
 activePanels = 0
 round = 1
 function endTurn()
+  resetDexterityCounter()
   initiativeMeterDice = setIninitiativeMeter.getTable('initiativeMeterDice')
   for i = 1, 8 do
     if UI.getAttribute(initiativeMeterPanels[i], 'active') == 'True' then
@@ -506,4 +514,13 @@ function findHitsInRadius(pos, ypos, size, reason)
       return hit.hit_object
     end
   end
+end
+
+function setDexterityCounters()
+  dexterityCounters = {
+    getObjectFromGUID('15fbf8'),
+    getObjectFromGUID('0f920f'),
+    getObjectFromGUID('a21a84'),
+    getObjectFromGUID('b4a0ff'),
+  }
 end
