@@ -185,7 +185,6 @@ end
 function resetDexterityCounter()
   for i, dexterityCounter in ipairs(dexterityCounters) do
     dexterityCounter.call('reset_val')
-
   end
 end
 
