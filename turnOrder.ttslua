@@ -184,7 +184,7 @@ end
 
 function resetDexterityCounter()
   for i, dexterityCounter in ipairs(dexterityCounters) do
-    dexterityCounter.setValue(0)
+    dexterityCounter.call('reset_val')
   end
 end
 
@@ -518,9 +518,9 @@ end
 
 function setDexterityCounters()
   dexterityCounters = {
-    getObjectFromGUID('15fbf8'),
-    getObjectFromGUID('0f920f'),
-    getObjectFromGUID('a21a84'),
-    getObjectFromGUID('b4a0ff'),
+    getObjectFromGUID('85c4c6'),
+    getObjectFromGUID('d92682'),
+    getObjectFromGUID('97c24c'),
+    getObjectFromGUID('e47d0d'),
   }
 end

@@ -5,17 +5,22 @@ end
 
 function setDexterityCounterColors()
   setSelectedPlayers()
-  for i, selectedPlayer in ipairs(selectedPlayers) do
-    dexterityCounters[i].setColorTint(gearlockNamesCounters[selectedPlayer])
+  for i, dexterityCounter in ipairs(dexterityCounters) do
+    if selectedPlayers[i] ~= nil then
+      dexterityCounters[i].setInvisibleTo({})
+      dexterityCounters[i].setColorTint(gearlockNamesCounters[selectedPlayers[i]])
+    elseif selectedPlayers[i] == nil then
+      dexterityCounters[i].destruct()
+    end
   end
 end
 
 function setDexterityCounters()
   dexterityCounters = {
-    getObjectFromGUID('15fbf8'),
-    getObjectFromGUID('0f920f'),
-    getObjectFromGUID('a21a84'),
-    getObjectFromGUID('b4a0ff'),
+    getObjectFromGUID('85c4c6'),
+    getObjectFromGUID('d92682'),
+    getObjectFromGUID('97c24c'),
+    getObjectFromGUID('e47d0d'),
   }
 end
 

@@ -2026,25 +2026,6 @@ function setupSpecial()
 end
 
 function gameStart()
-  setInitiativeObject.setVar('playerOneSelected', playerOneSelected)
-  setInitiativeObject.setVar('playerTwoSelected', playerTwoSelected)
-  setInitiativeObject.setVar('playerThreeSelected', playerThreeSelected)
-  setInitiativeObject.setVar('playerFourSelected', playerFourSelected)
-
-  finishCombatFn = getObjectFromGUID('f70e4e')
-  finishCombatFn.setVar('playerOneSelected', playerOneSelected)
-  finishCombatFn.setVar('playerTwoSelected', playerTwoSelected)
-  finishCombatFn.setVar('playerThreeSelected', playerThreeSelected)
-  finishCombatFn.setVar('playerFourSelected', playerFourSelected)
-
-  healthChipRemovalFn = getObjectFromGUID('b3e969')
-  healthChipRemovalFn.setVar('playerOneSelected', playerOneSelected)
-  healthChipRemovalFn.setVar('playerTwoSelected', playerTwoSelected)
-  healthChipRemovalFn.setVar('playerThreeSelected', playerThreeSelected)
-  healthChipRemovalFn.setVar('playerFourSelected', playerFourSelected)
-
-  finishCombatFn.call('setDexterityCounterColors')
-
     if tyrantSelected == nil then
         broadcastToAll ( "Cannot Start, No Tyrant Selected", {1, 0.5, 0.5} )
     elseif (playerOneSelected == nil) and (playerTwoSelected == nil) and (playerThreeSelected == nil) and (playerFourSelected == nil) then
@@ -3440,11 +3421,29 @@ function dealDice()
 end
 
 function finalClear()
-        local destroyZone = getObjectFromGUID(clearZone[1])
+  local destroyZone = getObjectFromGUID(clearZone[1])
 	local clearObjects = destroyZone.getObjects()
 	for i, object in ipairs(clearObjects) do
 		destroyObject(object)
 	end
+  setInitiativeObject.setVar('playerOneSelected', playerOneSelected)
+  setInitiativeObject.setVar('playerTwoSelected', playerTwoSelected)
+  setInitiativeObject.setVar('playerThreeSelected', playerThreeSelected)
+  setInitiativeObject.setVar('playerFourSelected', playerFourSelected)
+
+  finishCombatFn = getObjectFromGUID('f70e4e')
+  finishCombatFn.setVar('playerOneSelected', playerOneSelected)
+  finishCombatFn.setVar('playerTwoSelected', playerTwoSelected)
+  finishCombatFn.setVar('playerThreeSelected', playerThreeSelected)
+  finishCombatFn.setVar('playerFourSelected', playerFourSelected)
+
+  healthChipRemovalFn = getObjectFromGUID('b3e969')
+  healthChipRemovalFn.setVar('playerOneSelected', playerOneSelected)
+  healthChipRemovalFn.setVar('playerTwoSelected', playerTwoSelected)
+  healthChipRemovalFn.setVar('playerThreeSelected', playerThreeSelected)
+  healthChipRemovalFn.setVar('playerFourSelected', playerFourSelected)
+
+  finishCombatFn.call('setDexterityCounterColors')
 end
 
 initiativeDiceZones = {
