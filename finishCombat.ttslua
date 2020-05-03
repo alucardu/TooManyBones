@@ -50,14 +50,30 @@ function resetInitiativeTracker()
   roundDie.setValue(1)
 end
 
+local function shouldBeFirst(el)
+  return el.hit_object.getName() ~= 'Health'
+end
+
+local function swapIfNeeded(battleMatObjects)
+  if shouldBeFirst(battleMatObjects[1]) then
+    return
+  else
+    battleMatObjects[1], battleMatObjects[2] = battleMatObjects[2], battleMatObjects[1]
+  end
+end
+
 gearlock = false
 function checkBattleMat()
   checkBattleDice()
   posY = 0
   for b, battleMatZone in ipairs(battleMatZones) do
-
     battleMatObjects = findHitsInRadius(battleMatZone.getPosition(), 0.8, 1.5)
     if battleMatObjects ~= nil then
+
+      if battleMatObjects[2] ~=  nil and battleMatObjects[1].hit_object ~= nil then
+        swapIfNeeded(battleMatObjects)
+      end
+
       for i, battleMatObject in ipairs(battleMatObjects) do
 
         battleMatObject = battleMatObject.hit_object
@@ -111,17 +127,14 @@ function checkBattleMat()
           if gearlockNames[battleMatObject.getName()] then
             gearlock = true
             gearlockToken = battleMatObject
-
           end
+
           if gearlock == true then
             moveGearlockHealth(battleMatObject, b)
             break
           end
 
-          if battleMatObject.getName() == 'Health' and gearlock == false then
-            healthToken = battleMatObject
-            healthToken.destruct()
-          end
+          removeHealthTokens(battleMatObject)
 
         end
       end
@@ -129,17 +142,31 @@ function checkBattleMat()
   end
 end
 
-function moveGearlockHealth(battleMatObject, b)
-  healthToken = findHitsInRadius(battleMatZones[b].getPosition(), 0.8, 1.5)
-  if healthToken[2].hit_object.getName() == 'Health' then
-    healthToken[2].hit_object.setPositionSmooth(Vector(JSON.decode(battleMatObject.getGMNotes()).originalPosition))
+function removeHealthTokens(battleMatObject)
+  if battleMatObject.getName() == 'Health' and gearlock == false then
+    healthToken = battleMatObject
+    healthToken.destruct()
   end
-  pos = Vector(JSON.decode(gearlockToken.getGMNotes()).originalPosition)
-  pos.y = healthToken[2].hit_object.getQuantity() * 0.5
-  local moveGearlockToken = function() gearlockToken.setPositionSmooth(pos) end
-  moveWatch = function() return not healthToken[2].hit_object.isSmoothMoving() end
-  Wait.condition(moveGearlockToken, moveWatch)
-  gearlock = false
+end
+
+function moveGearlockHealth(battleMatObject, b)
+  hitList = findHitsInRadius(battleMatZones[b].getPosition(), 0.8, 1.5)
+
+  for i, hit in ipairs(hitList) do
+    if hit.hit_object.getName() == 'Health' then
+      local healthToken = hit.hit_object
+      healthToken.setPositionSmooth(Vector(JSON.decode(battleMatObject.getGMNotes()).originalPosition))
+      pos = Vector(JSON.decode(battleMatObject.getGMNotes()).originalPosition)
+
+      if gearlockNames[battleMatObject.getName()] then
+        pos.y = healthToken.getQuantity() * 0.5
+        battleMatObject.setPositionSmooth(pos)
+        gearlock = false
+      end
+    end
+
+  end
+
 end
 
 function checkBattleDice()
