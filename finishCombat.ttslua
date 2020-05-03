@@ -81,22 +81,43 @@ function checkBattleMat()
           if #battleMatObject.getGMNotes() > 0 then
             if JSON.decode(battleMatObject.getGMNotes()).type == 'baddie' and battleMatObject.getName() ~= 'Baddie Initiative Die'then
               baddie = battleMatObject
+
+              baddie.setDescription("Health is " .. JSON.decode(baddie.getGMNotes()).health)
+              guid = JSON.decode(baddie.getGMNotes()).guid
+              attack = JSON.decode(baddie.getGMNotes()).attack
+              initiative = JSON.decode(baddie.getGMNotes()).initiative
+              health = JSON.decode(baddie.getGMNotes()).health
+              name = JSON.decode(baddie.getGMNotes()).name
+              baddiePoints = JSON.decode(baddie.getGMNotes()).baddiePoints
+
+              baddie.setGMNotes(JSON.encode({
+                guid = guid,
+                attack = attack,
+                initiative = initiative,
+                health = health,
+                updatedHealth = health,
+                name = name,
+                baddiePoints = baddiePoints,
+                type = JSON.decode(baddie.getGMNotes()).type
+              }))
+
               if baddie.getJoints() ~= nil then
                 baddie.jointTo()
                 baddie.flip()
                 posY = posY + 0.45
                 if JSON.decode(baddie.getGMNotes()).baddiePoints == 1 then
-                  findHitsInRadius(onePointStack.getPosition(), 0.8, 1.5, 'die')
+                  findHitsInRadiusBaddiePoints(onePointStack.getPosition(), 0.8, 1.5, 'die')
                   pos = onePointStack.getPosition()
                   pos.y = pos.y + posY
                   baddie.setPositionSmooth(pos)
                 elseif JSON.decode(baddie.getGMNotes()).baddiePoints == 5 then
-                  findHitsInRadius(fivePointStack.getPosition(), 0.8, 1.5, 'die')
+                  findHitsInRadiusBaddiePoints(fivePointStack.getPosition(), 0.8, 1.5, 'die')
                   pos = fivePointStack.getPosition()
                   pos.y = pos.y + posY
+                  print(pos.y)
                   baddie.setPositionSmooth(pos)
                 elseif JSON.decode(baddie.getGMNotes()).baddiePoints == 20 then
-                  findHitsInRadius(twentyPointStack.getPosition(), 0.8, 1.5, 'die')
+                  findHitsInRadiusBaddiePoints(twentyPointStack.getPosition(), 0.8, 1.5, 'die')
                   pos = twentyPointStack.getPosition()
                   pos.y = pos.y + posY
                   baddie.setPositionSmooth(pos)
@@ -226,8 +247,24 @@ function setGearlockNamesCounters()
   }
 end
 
+function findHitsInRadiusBaddiePoints(pos, ypos, size, reason)
+  local radius = (radius or 1)
+  local hitList = Physics.cast({
+    origin       = {x=pos.x, y=6, z=pos.z},
+    direction    = {0,1,0},
+    type         = 3,
+    size         = {size,10,size},
+    max_distance = 0,
+    debug        = false,
+  })
+  pos.y = 1
+  for i, hit in ipairs(hitList) do
+    pos = hit.hit_object.getPosition()
+    pos.y = pos.y + 5
+    hit.hit_object.setPositionSmooth(pos)
+  end
+end
 
--- bug zit hier
 function findHitsInRadius(pos, ypos, size, reason)
   local radius = (radius or 1)
   local hitList = Physics.cast({
