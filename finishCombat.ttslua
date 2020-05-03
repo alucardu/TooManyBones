@@ -1,4 +1,5 @@
 function onLoad()
+  setBattleMatZones()
   setGearlockNamesCounters()
   setDexterityCounters()
 end
@@ -18,9 +19,9 @@ end
 function setDexterityCounters()
   dexterityCounters = {
     getObjectFromGUID('85c4c6'),
-    getObjectFromGUID('d92682'),
-    getObjectFromGUID('97c24c'),
-    getObjectFromGUID('e47d0d'),
+    getObjectFromGUID('b1b309'),
+    getObjectFromGUID('2758ff'),
+    getObjectFromGUID('e05174'),
   }
 end
 
@@ -49,87 +50,123 @@ function resetInitiativeTracker()
   roundDie.setValue(1)
 end
 
+gearlock = false
 function checkBattleMat()
-  battleMat = getObjectFromGUID('a11a9a')
-  battleMatObjects = battleMat.getObjects()
+  checkBattleDice()
   posY = 0
-  if #battleMatObjects > 0 then
-    for i, battleMatObject in ipairs(battleMatObjects) do
-      if battleMatObject ~= nil then
+  for b, battleMatZone in ipairs(battleMatZones) do
 
-        if JSON.decode(battleMatObject.getGMNotes()) ~= nil then
-          if JSON.decode(battleMatObject.getGMNotes()).type == 'baddie' and battleMatObject.getName() ~= 'Baddie Initiative Die'then
-            baddie = battleMatObject
-            if baddie.getJoints() ~= nil then
-              baddie.jointTo()
-              baddie.flip()
-              posY = posY + 0.45
-              if JSON.decode(baddie.getGMNotes()).baddiePoints == 1 then
-                findHitsInRadius(onePointStack.getPosition(), 0.8, 1.5, 'die')
-                pos = onePointStack.getPosition()
-                pos.y = pos.y + posY
-                baddie.setPositionSmooth(pos)
-              elseif JSON.decode(baddie.getGMNotes()).baddiePoints == 5 then
-                findHitsInRadius(fivePointStack.getPosition(), 0.8, 1.5, 'die')
-                pos = fivePointStack.getPosition()
-                pos.y = pos.y + posY
-                baddie.setPositionSmooth(pos)
-              elseif JSON.decode(baddie.getGMNotes()).baddiePoints == 20 then
-                findHitsInRadius(twentyPointStack.getPosition(), 0.8, 1.5, 'die')
-                pos = twentyPointStack.getPosition()
-                pos.y = pos.y + posY
-                baddie.setPositionSmooth(pos)
+    battleMatObjects = findHitsInRadius(battleMatZone.getPosition(), 0.8, 1.5)
+    if battleMatObjects ~= nil then
+      for i, battleMatObject in ipairs(battleMatObjects) do
+
+        battleMatObject = battleMatObject.hit_object
+        if battleMatObject ~= nil then
+          if #battleMatObject.getGMNotes() > 0 then
+            if JSON.decode(battleMatObject.getGMNotes()).type == 'baddie' and battleMatObject.getName() ~= 'Baddie Initiative Die'then
+              baddie = battleMatObject
+              if baddie.getJoints() ~= nil then
+                baddie.jointTo()
+                baddie.flip()
+                posY = posY + 0.45
+                if JSON.decode(baddie.getGMNotes()).baddiePoints == 1 then
+                  findHitsInRadius(onePointStack.getPosition(), 0.8, 1.5, 'die')
+                  pos = onePointStack.getPosition()
+                  pos.y = pos.y + posY
+                  baddie.setPositionSmooth(pos)
+                elseif JSON.decode(baddie.getGMNotes()).baddiePoints == 5 then
+                  findHitsInRadius(fivePointStack.getPosition(), 0.8, 1.5, 'die')
+                  pos = fivePointStack.getPosition()
+                  pos.y = pos.y + posY
+                  baddie.setPositionSmooth(pos)
+                elseif JSON.decode(baddie.getGMNotes()).baddiePoints == 20 then
+                  findHitsInRadius(twentyPointStack.getPosition(), 0.8, 1.5, 'die')
+                  pos = twentyPointStack.getPosition()
+                  pos.y = pos.y + posY
+                  baddie.setPositionSmooth(pos)
+                end
+              end
+            end
+
+            if JSON.decode(battleMatObject.getGMNotes()).type == 'ally' then
+              for i, playerSelected in ipairs(selectedPlayers) do
+                if playerSelected == JSON.decode(battleMatObject.getGMNotes()).owner then
+                  ally = battleMatObject
+                  pos = returnDiceZones[i].getPosition()
+                  ally.setPositionSmooth(pos)
+                  pos.x = pos.x - 1.5
+                  allyDie = getObjectFromGUID(JSON.decode(battleMatObject.getGMNotes()).initiativeDie)
+                  allyDie.setPositionSmooth(pos)
+                end
               end
             end
           end
 
-          if JSON.decode(battleMatObject.getGMNotes()).type == 'ally' then
+          if battleMatObject.getName() == 'Lane' then
+            laneToken = battleMatObject
+            laneTokenPosition = JSON.decode(laneToken.getGMNotes()).originalPosition
+            laneToken.setPositionSmooth(laneTokenPosition)
+          end
 
-            for i, playerSelected in ipairs(selectedPlayers) do
-              if playerSelected == JSON.decode(battleMatObject.getGMNotes()).owner then
-                ally = battleMatObject
-                pos = returnDiceZones[i].getPosition()
-                ally.setPositionSmooth(pos)
-                pos.x = pos.x - 1.5
-                allyDie = getObjectFromGUID(JSON.decode(battleMatObject.getGMNotes()).initiativeDie)
-                allyDie.setPositionSmooth(pos)
-              end
-            end
+          if gearlockNames[battleMatObject.getName()] then
+            gearlock = true
+            gearlockToken = battleMatObject
+
+          end
+          if gearlock == true then
+            moveGearlockHealth(battleMatObject, b)
+            break
+          end
+
+          if battleMatObject.getName() == 'Health' and gearlock == false then
+            healthToken = battleMatObject
+            healthToken.destruct()
           end
 
         end
-
-        if battleMatObject.getName() == 'Lane' then
-          laneToken = battleMatObject
-          laneTokenPosition = JSON.decode(laneToken.getGMNotes()).originalPosition
-          laneToken.setPositionSmooth(laneTokenPosition)
-        end
-
-        if battleMatObject.getName() == 'Health' then
-          healthToken = battleMatObject
-          healthToken.destruct()
-        end
-
-        if battleMatObject.getName() == 'Baddie Initiative Die' then
-          baddieInitiativeDie = battleMatObject
-          baddieInitiativeDie.setValue(1)
-          baddieInitiativeDie.setPositionSmooth(Vector(JSON.decode(baddieInitiativeDie.getGMNotes()).originalPosition))
-        end
-
-        if gearlockNames[battleMatObject.getName()] then
-          battleMatObject.getName()
-          gearlockToken = battleMatObject
-          gearlockToken.setPositionSmooth(Vector(JSON.decode(gearlockToken.getGMNotes()).originalPosition))
-        end
-
-        if gearlockInitiativeDice[battleMatObject.getName()] then
-          gearlockInitiativeDie = battleMatObject
-          gearlockInitiativeDie.setPositionSmooth(JSON.decode(gearlockInitiativeDie.getGMNotes()).originalPosition)
-        end
-
       end
     end
   end
+end
+
+function moveGearlockHealth(battleMatObject, b)
+  healthToken = findHitsInRadius(battleMatZones[b].getPosition(), 0.8, 1.5)
+  if healthToken[2].hit_object.getName() == 'Health' then
+    healthToken[2].hit_object.setPositionSmooth(Vector(JSON.decode(battleMatObject.getGMNotes()).originalPosition))
+  end
+  pos = Vector(JSON.decode(gearlockToken.getGMNotes()).originalPosition)
+  pos.y = healthToken[2].hit_object.getQuantity() * 0.5
+  local moveGearlockToken = function() gearlockToken.setPositionSmooth(pos) end
+  moveWatch = function() return not healthToken[2].hit_object.isSmoothMoving() end
+  Wait.condition(moveGearlockToken, moveWatch)
+  gearlock = false
+end
+
+function checkBattleDice()
+  local radius = (radius or 1)
+  local hitList = Physics.cast({
+    origin       = {4.8, 1, -7},
+    direction    = {0,1,0},
+    type         = 3,
+    size         = {1.5,2,9},
+    max_distance = 0,
+    debug        = false,
+  })
+  for i, battleMatObject in ipairs(hitList) do
+    if battleMatObject ~= nil then
+      if gearlockInitiativeDice[battleMatObject.hit_object.getName()] then
+        gearlockInitiativeDie = battleMatObject.hit_object
+        gearlockInitiativeDie.setPositionSmooth(JSON.decode(gearlockInitiativeDie.getGMNotes()).originalPosition)
+      end
+
+      if battleMatObject.hit_object.getName() == 'Baddie Initiative Die' then
+        baddieInitiativeDie = battleMatObject.hit_object
+        baddieInitiativeDie.setValue(1)
+        baddieInitiativeDie.setPositionSmooth(Vector(JSON.decode(baddieInitiativeDie.getGMNotes()).originalPosition))
+      end
+    end
+  end
+
 end
 
 function setSelectedPlayers()
@@ -162,27 +199,51 @@ function setGearlockNamesCounters()
   }
 end
 
+
+-- bug zit hier
 function findHitsInRadius(pos, ypos, size, reason)
   local radius = (radius or 1)
   local hitList = Physics.cast({
-    origin       = {x=pos.x, y=11, z=pos.z},
+    origin       = {x=pos.x, y=6, z=pos.z},
     direction    = {0,1,0},
     type         = 3,
-    size         = {size,20,size},
+    size         = {size,10,size},
     max_distance = 0,
     debug        = false,
   })
   pos.y = 1
-  for i, hit in ipairs(hitList) do
-    pos = hit.hit_object.getPosition()
-    pos.y = pos.y + 2
-    hit.hit_object.setPositionSmooth(pos)
+  if hitList ~= nil then
+    return hitList
   end
 end
 
 gearlockNames = {
   Boomer = true, Ghillie = true, Nugget = true, Patches = true, Picket = true, Tantrum = true, Tink = true,
 }
+
+function setBattleMatZones()
+  battleMatZones = {
+    getObjectFromGUID('a232a0'),
+    getObjectFromGUID('a608a8'),
+    getObjectFromGUID('1190bb'),
+    getObjectFromGUID('6e31a0'),
+
+    getObjectFromGUID('50af26'),
+    getObjectFromGUID('25da4f'),
+    getObjectFromGUID('53fe5d'),
+    getObjectFromGUID('77bb22'),
+
+    getObjectFromGUID('4357ee'),
+    getObjectFromGUID('1e18e4'),
+    getObjectFromGUID('5e82aa'),
+    getObjectFromGUID('2b8afb'),
+
+    getObjectFromGUID('5ed294'),
+    getObjectFromGUID('0750a4'),
+    getObjectFromGUID('7a7a8c'),
+    getObjectFromGUID('14a607'),
+  }
+end
 
 gearlockInitiativeDice = {
   BoomerInitiativeDie = true,
