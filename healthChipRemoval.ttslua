@@ -36,7 +36,6 @@ function onScriptingButtonDown(index, color)
   end
 
   if baddie ~= nil then
-    -- current_health = JSON.decode(baddie.getGMNotes()).health
     updatedHealth = JSON.decode(baddie.getGMNotes()).updatedHealth
   end
   if healthStack ~= nil then
