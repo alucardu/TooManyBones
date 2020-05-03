@@ -277,7 +277,6 @@ function setSelectedPlayers()
     playerThreeSelected,
     playerFourSelected
   }
-  print(#selectedPlayers)
 end
 
 function setReturnDiceZones()

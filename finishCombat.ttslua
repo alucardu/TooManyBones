@@ -114,7 +114,6 @@ function checkBattleMat()
                   findHitsInRadiusBaddiePoints(fivePointStack.getPosition(), 0.8, 1.5, 'die')
                   pos = fivePointStack.getPosition()
                   pos.y = pos.y + posY
-                  print(pos.y)
                   baddie.setPositionSmooth(pos)
                 elseif JSON.decode(baddie.getGMNotes()).baddiePoints == 20 then
                   findHitsInRadiusBaddiePoints(twentyPointStack.getPosition(), 0.8, 1.5, 'die')
