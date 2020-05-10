@@ -3436,6 +3436,7 @@ function finalClear()
   finishCombatFn.setVar('playerTwoSelected', playerTwoSelected)
   finishCombatFn.setVar('playerThreeSelected', playerThreeSelected)
   finishCombatFn.setVar('playerFourSelected', playerFourSelected)
+  finishCombatFn.call('setDexterityCounterColors')
 
   healthChipRemovalFn = getObjectFromGUID('b3e969')
   healthChipRemovalFn.setVar('playerOneSelected', playerOneSelected)
@@ -3443,7 +3444,8 @@ function finalClear()
   healthChipRemovalFn.setVar('playerThreeSelected', playerThreeSelected)
   healthChipRemovalFn.setVar('playerFourSelected', playerFourSelected)
 
-  finishCombatFn.call('setDexterityCounterColors')
+  adventerRoutine = getObjectFromGUID('c55c51')
+  adventerRoutine.call('onStart')
 end
 
 initiativeDiceZones = {
