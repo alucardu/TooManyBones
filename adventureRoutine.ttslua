@@ -1,0 +1,357 @@
+function onStart()
+  table1 = {
+    tag="TableLayout",
+    attributes={
+      id="ResolveEncouterBtns",
+      color="rgba(0,0,0,0.7)",
+      active=false,
+      offsetXY="280 -125",
+      rectAlignment="UpperLeft",
+      childForceExpandWidth=false,
+      childForceExpandHeight=false,
+      width=100,
+      height=50
+    },
+    children={
+      {
+        tag="Row",
+        attributes={
+          id="NewDay",
+          childForceExpandWidth=false,
+          dontUseTableRowBackground="true",
+        },
+        children={
+          {
+            tag="Cell",
+            attributes={
+              dontUseTableCellBackground=true,
+            },
+            children={
+              {
+                tag="Button",
+                attributes={
+                  id="DrawEncounterAction",
+                  dontUseTableCellBackground=true,
+                  onClick="c55c51/rewardPhase()",
+                  fontSize=13,
+                  color="green",
+                  text="Won"
+                },
+              },
+            }
+          },
+          {
+            tag="Cell",
+            attributes={
+              dontUseTableCellBackground=true,
+            },
+            children={
+              {
+                tag="Button",
+                attributes={
+                  id="DrawEncounterAction",
+                  dontUseTableCellBackground=true,
+                  onClick = "c55c51/recoveryPhase()",
+                  fontSize=13,
+                  color="red",
+                  text="Lost"
+                },
+              },
+            }
+          }
+        }
+      }
+    }
+  }
+  table2 = {
+    tag="TableLayout",
+    attributes={
+      id="AdventureRoutineTracker",
+      color="rgba(0,0,0,0.7)",
+      active=true,
+      offsetXY="75 -25",
+      rectAlignment="UpperLeft",
+      columnWidths="50 150",
+      childForceExpandWidth=false,
+      childForceExpandHeight=false,
+      width=200,
+      height=250
+    },
+    children={
+      {
+        tag="Row",
+        attributes={
+          id="NewDay",
+          childForceExpandWidth=false,
+          dontUseTableRowBackground="true",
+        },
+        children={
+          {
+            tag="Cell",
+            attributes={
+              dontUseTableCellBackground=true,
+              color="blue"
+            },
+            children={
+              {
+                tag="Button",
+                attributes={
+                  active=true,
+                  id="NewDayAction",
+                  dontUseTableCellBackground=true,
+                  color="#fff0f000",
+                  onClick = "c55c51/drawEncounter()",
+                  text="X"
+                }
+              }
+            }
+          },
+          {
+            tag="Cell",
+            attributes={
+              dontUseTableCellBackground=true,
+            },
+            children={
+              {
+                tag="Text",
+                attributes={
+                  id="currentDay",
+                  fontSize=13,
+                  color="white",
+                  text="New day" .. ' (' .. day .. ')'
+                },
+              },
+            }
+          }
+        }
+      },
+      {
+        tag="Row",
+        attributes={
+          id="DrawEncounter",
+          childForceExpandWidth=false,
+          dontUseTableRowBackground="true",
+        },
+        children={
+          {
+            tag="Cell",
+            attributes={
+              dontUseTableCellBackground=true,
+              color="blue"
+            },
+            children={
+              {
+                tag="Button",
+                attributes={
+                  active=false,
+                  id="DrawEncounterAction",
+                  dontUseTableCellBackground=true,
+                  color="#fff0f000",
+                  onClick = "c55c51/resolveEncounter()",
+                  text="X"
+                }
+              }
+            }
+          },
+          {
+            tag="Cell",
+            attributes={
+              dontUseTableCellBackground=true,
+            },
+            children={
+              {
+                tag="Text",
+                attributes={
+                  fontSize=13,
+                  color="white",
+                  text="Draw encounter"
+                },
+              },
+            }
+          }
+        }
+      },
+      {
+        tag="Row",
+        attributes={
+          id="ResolveEncounter",
+          childForceExpandWidth=false,
+          dontUseTableRowBackground="true",
+        },
+        children={
+          {
+            tag="Cell",
+            attributes={
+              dontUseTableCellBackground=true,
+              color="blue"
+            },
+            children={
+              {
+                tag="Button",
+                attributes={
+                  active=false,
+                  id="ResolveEncounterAction",
+                  dontUseTableCellBackground=true,
+                  color="#fff0f000",
+
+                }
+              }
+            }
+          },
+          {
+            tag="Cell",
+            attributes={
+              dontUseTableCellBackground=true,
+            },
+            children={
+              {
+                tag="Text",
+                attributes={
+                  fontSize=13,
+                  color="white",
+                  text="Resolve encounter"
+                },
+              },
+            }
+          }
+        }
+      },
+      {
+        tag="Row",
+        attributes={
+          id="RewardPhase",
+          childForceExpandWidth=false,
+          dontUseTableRowBackground="true",
+        },
+        children={
+          {
+            tag="Cell",
+            attributes={
+              dontUseTableCellBackground=true,
+              color="blue"
+            },
+            children={
+              {
+                tag="Button",
+                attributes={
+                  active=false,
+                  id="RewardPhaseAction",
+                  dontUseTableCellBackground=true,
+                  color="#fff0f000",
+                  onClick = "c55c51/recoveryPhase()",
+                  text="X"
+                }
+              }
+            }
+          },
+          {
+            tag="Cell",
+            attributes={
+              dontUseTableCellBackground=true,
+            },
+            children={
+              {
+                tag="Text",
+                attributes={
+                  fontSize=13,
+                  color="white",
+                  text="Reward phase"
+                },
+              },
+            }
+          }
+        }
+      },
+      {
+        tag="Row",
+        attributes={
+          id="RecoveryPhase",
+          childForceExpandWidth=false,
+          dontUseTableRowBackground="true",
+        },
+        children={
+          {
+            tag="Cell",
+            attributes={
+              dontUseTableCellBackground=true,
+              color="blue"
+            },
+            children={
+              {
+                tag="Button",
+                attributes={
+                  active=false,
+                  id="RecoveryPhaseAction",
+                  dontUseTableCellBackground=true,
+                  color="#fff0f000",
+                  onClick="c55c51/newDay()",
+                  text="X"
+                }
+              }
+            }
+          },
+          {
+            tag="Cell",
+            attributes={
+              dontUseTableCellBackground=true,
+            },
+            children={
+              {
+                tag="Text",
+                attributes={
+                  fontSize=13,
+                  color="white",
+                  text="Recovery phase"
+                },
+              },
+            }
+          }
+        }
+      }
+    }
+  }
+
+  UI.setXmlTable({table1, table2})
+
+end
+
+day = 1
+function newDay()
+  day = day + 1
+  UI.setAttribute('currentDay', 'text', 'New day'  .. ' (' .. day .. ')')
+  dayToken = getObjectFromGUID('3e84e6')
+  currentRotation = dayToken.getRotation()
+  currentRotation.y = currentRotation.y - 25
+  dayToken.setRotationSmooth(currentRotation)
+  UI.setAttribute('RecoveryPhaseAction', 'active', false)
+  UI.setAttribute('NewDayAction', 'active', true)
+end
+
+function drawEncounter()
+  encounterZone = getObjectFromGUID('8d5f0d')
+  encounterDeck = encounterZone.getObjects()[1]
+  takeParams = {
+    top = true,
+    position = {x=11.6, y=1.5, z=1},
+  }
+  encounterDeck.takeObject(takeParams)
+  UI.setAttribute('NewDayAction', 'active', false)
+  UI.setAttribute('DrawEncounterAction', 'active', true)
+end
+
+function resolveEncounter()
+  UI.setAttribute('ResolveEncouterBtns', 'active', true)
+  UI.setAttribute('DrawEncounterAction', 'active', false)
+  UI.setAttribute('ResolveEncounterAction', 'active', true)
+end
+
+function rewardPhase()
+  UI.setAttribute('ResolveEncouterBtns', 'active', false)
+  UI.setAttribute('RewardPhaseAction', 'active', true)
+end
+
+function recoveryPhase()
+  UI.setAttribute('ResolveEncouterBtns', 'active', false)
+  UI.setAttribute('RewardPhaseAction', 'active', false)
+  UI.setAttribute('RecoveryPhaseAction', 'active', true)
+end
