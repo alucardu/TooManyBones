@@ -520,14 +520,14 @@ setInitiativeTutorial =  {
     childForceExpandHeight=false,
     color="rgba(0,0,0,1)",
     width=500,
-    height=250,
+    height=350,
   },
   children={
     {
       tag="Text",
       attributes={
-        minHeight="200",
-        text="After players have build the baddie queue they can click the Initialize combat button to setup the battlemat and initiative dice. \n \n In the top-right corner a Initiative Tracker will be visible. Players can press the X button the finish that units turn, if a Gearlock or baddie is removed from the battlemat the Initiative Tracker will reflect this change. \n \n Once the combat is finished players can click the Finish combat button. This will clean up the battlemat, return the Gearlock and their initiative die.",
+        minHeight="300",
+        text="After players have build the baddie queue they can click the Initialize combat button to setup the battlemat and initiative dice. \n \n In the top-right corner a Initiative Tracker will be visible. Players can press the X button the finish that units turn, if a Gearlock or baddie is removed from the battlemat the Initiative Tracker will reflect this change. \n \n Players can remove health chips from a Gearlock/baddie/ally by hovering over the unit and pressing a number key on the keypad. \n \n Players can also spawn health chips by not hovering on a unit and press a number on the keypad. \n \n Once the combat is finished players can click the Finish combat button. This will clean up the battlemat, return the Gearlock and their initiative die.",
         color="white"
       }
     },
