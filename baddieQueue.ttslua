@@ -1,0 +1,70 @@
+function onLoad()
+  setTutorialBtn()
+end
+
+function opensetupTutorial()
+  status = UI.getAttribute('setBaddieQueueTutorialPanel', 'active')
+  if status ~= "True" then
+    UI.setAttribute('setBaddieQueueTutorialPanel', 'active', true)
+  elseif status == "True" then
+    UI.setAttribute('setBaddieQueueTutorialPanel', 'active', false)
+  end
+end
+
+function closeTutorial()
+  UI.setAttribute('setBaddieQueueTutorialPanel', 'active', false)
+end
+
+setBaddieQueueTutorial =  {
+  tag="VerticalLayout",
+  attributes={
+    active=false,
+    id="setBaddieQueueTutorialPanel",
+    childForceExpandHeight=false,
+    color="rgba(0,0,0,1)",
+    width=500,
+    height=250,
+  },
+  children={
+    {
+      tag="Text",
+      attributes={
+        minHeight="200",
+        text="Place the baddies from the baddie queue on the 4 queue markers \n \n The numbers on the queue markers corrospond to the lane markers. \n \n When the baddies have been placed click the Initialize combat button to setup the battle mat!",
+        color="white"
+      }
+    },
+    {
+      tag="Button",
+      attributes={
+        minHeight="50",
+        text="Got it!",
+        color="Orange",
+        onClick="54c5d6/closeTutorial()",
+      }
+    }
+  }
+}
+
+function setTutorialBtn()
+  setupTutorialBtn =
+    {
+      tag="Button",
+      attributes={
+        id="TutorialPanel",
+        position="-200 0 0",
+        rotation="180 0 0",
+        childForceExpandHeight=false,
+        onClick="54c5d6/opensetupTutorial()",
+        color="rgba(0,0,0,1)",
+        active=true,
+        width=50,
+        height=50,
+        text="?",
+        color="Grey",
+        fontSize=30,
+        textColor="White"
+      }
+    }
+  self.UI.setXmlTable({setupTutorialBtn})
+end

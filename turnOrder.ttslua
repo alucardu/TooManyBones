@@ -17,50 +17,49 @@ function initializeInitiativeTracker()
   click = true
   set = "asd"
 
-  UI.setXmlTable({
-    {
-      tag="TableLayout",
-      attributes={
-        id="InitiativeTracker",
-        active=false,
-        offsetXY="-25 -50",
-        childForceExpandWidth=false,
-        width=200,
-        rectAlignment="UpperRight",
-        columnWidths="50 150",
-      },
-      children={
-        initiativeTableLayout[1],
-        initiativeTableLayout[2],
-        initiativeTableLayout[3],
-        initiativeTableLayout[4],
-        initiativeTableLayout[5],
-        initiativeTableLayout[6],
-        initiativeTableLayout[7],
-        initiativeTableLayout[8],
-        {
-          tag="Row",
-          attributes={
-            id="StartCombat",
-            childForceExpandWidth=false,
-            dontUseTableRowBackground="true",
-            color="orange"
-          },
-          children={
-            {
-              tag="Button",
-              attributes={
-                dontUseTableCellBackground=true,
-                color="#fff0f000",
-                onClick = "0dc670/startCombat(set)",
-                text="Start Combat"
-              }
+  InitiativeTrackerTable =
+  {
+    tag="TableLayout",
+    attributes={
+      id="InitiativeTracker",
+      active=false,
+      offsetXY="-25 -50",
+      childForceExpandWidth=false,
+      width=200,
+      rectAlignment="UpperRight",
+      columnWidths="50 150",
+    },
+    children={
+      initiativeTableLayout[1],
+      initiativeTableLayout[2],
+      initiativeTableLayout[3],
+      initiativeTableLayout[4],
+      initiativeTableLayout[5],
+      initiativeTableLayout[6],
+      initiativeTableLayout[7],
+      initiativeTableLayout[8],
+      {
+        tag="Row",
+        attributes={
+          id="StartCombat",
+          childForceExpandWidth=false,
+          dontUseTableRowBackground="true",
+          color="orange"
+        },
+        children={
+          {
+            tag="Button",
+            attributes={
+              dontUseTableCellBackground=true,
+              color="#fff0f000",
+              onClick = "0dc670/startCombat(set)",
+              text="Start Combat"
             }
           }
         }
       }
     }
-  })
+  }
 end
 
 function setInitiativeTableLayout()

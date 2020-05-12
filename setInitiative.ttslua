@@ -9,6 +9,7 @@ function onload()
   setInitiativePositions()
   setLaneObjectsPositions()
   self.createButton(setInitiativeBtn)
+  setTutorialBtn()
 end
 
 -- step 1 // set baddie initiativeDieValue
@@ -497,3 +498,70 @@ setFinishCombatBtn = {
   font_size = 240,
   index = 0
 }
+
+function opensetupTutorial()
+  status = UI.getAttribute('setInitiativeTutorialPanel', 'active')
+  if status ~= "True" then
+    UI.setAttribute('setInitiativeTutorialPanel', 'active', true)
+  elseif status == "True" then
+    UI.setAttribute('setInitiativeTutorialPanel', 'active', false)
+  end
+end
+
+function closeTutorial()
+  UI.setAttribute('setInitiativeTutorialPanel', 'active', false)
+end
+
+setInitiativeTutorial =  {
+  tag="VerticalLayout",
+  attributes={
+    active=false,
+    id="setInitiativeTutorialPanel",
+    childForceExpandHeight=false,
+    color="rgba(0,0,0,1)",
+    width=500,
+    height=250,
+  },
+  children={
+    {
+      tag="Text",
+      attributes={
+        minHeight="200",
+        text="After players have build the baddie queue they can click the Initialize combat button to setup the battlemat and initiative dice. \n \n In the top-right corner a Initiative Tracker will be visible. Players can press the X button the finish that units turn, if a Gearlock or baddie is removed from the battlemat the Initiative Tracker will reflect this change. \n \n Once the combat is finished players can click the Finish combat button. This will clean up the battlemat, return the Gearlock and their initiative die.",
+        color="white"
+      }
+    },
+    {
+      tag="Button",
+      attributes={
+        minHeight="50",
+        text="Got it!",
+        color="Orange",
+        onClick="8d4497/closeTutorial()",
+      }
+    }
+  }
+}
+
+function setTutorialBtn()
+  setupTutorialBtn =
+    {
+      tag="Button",
+      attributes={
+        id="TutorialPanel",
+        position="-180 150 -200",
+        rotation="180 180 0",
+        childForceExpandHeight=false,
+        onClick="8d4497/opensetupTutorial()",
+        color="rgba(0,0,0,1)",
+        active=true,
+        width=50,
+        height=50,
+        text="?",
+        color="Grey",
+        fontSize=30,
+        textColor="White"
+      }
+    }
+  self.UI.setXmlTable({setupTutorialBtn})
+end

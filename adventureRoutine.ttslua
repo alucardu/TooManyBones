@@ -1,5 +1,5 @@
-function onStart()
-  table1 = {
+function onLoad()
+  ResolveEncouterBtns = {
     tag="TableLayout",
     attributes={
       id="ResolveEncouterBtns",
@@ -63,12 +63,13 @@ function onStart()
       }
     }
   }
-  table2 = {
+
+  AdventureRoutineTracker = {
     tag="TableLayout",
     attributes={
       id="AdventureRoutineTracker",
       color="rgba(0,0,0,0.7)",
-      active=true,
+      active=false,
       offsetXY="75 -25",
       rectAlignment="UpperLeft",
       columnWidths="50 150",
@@ -310,9 +311,11 @@ function onStart()
       }
     }
   }
+end
 
-  UI.setXmlTable({table1, table2})
-
+function onStart()
+  UI.setAttribute('AdventureRoutineTracker', 'active', true)
+  UI.setAttribute('ResolveEncouterBtns', 'active', false)
 end
 
 day = 1
