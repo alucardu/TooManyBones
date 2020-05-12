@@ -1,0 +1,104 @@
+function onLoad()
+  Wait.time(function() setXml() end, 0.1)
+end
+
+function setXml()
+
+  tutorialBtnToggleXml =
+    {
+      tag="Button",
+      attributes={
+        id="TutorialPanel",
+        rectAlignment="LowerLeft",
+        offsetXY="5 400",
+        childForceExpandHeight=false,
+        color="rgba(0,0,0,1)",
+        active=true,
+        width=50,
+        height=50,
+        text="?",
+        color="Grey",
+        onClick="toggleTutorialButtons()",
+        fontSize=30,
+        textColor="White"
+      }
+    }
+
+  mainTutorialXml =
+    {
+      tag="VerticalLayout",
+      attributes={
+        id="TutorialPanel",
+        childForceExpandHeight=false,
+        color="rgba(0,0,0,1)",
+        active=true,
+        width=500,
+        height=250,
+      },
+      children={
+        {
+          tag="Text",
+          attributes={
+            minHeight="200",
+            text="Welcome to the scripted Too Many Bones mod! \n \n To start the game all players should select a Gearlock to play and the Tyrant they are going to take down! \n \n You can click on the ? buttons for additional information. \n\n Press the left ? button to toggle the visibility of the other ? buttons.",
+            color="white"
+          }
+        },
+        {
+          tag="Button",
+          attributes={
+            minHeight="50",
+            text="Got it!",
+            color="Orange",
+            onClick="closeTutorial()",
+          }
+        }
+      }
+    }
+
+  adventureRoutineObject = getObjectFromGUID('c55c51')
+  resolveEncouterBtnsXml = adventureRoutineObject.getTable('ResolveEncouterBtns')
+  adventureRoutineTrackerXml = adventureRoutineObject.getTable('AdventureRoutineTracker')
+
+  initiativeTrackerObject = getObjectFromGUID('0dc670')
+  initiativeTrackerXml = initiativeTrackerObject.getTable('InitiativeTrackerTable')
+
+  setupObject = getObjectFromGUID('519c15')
+  setupTutorialXml = setupObject.getTable('setupTutorial')
+
+  setInitiativeObject = getObjectFromGUID('8d4497')
+  setInitiativeTutorialXml = setInitiativeObject.getTable('setInitiativeTutorial')
+
+  setBaddieQueueObject = getObjectFromGUID('54c5d6')
+  setBaddieQueueTutorialXml = setBaddieQueueObject.getTable('setBaddieQueueTutorial')
+
+  UI.setXmlTable({
+    tutorialBtnToggleXml,
+    mainTutorialXml,
+    resolveEncouterBtnsXml,
+    adventureRoutineTrackerXml,
+    initiativeTrackerXml,
+    setupTutorialXml,
+    setInitiativeTutorialXml,
+    setBaddieQueueTutorialXml
+  })
+end
+
+toggle = true
+function toggleTutorialButtons()
+  if toggle == false then
+    setupObject.UI.setAttribute('TutorialPanel', 'active', true)
+    setBaddieQueueObject.UI.setAttribute('TutorialPanel', 'active', true)
+    setInitiativeObject.UI.setAttribute('TutorialPanel', 'active', true)
+    toggle = true
+  elseif toggle == true then
+    setupObject.UI.setAttribute('TutorialPanel', 'active', false)
+    setBaddieQueueObject.UI.setAttribute('TutorialPanel', 'active', false)
+    setInitiativeObject.UI.setAttribute('TutorialPanel', 'active', false)
+    toggle = false
+  end
+end
+
+function closeTutorial()
+  UI.setAttribute("TutorialPanel", "active", false)
+end

@@ -562,6 +562,7 @@ dusterActive = 0
     startGame.index = 35
 
 function onload()
+    setTutorialBtn()
     setInitiativeObject = getObjectFromGUID('8d4497')
     self.createButton(Nom)
     self.createButton(Drellen)
@@ -3473,4 +3474,72 @@ function setInitiativeDice()
       setInitiativeObject.setTable('availableGearlockInititiativeDice', y)
     end
   end
+end
+
+function opensetupTutorial()
+  status = UI.getAttribute('SetupTutorialPanel', 'active')
+  if status ~= "True" then
+    UI.setAttribute('SetupTutorialPanel', 'active', true)
+  elseif status == "True" then
+    UI.setAttribute('SetupTutorialPanel', 'active', false)
+  end
+end
+
+function closeTutorial()
+  UI.setAttribute('SetupTutorialPanel', 'active', false)
+end
+
+setupTutorial =  {
+  tag="VerticalLayout",
+  attributes={
+    active=false,
+    id="SetupTutorialPanel",
+    childForceExpandHeight=false,
+    color="rgba(0,0,0,1)",
+    width=500,
+    height=250,
+  },
+  children={
+    {
+      tag="Text",
+      attributes={
+        minHeight="200",
+        text="Select the Gearlock you want to play and the Tyrant you are going to defeat! \n\n Press Start to finish the setup! \n\n After setup is completed a Adventure Routine tracker will be visible in the top left corner. Players can track the different phases during a day. On the New Day (after the first day) the day tracker will increase on the board and in the tracker. On the Draw encounter phase a encounter card will be placed next to the encounter deck. During the Resolve encounter step players can choose if they won or lost the encounter. If they won they are directed to the Reward phase, otherwise they are directed to the Recovery phase.",
+        color="white"
+      }
+    },
+    {
+      tag="Button",
+      attributes={
+        minHeight="50",
+        text="Got it!",
+        color="Orange",
+        onClick="519c15/closeTutorial()",
+      }
+    }
+  }
+}
+
+function setTutorialBtn()
+  setupTutorialBtn =
+    {
+      tag="Button",
+      attributes={
+        id="TutorialPanel",
+        position="0 450 0",
+        rotation="180 180 0",
+        childForceExpandHeight=false,
+        onClick="519c15/opensetupTutorial()",
+        color="rgba(0,0,0,1)",
+        active=true,
+        width=50,
+        height=50,
+        text="?",
+        color="Grey",
+        fontSize=30,
+        textColor="White"
+      }
+    }
+
+  self.UI.setXmlTable({setupTutorialBtn})
 end
