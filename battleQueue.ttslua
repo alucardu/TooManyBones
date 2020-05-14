@@ -37,7 +37,7 @@ function checkForBaddies(emptyLaneTokens)
   for i, emptyLaneToken in ipairs(emptyLaneTokens) do
     if baddieQueue[i] ~= nil then
       baddieQueue[i].setPositionSmooth(emptyLaneToken.getPosition())
-      local moveToBattleMats = function() moveToBattleMat(emptyLaneToken, baddieQueue[i], baddieQueue) end
+      local moveToBattleMats = function() moveToBattleMat(emptyLaneToken, baddieQueue[i], baddieQueue, emptyLaneTokens) end
       moveWatch = function() return not baddieQueue[i].isSmoothMoving() end
       Wait.condition(moveToBattleMats, moveWatch)
     end
@@ -48,10 +48,12 @@ runOnce = 0
 time = -1
 function moveToBattleMat(emptyLaneToken, baddie, baddieQueue, emptyLaneTokens)
   runOnce = runOnce + 1
-  if runOnce == #baddieQueue then
+  if runOnce == #emptyLaneTokens then
     for i, baddie in ipairs(baddieQueue) do
-      time = time + 1
-      Wait.time(function() moveToken(emptyLaneTokens[i], baddie) end, time)
+      if i <= #emptyLaneTokens then
+        time = time + 1
+        Wait.time(function() moveToken(emptyLaneTokens[i], baddie) end, time)
+      end
     end
     time = -1
     runOnce = 0
